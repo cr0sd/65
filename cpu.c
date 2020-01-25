@@ -14,19 +14,15 @@ cpu_t*cpu_init(void)
 // through CPU
 void cpu_exec(cpu_t*cpu,ram_t*ram)
 {
-	#define name(x) puts(#x);
-	//#define name(x)
 	switch(ram->mem[cpu->pc])
 	{
+		case 0x00:
+			break;
 		case 0x0a:
-			name(asl);
-			++cpu->pc;
 			break;
 		case 0xEA:
-			name(nop);
-			++cpu->pc;
 			break;
-		default: break;
+		default:
+			break;
 	}
-	#undef name
 }

@@ -24,6 +24,7 @@ int main(int argc,char**argv)
 	{
 		rom_load_file(rom,argv[1]);
 		rom_map(rom,ram);
+		rom_print_header_info(rom);
 	}
 
 	// Execute ROM
@@ -31,7 +32,14 @@ int main(int argc,char**argv)
 	{
 		// Read 3 instructions for testing purposes
 		for(int i=0;i<3;++i)
+		{
+			printf("pc: 0x%04x\t",cpu->pc);
+			printf("ac: 0x%02x",cpu->ac);
+			puts("");
+			printf("0x%04x: 0x%02x\n",cpu->pc,ram->mem[cpu->pc]);
 			cpu_exec(cpu,ram);
+			cpu->pc+=1;
+		}
 	}
 	else
 		puterr("%s: No ROM loaded\n",__func__);

@@ -18,8 +18,10 @@ typedef struct romNES_t
 	uint8_t header[16];		// iNes header file
 	uint8_t trainer[512];	// iNes (optional) trainer
 	uint8_t*data;			// ROM loaded into (host) RAM
+	size_t data_len;		// Size of data in buffer
 }rom_t;
 
 void rom_load_file(rom_t*,const char*);
 void rom_del(rom_t*rom);
 void rom_map(rom_t*rom,ram_t*ram);
+void rom_print_header_info(rom_t*rom);

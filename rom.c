@@ -38,7 +38,23 @@ void rom_load_file(rom_t*rom,const char*filepath)
 
 	read(fd,rom->header,16);	// iNes header
 
-	printf("Reading ROM file \"%s\"\n",filepath);
+	// Read trainer section of iNes file if it exists
+	if(rom->header[6]&0x3)		// .nes file contains trainer section
+	{
+		read(fd,rom->trainer,512);
+		//puts("has trainer!");
+	}
+
+	read(fd,rom->data,len-16);		// ROM data
+
+	//printf("success reading rom \"%s\" (%u B)\n",filepath,len);
+
+	close(fd);
+}
+
+void rom_print_header_info(rom_t*rom)
+{
+	printf("Reading ROM file \"%s\"\n",rom->filepath);
 	printf("ROM banks (16k): %u\n",rom->header[4]);
 	printf("VROM banks (8k): %u\n",rom->header[5]);
 
@@ -51,19 +67,7 @@ void rom_load_file(rom_t*rom,const char*filepath)
 	printf("ROM Mapper type: %u\n",rom->header[6]&0xf0|rom->header[7]&0x0f);
 	printf("RAM banks (8k): %u (if 0, counted as 1)\n",rom->header[8]);
 	printf("Cartridge: %s\n",(rom->header[9]&0x1)==1?"PAL":"NTSC");
-
-	// Read trainer section of iNes file if it exists
-	if(rom->header[6]&0x3)		// .nes file contains trainer section
-	{
-		read(fd,rom->trainer,512);
-		//puts("has trainer!");
-	}
-
-	read(fd,rom->data,len);		// ROM data
-
-	//printf("success reading rom \"%s\" (%u B)\n",filepath,len);
-
-	close(fd);
+	puts("_______________");
 }
 
 void rom_map(rom_t*rom,ram_t*ram)
@@ -81,7 +85,7 @@ void rom_map(rom_t*rom,ram_t*ram)
 
 	// Copy rom data into ram memory
 	// Put NES file header parsing here <---
-	memmove(ram->mem,rom->data,0x10000);
+	memmove(ram->mem,rom->data,rom->data_len);
 }
 
 // Free memory allocated to ROM object
