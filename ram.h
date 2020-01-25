@@ -13,3 +13,4 @@ typedef struct ram16_t
 }ram_t;
 
 ram_t*ram_init(void);
+void ram_del(ram_t*ram);

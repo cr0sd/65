@@ -1,8 +1,11 @@
 #pragma once
+#include"65.h"
 #include"ram.h"
 
 #include<stdio.h>
+#include<stdlib.h>
 #include<stdint.h>
+#include<string.h>
 // 1975, baby!
 
 typedef struct cpu_t
@@ -26,3 +29,6 @@ typedef struct cpu_t
 
 	int8_t sp;		// Stack pointer
 }cpu_t;
+
+cpu_t*cpu_init(void);
+void cpu_exec(cpu_t*cpu,ram_t*ram);
