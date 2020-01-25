@@ -6,6 +6,7 @@
 // To be mapped into 6502 RAM later
 void rom_load_file(rom_t*rom,const char*filepath)
 {
+	// Open specified file
 	rom->filepath=filepath;
 	int fd=open(filepath,O_RDONLY);
 	size_t len=0;
@@ -15,15 +16,16 @@ void rom_load_file(rom_t*rom,const char*filepath)
 		return;
 	}
 
-	// Allocate memory for and read
-	// ROM file contents into rom data
-	len=lseek(fd,0,SEEK_END);
+	// Determine ROM size
+	// TODO: Calculate actual ROM size based on iNes header
+	len=lseek(fd,0,SEEK_END)-16;
 	if(len<0)
 	{
 		puterr("%s: Error detecting ROM file (\"%s\") size\n",__func__,filepath);
 		return;
 	}
 
+	// Allocate memory for ROM data
 	rom->data=malloc(len);
 	if(!rom->data)
 	{
@@ -31,8 +33,33 @@ void rom_load_file(rom_t*rom,const char*filepath)
 		return;
 	}
 
+	// Read ROM data into rom_t struct
 	lseek(fd,0,SEEK_SET);
-	read(fd,rom->data,len);
+
+	read(fd,rom->header,16);	// iNes header
+
+	printf("Reading ROM file \"%s\"\n",filepath);
+	printf("ROM banks (16k): %u\n",rom->header[4]);
+	printf("VROM banks (8k): %u\n",rom->header[5]);
+
+	printf("Vertical mirroring: %s\n",rom->header[6]&0x01?"true":"false");
+	printf("Battery-backed RAM at $6000-$7FFF: %s\n",rom->header[6]&0x01?"true":"false");
+	printf("Contains trainer section: %s\n",rom->header[6]&0x03?"true":"false");
+	printf("Four-screen VRAM: %s\n",rom->header[6]&0x04?"true":"false");
+
+	printf("VS System cartridge: %s\n",rom->header[7]&0x01?"true":"false");
+	printf("ROM Mapper type: %u\n",rom->header[6]&0xf0|rom->header[7]&0x0f);
+	printf("RAM banks (8k): %u (if 0, counted as 1)\n",rom->header[8]);
+	printf("Cartridge: %s\n",(rom->header[9]&0x1)==1?"PAL":"NTSC");
+
+	// Read trainer section of iNes file if it exists
+	if(rom->header[6]&0x3)		// .nes file contains trainer section
+	{
+		read(fd,rom->trainer,512);
+		//puts("has trainer!");
+	}
+
+	read(fd,rom->data,len);		// ROM data
 
 	//printf("success reading rom \"%s\" (%u B)\n",filepath,len);
 

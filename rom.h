@@ -15,6 +15,8 @@ typedef struct romNES_t
 {
 	//int fd;				// File descriptor associated with ROM file on host machine
 	const char*filepath;	// File name associated with ROM file on host machine
+	uint8_t header[16];		// iNes header file
+	uint8_t trainer[512];	// iNes (optional) trainer
 	uint8_t*data;			// ROM loaded into (host) RAM
 }rom_t;
 

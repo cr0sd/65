@@ -22,7 +22,6 @@ int main(int argc,char**argv)
 	// Parse command line arguments
 	if(argc>1)
 	{
-		printf("loading rom \"%s\"\n",argv[1]);
 		rom_load_file(rom,argv[1]);
 		rom_map(rom,ram);
 	}
