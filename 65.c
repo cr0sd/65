@@ -1,4 +1,7 @@
 #include"65.h"
+#include"ram.h"
+#include"rom.h"
+#include"cpu.h"
 
 void puterr(const char*fmt,...)
 {

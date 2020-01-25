@@ -1,12 +1,13 @@
 #pragma once
-
-#include"ram.h"
+#include"65.h"
 
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
 #include<fcntl.h>
 #include<unistd.h>
+
+typedef struct ram_t ram_t;
 
 // Define ROM struct to contain
 // information about loaded NES rom

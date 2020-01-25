@@ -1,4 +1,5 @@
 #include"cpu.h"
+#include"ram.h"
 
 // Create new cpu_t object with
 // default values

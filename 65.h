@@ -1,7 +1,7 @@
 #pragma once
-#include"cpu.h"
-#include"ram.h"
-#include"rom.h"
+//#include"cpu.h"
+//#include"ram.h"
+//#include"rom.h"
 
 #include<stdio.h>
 #include<stdlib.h>

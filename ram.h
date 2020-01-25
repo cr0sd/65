@@ -1,5 +1,7 @@
 #pragma once
 #include"65.h"
+#include"cpu.h"
+#include"rom.h"
 
 #include<stdio.h>
 #include<stdint.h>
@@ -7,7 +9,7 @@
 
 // Define RAM struct
 // for 16-bit address space
-typedef struct ram16_t
+typedef struct ram_t
 {
 	uint8_t*mem;
 }ram_t;

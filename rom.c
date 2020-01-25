@@ -1,5 +1,6 @@
 #include"65.h"
 #include"rom.h"
+#include"ram.h"
 
 // Load ROM into host machine memory
 // To be mapped into 6502 RAM later

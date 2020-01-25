@@ -1,12 +1,14 @@
 #pragma once
 #include"65.h"
-#include"ram.h"
+#include"rom.h"
 
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
 #include<string.h>
 // 1975, baby!
+
+typedef struct ram_t ram_t;
 
 typedef struct cpu_t
 {
