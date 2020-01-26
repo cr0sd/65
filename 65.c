@@ -25,17 +25,20 @@ int main(int argc,char**argv)
 		rom_load_file(rom,argv[1]);
 		rom_map(rom,ram);
 		rom_print_header_info(rom);
+		//for(int i=0;i<100;++i)
+			//printf("%2x",ram->mem[i]);
+		//puts("");
 	}
 
 	// Execute ROM
 	if(rom->data)
 	{
 		// Read 3 instructions for testing purposes
-		for(int i=0;i<3;++i)
+		for(int i=0;i<4;++i)
 		{
-			printf("pc: 0x%04x\t",cpu->pc);
-			printf("ac: 0x%02x",cpu->ac);
-			puts("");
+			//printf("pc: 0x%04x\t",cpu->pc);
+			//printf("ac: 0x%02x",cpu->ac);
+			//puts("");
 			printf("0x%04x: 0x%02x\n",cpu->pc,ram->mem[cpu->pc]);
 			cpu_exec(cpu,ram);
 			cpu->pc+=1;

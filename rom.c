@@ -17,13 +17,14 @@ void rom_load_file(rom_t*rom,const char*filepath)
 	}
 
 	// Determine ROM size
-	// TODO: Calculate actual ROM size based on iNes header
-	len=lseek(fd,0,SEEK_END)-16;
-	if(len<0)
+	len=lseek(fd,0,SEEK_END);
+	if(len<=16)
 	{
-		puterr("%s: Error detecting ROM file (\"%s\") size\n",__func__,filepath);
+		puterr("%s: ROM size was less than 1 byte\n",__func__);
 		return;
 	}
+	len-=16;
+	rom->data_len=len;
 
 	// Allocate memory for ROM data
 	rom->data=malloc(len);
@@ -35,7 +36,6 @@ void rom_load_file(rom_t*rom,const char*filepath)
 
 	// Read ROM data into rom_t struct
 	lseek(fd,0,SEEK_SET);
-
 	read(fd,rom->header,16);	// iNes header
 
 	// Read trainer section of iNes file if it exists
@@ -45,15 +45,17 @@ void rom_load_file(rom_t*rom,const char*filepath)
 		//puts("has trainer!");
 	}
 
-	read(fd,rom->data,len-16);		// ROM data
+	//lseek(fd,16,SEEK_SET);
+	//printf("data_len: %d\n",rom->data_len);
+	read(fd,rom->data,len);		// ROM data
 
 	//printf("success reading rom \"%s\" (%u B)\n",filepath,len);
-
 	close(fd);
 }
 
 void rom_print_header_info(rom_t*rom)
 {
+	puts("ROM info:");
 	printf("Reading ROM file \"%s\"\n",rom->filepath);
 	printf("ROM banks (16k): %u\n",rom->header[4]);
 	printf("VROM banks (8k): %u\n",rom->header[5]);
@@ -67,6 +69,8 @@ void rom_print_header_info(rom_t*rom)
 	printf("ROM Mapper type: %u\n",rom->header[6]&0xf0|rom->header[7]&0x0f);
 	printf("RAM banks (8k): %u (if 0, counted as 1)\n",rom->header[8]);
 	printf("Cartridge: %s\n",(rom->header[9]&0x1)==1?"PAL":"NTSC");
+
+	printf("Rom data length: %d\n",rom->data_len);
 	puts("_______________");
 }
 
@@ -85,6 +89,7 @@ void rom_map(rom_t*rom,ram_t*ram)
 
 	// Copy rom data into ram memory
 	// Put NES file header parsing here <---
+	//printf("copying %u bytes into RAM from ROM\n",rom->data_len);
 	memmove(ram->mem,rom->data,rom->data_len);
 }
 
