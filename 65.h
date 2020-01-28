@@ -3,6 +3,7 @@
 //#include"ram.h"
 //#include"rom.h"
 
+#include<ncurses.h>
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
