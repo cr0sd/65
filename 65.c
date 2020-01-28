@@ -36,17 +36,22 @@ int main(int argc,char**argv)
 	if(argc>1)
 	{
 		rom_load_file(rom,argv[1]);
-		rom_map(rom,ram);
 		rom_print_header_info(rom);
+		refresh();
+
+		// Map ROM into $8000 by default
+		// TODO: Learn where exactly to map 'PRG-ROM'
+		rom_map(rom,ram,PRG_ROM_OFFSET);
+		refresh();
 		//for(int i=0;i<100;++i)
 			//printf("%2x",ram->mem[i]);
 		//puts("");
-		refresh();
 	}
 
 	// Execute ROM
 	if(rom->data)
 	{
+		cpu->pc=PRG_ROM_OFFSET;
 		// Read instructions for testing purposes
 		#define INSNS 4
 		printw("Displaying %d instructions:\n",INSNS);

@@ -20,7 +20,7 @@ void rom_load_file(rom_t*rom,const char*filepath)
 	len=lseek(fd,0,SEEK_END);
 	if(len<=16)
 	{
-		puterr("%s: ROM size was less than 1 byte\n",__func__);
+		puterr("%s: ROM size was less than 16 bytes\n",__func__);
 		return;
 	}
 	len-=16;
@@ -37,6 +37,13 @@ void rom_load_file(rom_t*rom,const char*filepath)
 	// Read ROM data into rom_t struct
 	lseek(fd,0,SEEK_SET);
 	read(fd,rom->header,16);	// iNes header
+
+	// Verify valid NES header
+	if(strncmp("NES",rom->header,3)!=0)
+	{
+		puterr("%s: \"%s\" is not a valid NES file\n",__func__,filepath);
+		return;
+	}
 
 	// Read trainer section of iNes file if it exists
 	if(rom->header[6]&0x3)		// .nes file contains trainer section
@@ -76,7 +83,9 @@ void rom_print_header_info(rom_t*rom)
 	printw("_______________\n");
 }
 
-void rom_map(rom_t*rom,ram_t*ram)
+// Map ROM information into CPU RAM for fetch-decode-execute
+// offset used to determine where in RAM said ROM data will be mapped
+void rom_map(rom_t*rom,ram_t*ram,size_t offset)
 {
 	if(!rom || !rom->data)
 	{
@@ -92,7 +101,14 @@ void rom_map(rom_t*rom,ram_t*ram)
 	// Copy rom data into ram memory
 	// Put NES file header parsing here <---
 	//printw("copying %u bytes into RAM from ROM\n",rom->data_len);
-	memmove(ram->mem,rom->data,rom->data_len);
+
+	// NOTE: Substitution of copying entire data_len with copying
+	// a smaller 'chunk' at a time was necessary on ArchLinux to prevent
+	// SIGSEGV crashing the program
+	const size_t DATA_CHUNK=2048;
+	for(size_t len=rom->data_len;len>0;len-=(len>DATA_CHUNK)?DATA_CHUNK:len)
+		memmove(ram->mem+offset,rom->data,(len>DATA_CHUNK)?DATA_CHUNK:len);
+	//memmove(ram->mem,rom->data,rom->data_len);
 }
 
 // Free memory allocated to ROM object
