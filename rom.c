@@ -42,36 +42,38 @@ void rom_load_file(rom_t*rom,const char*filepath)
 	if(rom->header[6]&0x3)		// .nes file contains trainer section
 	{
 		read(fd,rom->trainer,512);
-		//puts("has trainer!");
+		//printw("has trainer!");
 	}
 
 	//lseek(fd,16,SEEK_SET);
-	//printf("data_len: %d\n",rom->data_len);
+	//printw("data_len: %d\n",rom->data_len);
 	read(fd,rom->data,len);		// ROM data
 
-	//printf("success reading rom \"%s\" (%u B)\n",filepath,len);
+	//printw("success reading rom \"%s\" (%u B)\n",filepath,len);
 	close(fd);
 }
 
 void rom_print_header_info(rom_t*rom)
 {
-	puts("ROM info:");
-	printf("Reading ROM file \"%s\"\n",rom->filepath);
-	printf("ROM banks (16k): %u\n",rom->header[4]);
-	printf("VROM banks (8k): %u\n",rom->header[5]);
+	attron(COLOR_PAIR(3));
+	printw("ROM info:\n");
+	printw("Reading ROM file \"%s\"\n",rom->filepath);
+	printw("ROM banks (16k): %u\n",rom->header[4]);
+	printw("VROM banks (8k): %u\n",rom->header[5]);
 
-	printf("Vertical mirroring: %s\n",rom->header[6]&0x01?"true":"false");
-	printf("Battery-backed RAM at $6000-$7FFF: %s\n",rom->header[6]&0x01?"true":"false");
-	printf("Contains trainer section: %s\n",rom->header[6]&0x03?"true":"false");
-	printf("Four-screen VRAM: %s\n",rom->header[6]&0x04?"true":"false");
+	printw("Vertical mirroring: %s\n",rom->header[6]&0x01?"true":"false");
+	printw("Battery-backed RAM at $6000-$7FFF: %s\n",rom->header[6]&0x01?"true":"false");
+	printw("Contains trainer section: %s\n",rom->header[6]&0x03?"true":"false");
+	printw("Four-screen VRAM: %s\n",rom->header[6]&0x04?"true":"false");
 
-	printf("VS System cartridge: %s\n",rom->header[7]&0x01?"true":"false");
-	printf("ROM Mapper type: %u\n",rom->header[6]&0xf0|rom->header[7]&0x0f);
-	printf("RAM banks (8k): %u (if 0, counted as 1)\n",rom->header[8]);
-	printf("Cartridge: %s\n",(rom->header[9]&0x1)==1?"PAL":"NTSC");
+	printw("VS System cartridge: %s\n",rom->header[7]&0x01?"true":"false");
+	printw("ROM Mapper type: %u\n",rom->header[6]&0xf0|rom->header[7]&0x0f);
+	printw("RAM banks (8k): %u (if 0, counted as 1)\n",rom->header[8]);
+	printw("Cartridge: %s\n",(rom->header[9]&0x1)==1?"PAL":"NTSC");
 
-	printf("Rom data length: %d\n",rom->data_len);
-	puts("_______________");
+	printw("Rom data length: %d\n",rom->data_len);
+	attron(COLOR_PAIR(1));
+	printw("_______________\n");
 }
 
 void rom_map(rom_t*rom,ram_t*ram)
@@ -89,7 +91,7 @@ void rom_map(rom_t*rom,ram_t*ram)
 
 	// Copy rom data into ram memory
 	// Put NES file header parsing here <---
-	//printf("copying %u bytes into RAM from ROM\n",rom->data_len);
+	//printw("copying %u bytes into RAM from ROM\n",rom->data_len);
 	memmove(ram->mem,rom->data,rom->data_len);
 }
 

@@ -11,7 +11,9 @@ int main(void)
 	// Open nes.nes
 	fd=open("nes.nes",O_CREAT|O_TRUNC|O_RDWR);
 
-	for(int i=0;i<1024;++i)
+	write(fd,"NES",4);
+
+	for(int i=1;i<1024;++i)
 	{
 		uint8_t j=i; // cast to 8-bit int
 		write(fd,&j,1);

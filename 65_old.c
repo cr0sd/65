@@ -2,20 +2,13 @@
 #include"ram.h"
 #include"rom.h"
 #include"cpu.h"
-#include<ncurses.h>
 
-WINDOW*win;
 void puterr(const char*fmt,...)
 {
 	va_list list;
 	va_start(list,fmt);
-	//fprintf(stderr,PROG": Error: ");
-	printw(PROG": ");
-	attron(COLOR_PAIR(2));
-	printw("Error: ");
-	attron(COLOR_PAIR(1));
-	//vfprintf(stderr,fmt,list);
-	vwprintw(win,fmt,list);
+	fprintf(stderr,PROG": Error: ");
+	vfprintf(stderr,fmt,list);
 	va_end(list);
 }
 
@@ -26,12 +19,6 @@ int main(int argc,char**argv)
 	rom_t*rom=new(rom_t);
 	ram_t*ram=ram_init();
 
-	win=initscr();
-	start_color();
-	init_pair(1,COLOR_WHITE,COLOR_BLACK);
-	init_pair(2,COLOR_RED,COLOR_BLACK);
-	init_pair(3,COLOR_CYAN,COLOR_BLACK);
-
 	// Parse command line arguments
 	if(argc>1)
 	{
@@ -41,7 +28,6 @@ int main(int argc,char**argv)
 		//for(int i=0;i<100;++i)
 			//printf("%2x",ram->mem[i]);
 		//puts("");
-		refresh();
 	}
 
 	// Execute ROM
@@ -49,23 +35,19 @@ int main(int argc,char**argv)
 	{
 		// Read instructions for testing purposes
 		#define INSNS 4
-		printw("Displaying %d instructions:\n",INSNS);
+		printf("Displaying %d instructions:\n",INSNS);
 		for(int i=0;i<INSNS;++i)
 		{
 			//printf("pc: 0x%04x\t",cpu->pc);
 			//printf("ac: 0x%02x",cpu->ac);
 			//puts("");
-			printw("0x%04x: 0x%02x\n",cpu->pc,ram->mem[cpu->pc]);
+			printf("0x%04x: 0x%02x\n",cpu->pc,ram->mem[cpu->pc]);
 			cpu_exec(cpu,ram);
 			cpu->pc+=1;
-			refresh();
 		}
 	}
 	else
 		puterr("%s: No ROM loaded\n",__func__);
-
-	refresh();
-	getchar();
 
 	// Free memory
 	free(cpu);
@@ -73,5 +55,4 @@ int main(int argc,char**argv)
 	free(rom);
 	ram_del(ram);
 	free(ram);
-	endwin();
 }
