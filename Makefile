@@ -4,16 +4,20 @@ LD65=../nescom-1.2.0/neslink
 PROG= 65
 OBJS= 65.o cpu.o ram.o rom.o
 
+TESTDIR= tests
+TESTOBJS= $(TESTDIR)/nes.nes
+
 CFLAGS=-Wfatal-errors
 CFLAGS=-lncurses
 
 $(PROG):$(OBJS)
 	$(CC) $(OBJS) -o $(PROG) $(CFLAGS) $(LDFLAGS)
+tests:$(TESTOBJS)
 .o65.nes:
-	$(LD65) $*.o65 -f nes -o $*.nes
+	$(LD65) $*.o65 -fnes -o $*.nes
 .a65.o65:
-	$(A65) $*.a65 -f o65 -o $*.o65
+	$(A65) $*.a65 -fo65 -o $*.o65
 clean:
-	$(RM) *.o *.o65 $(PROG)
+	$(RM) *.o $(TESTDIR)/*.o65 $(PROG) $(TESTOBJS)
 .SUFFIXES: .nes .o65 .a65
-.PHONY: all rom clean
+.PHONY: all clean tests
