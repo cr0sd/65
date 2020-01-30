@@ -22,14 +22,14 @@ typedef struct cpu_t
 		uint8_t reg;	// Entire 8-bit register
 		struct
 		{
-			int n:1;	// Negative
-			int v:1;	// Overflow
-			int _:1;	// Ignored
-			int b:1;	// Break
-			int d:1;	// Decimal (BCD)
-			int i:1;	// Interrupt (enable/disable)
-			int z:1;	// Zero
-			int c:1;	// Carry
+			int8_t n:1;	// Negative
+			int8_t v:1;	// Overflow
+			int8_t _:1;	// Ignored
+			int8_t b:1;	// Break
+			int8_t d:1;	// Decimal (BCD)
+			int8_t i:1;	// Interrupt (enable/disable)
+			int8_t z:1;	// Zero
+			int8_t c:1;	// Carry
 		}bits;			// Access individual bit flags
 	}sr;
 
