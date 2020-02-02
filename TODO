@@ -1,7 +1,8 @@
 1. Implement instruction set
 	a. Pay attention to address modes
+	b. Start with ops without operands
 2. Work on UI
-	a. Create boxes for text
+	a. Create ncurses scrollable boxes for text
 3. Create suite of tests
 4. Implement other NES hardware
 	a. Joypad

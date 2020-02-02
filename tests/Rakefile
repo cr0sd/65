@@ -1,0 +1,23 @@
+require 'fileutils'
+
+# Remove file extension
+def get_name(x)
+	x.scan(/([a-z_0-9]+)\.(.*)/)[0][0]
+end
+
+def a65_nes(x)
+
+	# Get base filename
+	y=get_name(x)
+
+	# Run command if needed
+	if !FileUtils.uptodate?('#{y}.nes',['#{y}.a65'])
+		`set -x; xa #{y}.a65 -o #{y}.nes`
+	else
+		puts"nothing to be done for #{x}"
+	end
+end
+
+task :default do
+	a65_nes('nes.nes')
+end
