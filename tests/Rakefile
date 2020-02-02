@@ -69,7 +69,6 @@ end
 # -----------------------------
 task :default do
 	make'nes.nes'
-	make'fam.o'
 end
 
 task :clean do
