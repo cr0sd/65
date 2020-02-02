@@ -51,8 +51,17 @@ def make(x)
 	end
 end
 
+# Remove files
+def clean(x)
+	`set -x; rm -f #{x}`
+end
+
 ####################################
 
 task :default do
 	make'nes.nes'
+end
+
+task :clean do
+	clean'nes.nes'
 end
