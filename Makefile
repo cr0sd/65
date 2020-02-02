@@ -6,8 +6,8 @@ OBJS= 65.o cpu.o ram.o rom.o
 TESTDIR= tests
 TESTOBJS= nes.nes
 
-CFLAGS= -Wfatal-errors
-CFLAGS= -lncurses
+CFLAGS = -Wfatal-errors
+CFLAGS += -lncurses
 
 $(PROG): $(OBJS)
 	$(CC) $(OBJS) -o $(PROG) $(CFLAGS) $(LDFLAGS)
