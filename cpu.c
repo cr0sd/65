@@ -14,6 +14,7 @@ cpu_t*cpu_init(void)
 // through CPU
 void cpu_exec(cpu_t*cpu,ram_t*ram)
 {
+
 	switch(ram->mem[cpu->pc])
 	{
 		case 0x00:

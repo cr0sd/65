@@ -1,18 +1,18 @@
-A65=../nescom-1.2.0/nescom
-LD65=../nescom-1.2.0/neslink
+A65= ../nescom-1.2.0/nescom
+LD65= ../nescom-1.2.0/neslink
 
 PROG= 65
 OBJS= 65.o cpu.o ram.o rom.o
 
 TESTDIR= tests
-TESTOBJS= $(TESTDIR)/nes.nes
+TESTOBJS= nes.nes
 
-CFLAGS=-Wfatal-errors
-CFLAGS=-lncurses
+CFLAGS= -Wfatal-errors
+CFLAGS= -lncurses
 
-$(PROG):$(OBJS)
+$(PROG): $(OBJS)
 	$(CC) $(OBJS) -o $(PROG) $(CFLAGS) $(LDFLAGS)
-tests:$(TESTOBJS)
+tests: $(foreach x,$(TESTOBJS),$(TESTDIR)/$(x))
 .o65.nes:
 	$(LD65) $*.o65 -fnes -o $*.nes
 .a65.o65:

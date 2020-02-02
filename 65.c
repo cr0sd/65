@@ -4,6 +4,17 @@
 #include"cpu.h"
 #include<ncurses.h>
 
+void cpu65_exec(cpu_t*cpu,ram_t*ram)
+{
+	//printf("pc: 0x%04x\t",cpu->pc);
+	//printf("ac: 0x%02x",cpu->ac);
+	//puts("");
+	printw("0x%04x: 0x%02x\n",cpu->pc,ram->mem[cpu->pc]);
+	cpu_exec(cpu,ram);
+	cpu->pc+=1;
+	refresh();
+}
+
 WINDOW*win;
 void puterr(const char*fmt,...)
 {
@@ -56,22 +67,28 @@ int main(int argc,char**argv)
 		#define INSNS 4
 		printw("Displaying %d instructions:\n",INSNS);
 		for(int i=0;i<INSNS;++i)
-		{
-			//printf("pc: 0x%04x\t",cpu->pc);
-			//printf("ac: 0x%02x",cpu->ac);
-			//puts("");
-			printw("0x%04x: 0x%02x\n",cpu->pc,ram->mem[cpu->pc]);
-			cpu_exec(cpu,ram);
-			cpu->pc+=1;
-			refresh();
-		}
+			cpu65_exec(cpu,ram);
 	}
 	else
 		puterr("%s: No ROM loaded\n",__func__);
 
-	refresh();
-	getchar();
+	while(true)
+	{
+		refresh();
+		switch(getchar())
+		{
+		case 'i':
+			printw("ac: 0x%x\n",cpu->ac);
+			break;
+		case 's':
+			cpu65_exec(cpu,ram);
+			break;
+		case 'q':
+			goto quit;
+		}
+	}
 
+quit:
 	// Free memory
 	free(cpu);
 	rom_del(rom);

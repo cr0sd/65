@@ -1,5 +1,7 @@
-1. Get 6502 assembler
-2. Implement instruction set
+1. Implement instruction set
+	a. Pay attention to address modes
+2. Work on UI
+	a. Create boxes for text
 3. Create suite of tests
 4. Implement other NES hardware
 	a. Joypad
