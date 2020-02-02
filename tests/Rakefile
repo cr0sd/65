@@ -1,5 +1,13 @@
 require 'fileutils'
 
+# Variables
+# -----------------------------
+AS65='xa'
+CC='cc'
+
+
+# Functions
+# -----------------------------
 # Remove file extension
 def get_name(x)
 	x.scan(/([a-z_0-9]+)\.(.*)/)[0][0]
@@ -19,7 +27,7 @@ def a65_nes(x)
 
 	# Run command if needed
 	if !FileUtils.uptodate?('#{y}.nes',['#{y}.a65'])
-		`set -x; xa #{y}.a65 -o #{y}.nes`
+		`set -x; #{AS65} #{y}.a65 -o #{y}.nes`
 	else
 		puts"nothing to be done for #{x}"
 	end
@@ -33,7 +41,7 @@ def c_o(x)
 
 	# Run command if needed
 	if !FileUtils.uptodate?('#{y}.o',['#{y}.c'])
-		`set -x; cc -c #{y}.c`
+		`set -x; #{CC} -c #{y}.c`
 	else
 		puts"nothing to be done for #{x}"
 	end
@@ -56,10 +64,12 @@ def clean(x)
 	`set -x; rm -f #{x}`
 end
 
-####################################
 
+# Rules
+# -----------------------------
 task :default do
 	make'nes.nes'
+	make'fam.o'
 end
 
 task :clean do
