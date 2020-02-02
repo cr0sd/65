@@ -74,3 +74,9 @@ end
 task :clean do
 	clean'nes.nes'
 end
+
+task :sim65 do
+	# Setup execution environment to use wxWidgets 2.8
+	`set -x; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib`
+	#`./sim65`
+end
