@@ -9,7 +9,7 @@ void cpu65_exec(cpu_t*cpu,ram_t*ram)
 	//printf("pc: 0x%04x\t",cpu->pc);
 	//printf("ac: 0x%02x",cpu->ac);
 	//puts("");
-	printw("0x%04x: 0x%02x\n",cpu->pc,ram->mem[cpu->pc]);
+	printw("0x%04x: 0x%02x\n",cpu->pc,ram->ram[cpu->pc]);
 	cpu_exec(cpu,ram);
 	cpu->pc+=1;
 	refresh();
@@ -55,12 +55,12 @@ int main(int argc,char**argv)
 		rom_map(rom,ram,PRG_ROM_OFFSET);
 		refresh();
 		//for(int i=0;i<100;++i)
-			//printf("%2x",ram->mem[i]);
+			//printf("%2x",ram->ram[i]);
 		//puts("");
 	}
 
 	// Execute ROM
-	if(rom->data)
+	if(rom->rom)
 	{
 		cpu->pc=PRG_ROM_OFFSET;
 		// Read instructions for testing purposes
@@ -78,7 +78,7 @@ int main(int argc,char**argv)
 		switch(getchar())
 		{
 		case 'i':
-			printw("ac: 0x%x\n",cpu->ac);
+			printw("a: 0x%x\n",cpu->a);
 			break;
 		case 's':
 			cpu65_exec(cpu,ram);

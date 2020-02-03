@@ -17,7 +17,7 @@ typedef struct romNES_t
 	const char*filepath;	// File name associated with ROM file on host machine
 	uint8_t header[16];		// iNes header file
 	uint8_t trainer[1024];	// iNes (optional) trainer
-	uint8_t*data;			// ROM loaded into (host) RAM
+	uint8_t*rom;			// ROM loaded into (host) RAM
 	size_t data_len;		// Size of data in buffer
 }rom_t;
 

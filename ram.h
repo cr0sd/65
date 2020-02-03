@@ -11,7 +11,7 @@
 // for 16-bit address space
 typedef struct ram_t
 {
-	uint8_t*mem;
+	uint8_t*ram;
 }ram_t;
 
 ram_t*ram_init(void);

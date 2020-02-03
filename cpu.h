@@ -13,7 +13,7 @@ typedef struct ram_t ram_t;
 typedef struct cpu_t
 {
 	uint16_t pc;		// Program counter
-	uint8_t ac;		// Accumulator
+	uint8_t a;		// Accumulator
 	uint8_t x;
 	uint8_t y;
 

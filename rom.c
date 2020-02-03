@@ -27,8 +27,8 @@ void rom_load_file(rom_t*rom,const char*filepath)
 	rom->data_len=len;
 
 	// Allocate memory for ROM data
-	rom->data=malloc(len);
-	if(!rom->data)
+	rom->rom=malloc(len);
+	if(!rom->rom)
 	{
 		puterr("%s: Error allocating ROM memory for file data (\"%s\")\n",__func__,filepath);
 		return;
@@ -54,7 +54,7 @@ void rom_load_file(rom_t*rom,const char*filepath)
 
 	//lseek(fd,16,SEEK_SET);
 	//printw("data_len: %d\n",rom->data_len);
-	read(fd,rom->data,len);		// ROM data
+	read(fd,rom->rom,len);		// ROM data
 
 	//printw("success reading rom \"%s\" (%u B)\n",filepath,len);
 	close(fd);
@@ -87,12 +87,12 @@ void rom_print_header_info(rom_t*rom)
 // offset used to determine where in RAM said ROM data will be mapped
 void rom_map(rom_t*rom,ram_t*ram,size_t offset)
 {
-	if(!rom || !rom->data)
+	if(!rom || !rom->rom)
 	{
 		puterr("%s: Attempting to map NULL ROM data into RAM memory\n",__func__);
 		return;
 	}
-	if(!ram || !ram->mem)
+	if(!ram || !ram->ram)
 	{
 		puterr("%s: Attempting to map ROM data into NULL RAM memory\n",__func__);
 		return;
@@ -107,17 +107,17 @@ void rom_map(rom_t*rom,ram_t*ram,size_t offset)
 	// SIGSEGV crashing the program
 	const size_t DATA_CHUNK=2048;
 	for(size_t len=rom->data_len;len>0;len-=(len>DATA_CHUNK)?DATA_CHUNK:len)
-		memmove(ram->mem+offset,rom->data,(len>DATA_CHUNK)?DATA_CHUNK:len);
-	//memmove(ram->mem,rom->data,rom->data_len);
+		memmove(ram->ram+offset,rom->rom,(len>DATA_CHUNK)?DATA_CHUNK:len);
+	//memmove(ram->ram,rom->rom,rom->data_len);
 }
 
 // Free memory allocated to ROM object
 void rom_del(rom_t*rom)
 {
-	if(!rom->data)
+	if(!rom->rom)
 	{
 		puterr("%s: Attempting to free NULL memory\n",__func__);
 		return;
 	}
-	free(rom->data);
+	free(rom->rom);
 }
