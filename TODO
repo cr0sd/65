@@ -1,10 +1,12 @@
 1. Implement instruction set
 	a. Pay attention to address modes
+		- Zeropage, absolute, immediate value, indirect (X, Y)
 	b. Start with ops without operands
-2. Work on UI
+2. Understand memory mapping for 6502
+3. Work on UI
 	a. Create ncurses scrollable boxes for text
-3. Create suite of tests
-4. Implement other NES hardware
+4. Create suite of tests
+5. Implement other NES hardware
 	a. Joypad
 	b. Graphics
 	c. Sound

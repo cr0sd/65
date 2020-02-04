@@ -19,7 +19,11 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 	// here
 	switch(ram->ram[cpu->pc])
 	{
-		case 0xa9:
+		case 0xa2: // ldx imm
+			cpu->pc+=1;
+			cpu->x=ram->ram[cpu->pc];
+			break;
+		case 0xa9: // lda imm
 			cpu->pc+=1;
 			cpu->a=ram->ram[cpu->pc];
 			break;
