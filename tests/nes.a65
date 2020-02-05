@@ -4,15 +4,12 @@
 *=$8000
 .text
 main:
-	ldx $0000
+	lda #$10
+	ldx #$43
+	ldy #$12
+
 	asl $0100,x
 	inc $0100,x
 	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+
 	jsr main
