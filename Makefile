@@ -7,7 +7,7 @@ TESTDIR= tests
 TESTOBJS= nes.nes
 
 CFLAGS = -Wfatal-errors
-CFLAGS += -lncurses
+LDFLAGS += -lncurses
 
 $(PROG): $(OBJS)
 	$(CC) $(OBJS) -o $(PROG) $(CFLAGS) $(LDFLAGS)
