@@ -50,13 +50,24 @@ void print_hexdump(cpu_t*cpu,ram_t*ram)
 	attron(COLOR_PAIR(4));
 	mvprintw(0,16,"Hexdump:");
 	attroff(COLOR_PAIR(4));
-	for(int i=0;i<4;++i)
+
+	// Print multiple lines
+	for(int i=0;i<5;++i)
 	{
 		attron(COLOR_PAIR(3));
 		mvprintw(i+1,16,"%04x",cpu->pc+i*8);
 		attroff(COLOR_PAIR(3));
+
+		// Hex output
 		for(int j=0;j<8;++j)
 			mvprintw(i+1,24+j*4,"%02x\n",ram->ram[cpu->pc+i*8+j]);
+
+		// ASCII output
+		for(int j=0;j<8;++j)
+		{
+			char c=ram->ram[cpu->pc+i*8+j];
+			mvprintw(i+1,32+24+j,"%c\n",c<33?'.':c);
+		}
 	}
 }
 
@@ -76,6 +87,7 @@ int main(int argc,char**argv)
 	ram_t*ram=ram_init();
 
 	win=initscr();
+	curs_set(0);
 	start_color();
 	init_pair(1,COLOR_WHITE,COLOR_BLACK);
 	init_pair(2,COLOR_RED,COLOR_BLACK);
