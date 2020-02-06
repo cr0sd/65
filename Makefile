@@ -1,7 +1,7 @@
 AS65= xa
 
 PROG= 65
-OBJS= 65.o cpu.o ram.o rom.o
+OBJS= 65.o cpu.o ram.o rom.o disasm.o
 
 TESTDIR= tests
 TESTOBJS= nes.nes

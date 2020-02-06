@@ -2,6 +2,7 @@
 #include"ram.h"
 #include"rom.h"
 #include"cpu.h"
+#include"disasm.h"
 
 void cpu65_exec(cpu_t*cpu,ram_t*ram)
 {
@@ -94,8 +95,11 @@ int main(int argc,char**argv)
 	while(true)
 	{
 
+		//clear();
 		print_registers(cpu);
 		print_hexdump(cpu,ram);
+		mvprintw(7,0,"Disassembly:");
+		mvprintw(8,0,da_print_nextop(cpu,ram));
 		refresh();
 		// Get keyboard input
 		switch(getchar())
