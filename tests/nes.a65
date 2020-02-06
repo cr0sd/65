@@ -10,6 +10,7 @@ main:
 
 	.byt $a5,$01
 	lda $02 ; lda ram[$01]
+	nop
 
 	;ldy #$12
 	;asl $0100,x
@@ -17,3 +18,4 @@ main:
 	;nop
 
 	jsr main
+	.byt "hi there ya peeps",0
