@@ -94,6 +94,8 @@ int main(int argc,char**argv)
 	init_pair(3,COLOR_CYAN,COLOR_BLACK);
 	init_pair(4,COLOR_YELLOW,COLOR_BLACK);
 
+	mvprintw(20,0,"Welcome! Usage: [s] Step [q] Quit");
+
 	// Parse command line arguments
 	if(argc>1)
 	{

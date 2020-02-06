@@ -29,6 +29,7 @@ cpu_t*cpu_init(void)
 #define ldy(x) cpu->y=(x)
 #define ldpc(x) cpu->pc=(x)
 #define nop()
+#define brk()
 
 // Execute next instruction in RAM
 // through CPU
@@ -48,8 +49,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xA5: lda( zp( imm() ) ); break;
 		case 0xA9: lda( imm() ); break;
 		case 0x4C: ldpc( imm() | (imm()<<8) ); break;
-		case 0x00: break;
-		case 0x0A: break;
+		case 0x00: brk(); break;
 		case 0xEA: nop();
 		default: break;
 
