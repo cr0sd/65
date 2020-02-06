@@ -28,9 +28,21 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 				++i;
 				break;
 
+			case 0x4C: // jmp
+				printw( "\tjmp");
+				//printw( "\t%02x %02x", ram->ram[cpu->pc+i], ram->ram[cpu->pc+i+1] );
+				//printw( "\tldx $%02x", ram->ram[cpu->pc+i+1] );
+				++i;
+				++i;
+				goto clear_rest;
+
 			case 0xea: // nop
 				printw( "\t%02x", ram->ram[cpu->pc+i], ram->ram[cpu->pc+i+1] );
 				printw( "\tnop" );
+				goto clear_rest;
+
+			clear_rest:
+				printw("                  ");
 				break;
 
 			default:

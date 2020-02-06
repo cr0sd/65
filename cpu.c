@@ -24,9 +24,10 @@ cpu_t*cpu_init(void)
 #define imm() ram->ram[cpu->pc+=1]
 
 // Move micro-insns
-#define lda(x) cpu->a=x
+#define lda(x) cpu->a=(x)
 #define ldx(m) cpu->x=m
-#define ldy(x) cpu->y=x
+#define ldy(x) cpu->y=(x)
+#define ldpc(x) cpu->pc=(x)
 #define nop()
 
 // Execute next instruction in RAM
@@ -46,6 +47,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xA2: ldx( imm() ); break;
 		case 0xA5: lda( zp( imm() ) ); break;
 		case 0xA9: lda( imm() ); break;
+		case 0x4C: ldpc( imm() | (imm()<<8) ); break;
 		case 0x00: break;
 		case 0x0A: break;
 		case 0xEA: nop();

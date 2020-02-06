@@ -1,8 +1,8 @@
 .byt	"NES",0
 .word	0,0,0,0,0,0
 
-*=$8000
 .text
+*=$8000
 main:
 	lda #$00
 	ldx #$00
@@ -17,5 +17,6 @@ main:
 	;inc $0100,x
 	;nop
 
-	jsr main
+	;jsr main
+	jmp main
 	.byt "hi there ya peeps",0
