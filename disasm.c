@@ -4,7 +4,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 {
 	int y=8;
 
-	for(int i=0;i<4;++i)
+	for(int i=0; i<12; ++i)
 	{
 
 		// Print offset
@@ -19,11 +19,13 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 			case 0xa0: // ldy imm
 				printw( "\t%02x %02x", ram->ram[cpu->pc+i], ram->ram[cpu->pc+i+1] );
 				printw( "\tldy $%02x", ram->ram[cpu->pc+i+1] );
+				++i;
 				break;
 
 			case 0xa2: // ldx imm
 				printw( "\t%02x %02x", ram->ram[cpu->pc+i], ram->ram[cpu->pc+i+1] );
 				printw( "\tldx $%02x", ram->ram[cpu->pc+i+1] );
+				++i;
 				break;
 
 			case 0xea: // nop
