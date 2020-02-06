@@ -10,6 +10,25 @@ cpu_t*cpu_init(void)
 	return cpu;
 }
 
+// Microinstructions
+// Ex: lda $X : lda(fetch())
+// Get next byte
+// Load to pc
+// Load to a
+// Load to x
+// Load to y
+
+// Addressing mode micro-insns
+#define zp(x) ram->ram[x]
+#define ab(x) ram->ram[x]
+#define imm() ram->ram[cpu->pc+=1]
+
+// Move micro-insns
+#define lda(x) cpu->a=x
+#define ldx(m) cpu->x=m
+#define ldy(x) cpu->y=x
+#define nop()
+
 // Execute next instruction in RAM
 // through CPU
 void cpu_exec(cpu_t*cpu,ram_t*ram)
@@ -20,28 +39,17 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 	switch(ram->ram[cpu->pc])
 	{
 
-		case 0xa0: // ldy imm
-			cpu->pc+=1;
-			cpu->y=ram->ram[cpu->pc];
-			break;
+		// Get RAM value at address X
+		#define zp(x) ram->ram[x]
 
-		case 0xa2: // ldx imm
-			cpu->pc+=1;
-			cpu->x=ram->ram[cpu->pc];
-			break;
+		case 0xA0: ldy( imm() ); break;
+		case 0xA2: ldx( imm() ); break;
+		case 0xA5: lda( zp( imm() ) ); break;
+		case 0xA9: lda( imm() ); break;
+		case 0x00: break;
+		case 0x0A: break;
+		case 0xEA: nop();
+		default: break;
 
-		case 0xa9: // lda imm
-			cpu->pc+=1;
-			cpu->a=ram->ram[cpu->pc];
-			break;
-
-		case 0x00:
-			break;
-		case 0x0a:
-			break;
-		case 0xEA:
-			break;
-		default:
-			break;
 	}
 }

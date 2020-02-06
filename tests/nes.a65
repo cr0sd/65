@@ -4,12 +4,16 @@
 *=$8000
 .text
 main:
-	lda #$10
-	ldx #$43
-	ldy #$12
+	lda #$00
+	ldx #$00
+	ldy #$00
 
-	asl $0100,x
-	inc $0100,x
-	nop
+	.byt $a5,$01
+	lda $02 ; lda ram[$01]
+
+	;ldy #$12
+	;asl $0100,x
+	;inc $0100,x
+	;nop
 
 	jsr main

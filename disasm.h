@@ -24,4 +24,4 @@
 yaml_parser_t parser;
 yaml_event_t event;
 
-char*da_print_nextop(cpu_t*cpu,ram_t*ram);
+void da_print_disassembly(cpu_t*cpu,ram_t*ram);

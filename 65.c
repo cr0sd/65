@@ -65,7 +65,7 @@ void print_disassembly(cpu_t*cpu,ram_t*ram)
 	attron(COLOR_PAIR(4));
 	mvprintw(7,0,"Disassembly:");
 	attroff(COLOR_PAIR(4));
-	mvprintw(8,0,da_print_nextop(cpu,ram));
+	da_print_disassembly(cpu,ram);
 }
 
 // Entry point

@@ -1,15 +1,30 @@
 #include"disasm.h"
 
-char*da_print_nextop(cpu_t*cpu,ram_t*ram)
+void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 {
-	static char b[512];
+	int y=8;
+
+	// Print offset
+	attron(COLOR_PAIR(3));
+	mvprintw(y,0,"%04x",cpu->pc);
+	attroff(COLOR_PAIR(3));
+
+	// Opcodes
 	switch(ram->ram[cpu->pc])
 	{
-	case 0xa0:
-		sprintf(b,"%04x    %02x %02x  ldy %02x",cpu->pc,ram->ram[cpu->pc],ram->ram[cpu->pc+1],ram->ram[cpu->pc+1]);
-		break;
-	default:
-		sprintf(b,"-                           ");
+
+		case 0xa0: // ldy imm
+			printw( "\t%02x %02x", ram->ram[cpu->pc], ram->ram[cpu->pc+1] );
+			printw( "\tldy $%02x", ram->ram[cpu->pc+1] );
+			break;
+
+		case 0xea: // nop
+			printw( "\t%02x", ram->ram[cpu->pc], ram->ram[cpu->pc+1] );
+			printw( "\tnop" );
+			break;
+
+		default:
+			mvprintw(y,0,"-                               ");
+
 	}
-	return b;
 }
