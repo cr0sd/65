@@ -33,7 +33,9 @@ void puterr(const char*fmt,...)
 void print_registers(cpu_t*cpu)
 {
 	// Print Register info at (0,0)
+	attron(COLOR_PAIR(4));
 	mvprintw(0,0,"Registers:");
+	attroff(COLOR_PAIR(4));
 	mvprintw(1,0,"a:  $%02x\n",cpu->a);
 	mvprintw(2,0,"x:  $%02x\n",cpu->x);
 	mvprintw(3,0,"y:  $%02x\n",cpu->y);
@@ -45,7 +47,9 @@ void print_registers(cpu_t*cpu)
 void print_hexdump(cpu_t*cpu,ram_t*ram)
 {
 	// Print hexdump at (16,0)
+	attron(COLOR_PAIR(4));
 	mvprintw(0,16,"Hexdump:");
+	attroff(COLOR_PAIR(4));
 	for(int i=0;i<4;++i)
 	{
 		attron(COLOR_PAIR(3));
@@ -54,6 +58,14 @@ void print_hexdump(cpu_t*cpu,ram_t*ram)
 		for(int j=0;j<8;++j)
 			mvprintw(i+1,24+j*4,"%02x\n",ram->ram[cpu->pc+i*8+j]);
 	}
+}
+
+void print_disassembly(cpu_t*cpu,ram_t*ram)
+{
+	attron(COLOR_PAIR(4));
+	mvprintw(7,0,"Disassembly:");
+	attroff(COLOR_PAIR(4));
+	mvprintw(8,0,da_print_nextop(cpu,ram));
 }
 
 // Entry point
@@ -68,6 +80,7 @@ int main(int argc,char**argv)
 	init_pair(1,COLOR_WHITE,COLOR_BLACK);
 	init_pair(2,COLOR_RED,COLOR_BLACK);
 	init_pair(3,COLOR_CYAN,COLOR_BLACK);
+	init_pair(4,COLOR_YELLOW,COLOR_BLACK);
 
 	// Parse command line arguments
 	if(argc>1)
@@ -98,8 +111,7 @@ int main(int argc,char**argv)
 		//clear();
 		print_registers(cpu);
 		print_hexdump(cpu,ram);
-		mvprintw(7,0,"Disassembly:");
-		mvprintw(8,0,da_print_nextop(cpu,ram));
+		print_disassembly(cpu,ram);
 		refresh();
 		// Get keyboard input
 		switch(getchar())
