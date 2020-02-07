@@ -25,6 +25,7 @@ static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
 #define p1(...) pi(cpu,ram,1,__VA_ARGS__)
 #define p2(...) pi(cpu,ram,2,__VA_ARGS__)
 #define p3(...) pi(cpu,ram,3,__VA_ARGS__)
+#define end() goto clear_rest
 
 // Print disassembly
 void da_print_disassembly(cpu_t*cpu,ram_t*ram)
@@ -57,47 +58,27 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		switch(ram->ram[cpuc->pc])
 		{
 
-		case 0xA0: p2( "ldy #$%02x", imm() );
-			goto clear_rest;
-
-		case 0xA5: p2( "lda zp $%02x", imm() );
-			goto clear_rest;
-
-		case 0xA9: p2( "lda #$%02x", imm() );
-			goto clear_rest;
-
-		case 0xB1: p2( "lda y, zp $%02x", zp( imm() ) );
-			goto clear_rest;
-
-		case 0xB5: p2( "lda x, zp $%02x", zp( imm() ) );
-			goto clear_rest;
-
-		case 0xB9: p2( "lda y, abs $%02x", ab( imm() ) );
-			goto clear_rest;
-
-		case 0xBD: p2( "lda y, abs $%02x", ab( imm() ) );
-			goto clear_rest;
-
-		case 0xA2: p2( "ldx #$%02x", imm() );
-			goto clear_rest;
-
-		case 0x4C: p3( "jmp abs $%04x", imm() | (imm()<<8) );
-			goto clear_rest;
-
+		// Move/transfer
+		// lda
+		case 0xA5: p2( "lda zp $%02x", imm() ); end();
+		case 0xA9: p2( "lda #$%02x", imm() ); end();
+		case 0xB1: p2( "lda y, zp $%02x", zp( imm() ) ); end();
+		case 0xB5: p2( "lda x, zp $%02x", zp( imm() ) ); end();
+		case 0xB9: p2( "lda y, abs $%02x", ab( imm() ) ); end();
+		case 0xBD: p2( "lda y, abs $%02x", ab( imm() ) ); end();
+		// ldy
+		case 0xA0: p2( "ldy #$%02x", imm() ); end();
+		// ldx
+		case 0xA2: p2( "ldx #$%02x", imm() ); end();
+		case 0x4C: p3( "jmp abs $%04x", imm16() ); end();
 		case 0x6C:
 			{
-				int tmp = imm() | (imm()<<8);
+				int tmp = imm16();
 				p3( "jmp ind (%04x) <%04x>", tmp, ind( tmp ) );
+				end();
 			}
-			goto clear_rest;
-
-		case 0xEA: // nop
-			p1( "nop");
-			goto clear_rest;
-
-		case 0x00: // brk
-			p1( "brk");
-			goto clear_rest;
+		case 0xEA: p1( "nop"); end();
+		case 0x00: p1( "brk"); end();
 
 		clear_rest:
 			printw("                     ");

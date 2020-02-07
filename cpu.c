@@ -37,8 +37,8 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xA0: ldy( imm() );				sr_nz(cpu->y); incpc(1);	break;
 
 		// Jump/branch ---
-		case 0x4C: ldpc( imm() | (imm()<<8) );				break;
-		case 0x6C: ldpc( ind( imm() | (imm()<<8) ) );		break;
+		case 0x4C: ldpc( imm16() );				break;
+		case 0x6C: ldpc( ind( imm16() ) );		break;
 		case 0x00: brk(); 						incpc(1);	break;
 		case 0xEA: nop();						incpc(1);	break;
 		default:											break;

@@ -50,6 +50,7 @@ typedef struct cpu_t
 #endif
 #define __cpu cpu
 #define imm()	ram->ram[__cpu->pc+=1]	// Get immediate binary value
+#define imm16()	( imm() | (imm()<<8) )	// Get immediate binary value
 #define zp(x)	ram->ram[x]				// Get value at $0000 + x
 #define ab(x)	ram->ram[x]				// Get value at $xxxx
 #define ind(x)	ram->ram[ram->ram[x]]	// Get value at ram[ ram[x] ]
