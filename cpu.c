@@ -18,13 +18,25 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 	switch(ram->ram[cpu->pc])
 	{
 
-		// Get RAM value at address X
-		#define zp(x) ram->ram[x]
+		// Set 'mode' to main cpu
+		#define __cpu cpu
 
-		case 0xA0: ldy( imm() );				incpc(1);	break;
-		case 0xA2: ldx( imm() );				incpc(1);	break;
-		case 0xA5: lda( zp( imm() ) );			incpc(1);	break;
-		case 0xA9: lda( imm() );				incpc(1);	break;
+		// Move/load/transfer ---
+		// lda
+		case 0xA1: lda( xidx( ind( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
+		case 0xA5: lda( zp( imm() ) );			sr_nz(cpu->a); incpc(1);	break;
+		case 0xA9: lda( imm() );				sr_nz(cpu->a); incpc(1);	break;
+		case 0xAD: lda( ab( imm() ) );			sr_nz(cpu->a); incpc(1);	break;
+		case 0xB1: lda( yidx( zp( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
+		case 0xB5: lda( xidx( zp( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
+		case 0xB9: lda( yidx( ab( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
+		case 0xBD: lda( xidx( ab( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
+		// ldx
+		case 0xA2: ldx( imm() );				sr_nz(cpu->x); incpc(1);	break;
+		// ldy
+		case 0xA0: ldy( imm() );				sr_nz(cpu->y); incpc(1);	break;
+
+		// Jump/branch ---
 		case 0x4C: ldpc( imm() | (imm()<<8) );				break;
 		case 0x6C: ldpc( ind( imm() | (imm()<<8) ) );		break;
 		case 0x00: brk(); 						incpc(1);	break;

@@ -22,9 +22,16 @@ static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
 	va_end(list);
 }
 
+#define p1(...) pi(cpu,ram,1,__VA_ARGS__)
+#define p2(...) pi(cpu,ram,2,__VA_ARGS__)
+#define p3(...) pi(cpu,ram,3,__VA_ARGS__)
+
 // Print disassembly
 void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 {
+	// Set 'mode' to this copy of cpu
+	#define __cpu cpuc
+
 	int y=8;
 	cpu_t*cpuc=alloca(sizeof(cpu_t));
 
@@ -49,45 +56,46 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		switch(ram->ram[cpuc->pc])
 		{
 
-		case 0xA0: // ldy imm
-			pi( cpuc, ram, 2, "ldy #$%02x", ram->ram[cpuc->pc+i+1] );
-			++cpuc->pc;
+		case 0xA0: p2( "ldy #$%02x", imm() );
 			goto clear_rest;
 
-		case 0xA5: // ldy imm
-			pi( cpuc, ram, 2, "lda zp $%02x", ram->ram[cpuc->pc+i+1] );
-			++cpuc->pc;
+		case 0xA5: p2( "lda zp $%02x", imm() );
 			goto clear_rest;
 
-		case 0xA9: // lda #
-			pi( cpuc, ram, 2, "lda #$%02x", ram->ram[cpuc->pc+i+1] );
-			++cpuc->pc;
+		case 0xA9: p2( "lda #$%02x", imm() );
 			goto clear_rest;
 
-		case 0xA2: // ldx imm
-			pi( cpuc, ram, 2, "ldx #$%02x", ram->ram[cpuc->pc+i+1] );
-			++cpuc->pc;
+		case 0xB1: p2( "lda y, zp $%02x", zp( imm() ) );
 			goto clear_rest;
 
-		case 0x4C: // jmp abs
-			pi( cpuc, ram, 3, "jmp abs $%04x", ram->ram[cpuc->pc+1] | (ram->ram[cpuc->pc+2]<<8) );
-			cpuc->pc+=2;
+		case 0xB5: p2( "lda x, zp $%02x", zp( imm() ) );
 			goto clear_rest;
 
-		case 0x6C: // jmp ind
-			pi( cpuc, ram, 3, "jmp ind (%04x) <%04x>",
-				ram->ram[cpuc->pc+1] | (ram->ram[cpuc->pc+2]<<8),
-				ram->ram[ ram->ram[ ram->ram[ cpuc->pc+1] |
-					(ram->ram[cpuc->pc+2]<<8) ] ] );
-			cpuc->pc+=2;
+		case 0xB9: p2( "lda y, abs $%02x", ab( imm() ) );
+			goto clear_rest;
+
+		case 0xBD: p2( "lda y, abs $%02x", ab( imm() ) );
+			goto clear_rest;
+
+		case 0xA2: p2( "ldx #$%02x", imm() );
+			goto clear_rest;
+
+		case 0x4C: p3( "jmp abs $%04x", imm() | (imm()<<8) );
+			goto clear_rest;
+
+		case 0x6C:
+			{
+				int tmp = imm() | (imm()<<8);
+				p3( "jmp ind (%04x) <%04x>", tmp, ind( tmp ) );
+			}
 			goto clear_rest;
 
 		case 0xEA: // nop
-			pi( cpuc, ram, 1, "nop");
+			p1( "nop");
 			goto clear_rest;
 
 		case 0x00: // brk
-			pi( cpuc, ram, 1, "brk");
+			p1( "brk");
 			goto clear_rest;
 
 		clear_rest:

@@ -45,21 +45,34 @@ typedef struct cpu_t
 // Load to y
 
 // Addressing mode micro-insns
-#define imm() ram->ram[cpu->pc+=1]		// Get immediate binary value
-#define zp(x) ram->ram[x]				// Get value at $0000 + x
-#define ab(x) ram->ram[x]				// Get value at $xxxx
-#define ind(x) ram->ram[ram->ram[x]]	// Get value at ram[ ram[x] ]
+#define __cpu cpu
+#define imm()	ram->ram[__cpu->pc+=1]	// Get immediate binary value
+#define zp(x)	ram->ram[x]				// Get value at $0000 + x
+#define ab(x)	ram->ram[x]				// Get value at $xxxx
+#define ind(x)	ram->ram[ram->ram[x]]	// Get value at ram[ ram[x] ]
+#define xidx(m)	__cpu->x+m				// Get value at y + (m)
+#define yidx(m)	__cpu->y+m				// Get value at x + (m)
 
 // Move micro-insns
-#define lda(x) cpu->a=(x)
-#define ldx(m) cpu->x=m
-#define ldy(x) cpu->y=(x)
-#define ldpc(x) cpu->pc=(x)
+#define lda(x)	__cpu->a=(x)
+#define ldx(m)	__cpu->x=m
+#define ldy(x)	__cpu->y=(x)
+#define ldpc(x)	__cpu->pc=(x)
 #define nop()
 #define brk()
 
 // Arithmetic micro-insns
-#define incpc(x) cpu->pc+=x
+#define incpc(x)	__cpu->pc+=x
+
+// Status register micro-insns
+#define sr_n(x)	__cpu->sr.bits.n=(x<0) 		// Negative
+#define sr_v(x)	__cpu->sr.bits.v=?			// Overflow
+#define sr_b(x)	__cpu->sr.bits.b=?			// Break
+#define sr_d(x)	__cpu->sr.bits.d=?			// Decimal (BCD)
+#define sr_i(x)	__cpu->sr.bits.i=x			// Interrupt (enable/disable)
+#define sr_z(x)	__cpu->sr.bits.z=(x==0)		// Zero
+#define sr_c(x)	__cpu->sr.bits.c=?			// Carry
+#define sr_nz(x)	sr_n(x);sr_z(x)
 
 cpu_t*cpu_init(void);
 void cpu_exec(cpu_t*cpu,ram_t*ram);
