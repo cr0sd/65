@@ -1,22 +1,22 @@
 #include"disasm.h"
 #include"stdlib.h"
 
-// TODO: fix discrepancy between pi function and
-// rest of disasssembly code
+static int oper[8];
 
 // Print instruction helper function
 static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
 {
 
-	// Print binary hexdump
+	#undef __cpu
+	#define __cpu cpu
+
+	// Print binary representation
 	if(n==1)
-		printw( "\t%02x\t\t", ram->ram[cpu->pc] );
+		printw( "\t%02x\t\t", imm() );
 	else if(n==2)
-		printw( "\t%02x %02x\t\t", ram->ram[cpu->pc],
-			ram->ram[cpu->pc+1] );
+		printw( "\t%02x %02x\t\t", imm(), imm() );
 	else if(n==3)
-		printw( "\t%02x %02x %02x\t", ram->ram[cpu->pc],
-			ram->ram[cpu->pc+1], ram->ram[cpu->pc+2] );
+		printw( "\t%02x %02x %02x\t", imm(), imm(), imm() );
 
 	// Print rest of vararg stuff (insn name, operands)
 	va_list list;
@@ -25,9 +25,9 @@ static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
 	va_end(list);
 }
 
-#define p1(...) pi(cpu,ram,1,__VA_ARGS__)
-#define p2(...) pi(cpu,ram,2,__VA_ARGS__)
-#define p3(...) pi(cpu,ram,3,__VA_ARGS__)
+#define p1(...) pi(cpuc,ram,1,__VA_ARGS__)
+#define p2(...) pi(cpuc,ram,2,__VA_ARGS__)
+#define p3(...) pi(cpuc,ram,3,__VA_ARGS__)
 #define end() goto clear_rest
 
 // Print disassembly
@@ -63,32 +63,31 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 
 		// Move/transfer
 		// lda
-		case 0xA5: p2( "lda zp $%02x", imm() ); end();
-		case 0xA9: p2( "lda #$%02x", imm() ); end();
-		case 0xB1: p2( "lda y, zp $%02x", zp( imm() ) ); end();
-		case 0xB5: p2( "lda x, zp $%02x", zp( imm() ) ); end();
-		case 0xB9: p2( "lda y, abs $%02x", ab( imm() ) ); end();
-		case 0xBD: p2( "lda y, abs $%02x", ab( imm() ) ); end();
+		case 0xA1: p2( "lda ($%02x,x)", imm_pk(1) ); end();
+		case 0xA5: p2( "lda zp $%02x", imm_pk(1) ); end();
+		case 0xA9: p2( "lda #$%02x", imm_pk(1) ); end();
+		case 0xB1: p2( "lda y, zp $%02x", imm_pk(1) ); end();
+		case 0xB5: p2( "lda x, zp $%02x", imm_pk(1) ); end();
+		case 0xB9: p2( "lda y, abs $%02x", imm_pk(1) ); end();
+		case 0xBD: p2( "lda y, abs $%02x", imm_pk(1) ); end();
 		// ldy
-		case 0xA0: p2( "ldy #$%02x", imm() ); end();
+		case 0xA0: p2( "ldy #$%02x", imm_pk(1) ); end();
 		// ldx
-		case 0xA2: p2( "ldx #$%02x", imm() ); end();
-		case 0x4C: p3( "jmp abs $%04x", imm16() ); end();
+		case 0xA2: p2( "ldx #$%02x", imm_pk(1) ); end();
+		case 0x4C: p3( "jmp abs $%04x", imm16_pk(1) ); end();
 		case 0x6C:
-			{
-				int tmp = imm16();
-				p3( "jmp ind (%04x) <%04x>", tmp, ind( tmp ) );
+				p3( "jmp ind ($%04x) <%04x>", imm_pk(1),
+					ind( imm16_pk(2) ) );
 				end();
-			}
 		case 0xEA: p1( "nop"); end();
 		case 0x00: p1( "brk"); end();
 
 		clear_rest:
-			printw("                     ");
+			printw("                         ");
 			break;
 
 		default:
-			mvprintw(y,0,"-                                         ");
+			mvprintw(y,0,"-                                             ");
 		}
 
 		// Next line of disassembly
