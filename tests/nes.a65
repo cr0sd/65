@@ -12,5 +12,8 @@ main:
 	nop
 
 	jmp main
+	jmp (yoyo)
 
+yoyo:
+.word $8000
 	.byt "hi there ya peeps",0

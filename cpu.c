@@ -21,14 +21,15 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		// Get RAM value at address X
 		#define zp(x) ram->ram[x]
 
-		case 0xA0: ldy( imm() ); incpc(1); break;
-		case 0xA2: ldx( imm() ); incpc(1); break;
-		case 0xA5: lda( zp( imm() ) ); incpc(1); break;
-		case 0xA9: lda( imm() ); incpc(1); break;
-		case 0x4C: ldpc( imm() | (imm()<<8) ); break;
-		case 0x00: brk(); incpc(1); break;
-		case 0xEA: nop(); incpc(1); break;
-		default: break;
+		case 0xA0: ldy( imm() );				incpc(1);	break;
+		case 0xA2: ldx( imm() );				incpc(1);	break;
+		case 0xA5: lda( zp( imm() ) );			incpc(1);	break;
+		case 0xA9: lda( imm() );				incpc(1);	break;
+		case 0x4C: ldpc( imm() | (imm()<<8) );				break;
+		case 0x6C: ldpc( ind( imm() | (imm()<<8) ) );		break;
+		case 0x00: brk(); 						incpc(1);	break;
+		case 0xEA: nop();						incpc(1);	break;
+		default:											break;
 
 	}
 }

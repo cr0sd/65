@@ -45,9 +45,10 @@ typedef struct cpu_t
 // Load to y
 
 // Addressing mode micro-insns
-#define zp(x) ram->ram[x]
-#define ab(x) ram->ram[x]
-#define imm() ram->ram[cpu->pc+=1]
+#define imm() ram->ram[cpu->pc+=1]		// Get immediate binary value
+#define zp(x) ram->ram[x]				// Get value at $0000 + x
+#define ab(x) ram->ram[x]				// Get value at $xxxx
+#define ind(x) ram->ram[ram->ram[x]]	// Get value at ram[ ram[x] ]
 
 // Move micro-insns
 #define lda(x) cpu->a=(x)

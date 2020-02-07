@@ -4,17 +4,7 @@
 #include"cpu.h"
 #include"disasm.h"
 
-void cpu65_exec(cpu_t*cpu,ram_t*ram)
-{
-	//printf("pc: 0x%04x\t",cpu->pc);
-	//printf("ac: 0x%02x",cpu->ac);
-	//puts("");
-	//printw("0x%04x: 0x%02x\n",cpu->pc,ram->ram[cpu->pc]);
-	cpu_exec(cpu,ram);
-	//cpu->pc+=1;
-	refresh();
-}
-
+// Print formatted error message
 void puterr(const char*fmt,...)
 {
 	va_list list;
@@ -108,9 +98,6 @@ int main(int argc,char**argv)
 		// TODO: Learn where exactly to map 'PRG-ROM'
 		rom_map(rom,ram,PRG_ROM_OFFSET);
 		refresh();
-		//for(int i=0;i<100;++i)
-			//printf("%2x",ram->ram[i]);
-		//puts("");
 	}
 
 	// Verify ROM is loaded
@@ -132,9 +119,9 @@ int main(int argc,char**argv)
 		switch(getchar())
 		{
 
-		// Step
+		// Single step
 		case 's':
-			cpu65_exec(cpu,ram);
+			cpu_exec(cpu,ram);
 			break;
 
 		// Quit command
