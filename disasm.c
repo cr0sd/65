@@ -1,6 +1,9 @@
 #include"disasm.h"
 #include"stdlib.h"
 
+// TODO: fix discrepancy between pi function and
+// rest of disasssembly code
+
 // Print instruction helper function
 static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
 {
