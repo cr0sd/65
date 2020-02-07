@@ -11,7 +11,7 @@ void cpu65_exec(cpu_t*cpu,ram_t*ram)
 	//puts("");
 	//printw("0x%04x: 0x%02x\n",cpu->pc,ram->ram[cpu->pc]);
 	cpu_exec(cpu,ram);
-	cpu->pc+=1;
+	//cpu->pc+=1;
 	refresh();
 }
 
@@ -93,6 +93,7 @@ int main(int argc,char**argv)
 	init_pair(2,COLOR_RED,COLOR_BLACK);
 	init_pair(3,COLOR_CYAN,COLOR_BLACK);
 	init_pair(4,COLOR_YELLOW,COLOR_BLACK);
+	init_pair(5,COLOR_BLUE,COLOR_BLACK);
 
 	mvprintw(20,0,"Welcome! Usage: [s] Step [q] Quit");
 

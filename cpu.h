@@ -36,5 +36,29 @@ typedef struct cpu_t
 	uint8_t sp;		// Stack pointer
 }cpu_t;
 
+// Microinstructions
+// Ex: lda $X : lda(fetch())
+// Get next byte
+// Load to pc
+// Load to a
+// Load to x
+// Load to y
+
+// Addressing mode micro-insns
+#define zp(x) ram->ram[x]
+#define ab(x) ram->ram[x]
+#define imm() ram->ram[cpu->pc+=1]
+
+// Move micro-insns
+#define lda(x) cpu->a=(x)
+#define ldx(m) cpu->x=m
+#define ldy(x) cpu->y=(x)
+#define ldpc(x) cpu->pc=(x)
+#define nop()
+#define brk()
+
+// Arithmetic micro-insns
+#define incpc(x) cpu->pc+=x
+
 cpu_t*cpu_init(void);
 void cpu_exec(cpu_t*cpu,ram_t*ram);
