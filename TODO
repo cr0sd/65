@@ -1,17 +1,16 @@
 1. Implement instruction set
 	a. Pay attention to address modes
 		- Zeropage, absolute, immediate value, indirect (X, Y)
-	b. Start with ops without operands
+		- Difference in OPC ($LL,x) and ($LL),y
+		- Understand memory mapping for 6502
+	b. Move/transfer insns
+	c. Jump/branching insns
+	d. Arithmetic insns
+	e. Bitwise/logical insns
 
-2. Understand memory mapping for 6502
+2. Create suite of tests
 
-3. Work on UI
-	a. Disassembly section
-		- Maybe use YAML for ASM language definition
-
-4. Create suite of tests
-
-5. Implement other NES hardware
+3. Implement other NES hardware
 	a. Joypad
 	b. Graphics
 	c. Sound

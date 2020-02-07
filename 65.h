@@ -13,6 +13,7 @@ WINDOW*win;
 
 #define PRG_ROM_OFFSET 0x8000
 #define STATUSLINE 20
+#define LASTHEXOFFSET (0x10000-40)
 
 // Print error
 void puterr(const char*msg,...);

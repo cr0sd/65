@@ -55,6 +55,7 @@ typedef struct cpu_t
 #define zp(x)	ram->ram[x]					// Get value at $0000 + x
 #define ab(x)	ram->ram[x]					// Get value at $xxxx
 #define ind(x)	ram->ram[ram->ram[x]]		// Get value at ram[ ram[x] ]
+#define ind16(x) ( ram->ram[x] | (ram->ram[x+1]<<8) )
 #define xidx(m)	__cpu->x+m					// Get value at y + (m)
 #define yidx(m)	__cpu->y+m					// Get value at x + (m)
 

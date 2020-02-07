@@ -2,30 +2,27 @@
 .word	0,0,0,0,0,0
 
 reg1=$05
+reg2=$55
 
 .text
 *=$8000
 main:
-	lda #$ba
-	;ldx #$8a
-	;ldy #$0e
 
-	sta reg1
-	lda #$65
+	lda #$55
+	sta reg1+1
+
+	lda #$de
+	sta reg2
+
+	lda #$aa
+	sta reg2+1
+
+	lda #$44
+	ldx #$01
 	lda (reg1,x)
 
-	;lda #$fe
-	;sta reg1
-
-	;lda $8010
-	;lda #$02
-	;lda reg1
-	;lda ($09,x)
-
-	;nop
-
-	jmp main
-	jmp (yoyo)
+label:
+	jmp label
 
 yoyo:
 .word $8000

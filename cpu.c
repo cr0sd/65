@@ -23,7 +23,8 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 
 		// Move/load/transfer ---
 		// a
-		case 0xA1: lda( xidx( ind( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
+		//case 0xA1: lda( xidx( zp( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
+		case 0xA1: lda( ind16( zp( xidx( imm() ) ) ) );	sr_nz(cpu->a); break;
 		case 0xA5: lda( zp( imm() ) );			sr_nz(cpu->a); incpc(1);	break;
 		case 0xA9: lda( imm() );				sr_nz(cpu->a); incpc(1);	break;
 		case 0xAD: lda( ab( imm16() ) );		sr_nz(cpu->a); incpc(1);	break;

@@ -89,7 +89,7 @@ int main(int argc,char**argv)
 	init_pair(4,COLOR_YELLOW,COLOR_BLACK);
 	init_pair(5,COLOR_BLUE,COLOR_BLACK);
 
-	mvprintw(20,1,"Welcome! Usage: [s] Step [q] Quit");
+	mvprintw(20,1,"Welcome! Usage: [s] Step [q] Quit [g] Goto [G] Follow");
 
 	// Parse command line arguments
 	if(argc>1)
@@ -119,6 +119,17 @@ int main(int argc,char**argv)
 		print_registers(cpu);
 		print_hexdump(cpu,ram,hex_offset);
 		print_disassembly(cpu,ram);
+
+		// Display if following
+		if(hex_follow_pc)
+		{
+			attron(COLOR_PAIR(2));
+			mvprintw(0,30,"F");
+			attroff(COLOR_PAIR(2));
+		}
+		else
+			mvprintw(0,30," ");
+
 		refresh();
 		// Get keyboard input
 		switch(getchar())
@@ -127,6 +138,16 @@ int main(int argc,char**argv)
 		// Single step
 		case 's':
 			cpu_exec(cpu,ram);
+			break;
+
+		// Scroll up/down through hexdump
+		case 'k': // Up
+			hex_follow_pc=false;
+			hex_offset= (hex_offset>8) ? (hex_offset-8) : 0;
+			break;
+		case 'j': // Down
+			hex_follow_pc=false;
+			hex_offset= (hex_offset<LASTHEXOFFSET-8) ? (hex_offset+8) : LASTHEXOFFSET;
 			break;
 
 		// Toggle follow pc on/off
@@ -139,15 +160,27 @@ int main(int argc,char**argv)
 		// Goto (hexdump)
 		case 'g':
 			{
-				// Get user input
 				char b[512];
-				//uint16_t gowh=0x0000;
+				uint16_t gowh=0;
+
+				// Prompt for desired goto address
 				mvprintw(STATUSLINE,0,"                                                      ");
-				mvprintw(STATUSLINE,0,"Goto where? (0000-ffff): ");
-				getstr(b);
+				mvprintw(STATUSLINE,0,"Goto where? (0000-ffff) (Use 'G' for end): ");
+				getnstr(b,4);
+
+				// Special values
+				if(strcmp(b,"G")==0) gowh=LASTHEXOFFSET;	// Goto end
+				else if(strlen(b)==0) gowh=0;	// Goto $0000 if empty
+				// Normal case
+				else
+				{
+					gowh=strtol(b,NULL,16);
+					// Validate input
+					if(gowh>LASTHEXOFFSET) gowh=LASTHEXOFFSET;
+				}
 
 				// Convert to hex offset, then print
-				hex_offset=strtol(b,NULL,16); //atoi(b);
+				hex_offset=gowh; //atoi(b);
 				mvprintw(STATUSLINE,0,"Goto: $%04x.                 ",
 					hex_offset);
 				//print_hexdump(cpu,ram,gowh);
