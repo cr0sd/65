@@ -2,23 +2,24 @@ require 'fileutils'
 
 # Variables
 # -----------------------------
-AS65=		'xa'
-CC=			'cc'
-CFLAGS=		'-Wfatal-errors'
-LDFLAGS=	'-lncurses'
-OBJS='65.o cpu.o ram.o rom.o disasm.o'
+AS65	=	'xa'
+CC		=	'cc'
+CFLAGS	=	'-Wfatal-errors'
+LDFLAGS	=	'-lncurses'
+OBJS	=	'65.o cpu.o ram.o rom.o disasm.o'
 
 
 # Functions
 # -----------------------------
+# Start sub rake
 # Remove file extension
 def get_name(x)
-	x.scan(/([a-z_0-9]+)\.(.*)/)[0][0]
+	x.scan(/([\-a-z_0-9]+)\.(.*)/)[0][0]
 end
 
 # Remove file extension
 def get_ext(x)
-	x.scan(/([a-z_0-9]+)\.(.*)/)[0][1]
+	x.scan(/([\-a-z_0-9]+)\.(.*)/)[0][1]
 end
 
 # Rule for .a65 to .nes
@@ -86,15 +87,23 @@ end
 
 # Rules
 # -----------------------------
-task :default => :objs do
+task :default => [:_65, :test] do
+	
+end
+
+task :_65 => [:objs] do
 	`set -x; cc #{CFLAGS} #{LDFLAGS} #{OBJS} -o 65`
+end
+
+task :test do
+	puts'Entering directory test'
+	`cd test; set -x; rake`
+	puts'Leaving directory test'
 end
 
 task :objs do
 	make OBJS.split
 end
-
-#65.c  65_old.c  cpu.c  disasm.c  ram.c  rom.c  test_gen.c
 
 task :clean do
 	clean '65 nes.nes *.o'.split
