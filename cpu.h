@@ -45,6 +45,9 @@ typedef struct cpu_t
 // Load to y
 
 // Addressing mode micro-insns
+#ifdef __cpu
+#	undef __cpu
+#endif
 #define __cpu cpu
 #define imm()	ram->ram[__cpu->pc+=1]	// Get immediate binary value
 #define zp(x)	ram->ram[x]				// Get value at $0000 + x

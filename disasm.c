@@ -30,6 +30,7 @@ static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
 void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 {
 	// Set 'mode' to this copy of cpu
+	#undef __cpu
 	#define __cpu cpuc
 
 	int y=8;
