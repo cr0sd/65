@@ -22,7 +22,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		#define __cpu cpu
 
 		// Move/load/transfer ---
-		// lda
+		// a
 		case 0xA1: lda( xidx( ind( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
 		case 0xA5: lda( zp( imm() ) );			sr_nz(cpu->a); incpc(1);	break;
 		case 0xA9: lda( imm() );				sr_nz(cpu->a); incpc(1);	break;
@@ -31,17 +31,17 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xB5: lda( xidx( zp( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
 		case 0xB9: lda( yidx( ab( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
 		case 0xBD: lda( xidx( ab( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
-		// ldx
+		case 0x85: sta( imm() );				incpc(1);	break;
+		// x
 		case 0xA2: ldx( imm() );				sr_nz(cpu->x); incpc(1);	break;
-		// ldy
+		// y
 		case 0xA0: ldy( imm() );				sr_nz(cpu->y); incpc(1);	break;
 
 		// Jump/branch ---
 		case 0x4C: ldpc( imm16() );				break;
 		case 0x6C: ldpc( ind( imm16() ) );		break;
-		case 0x85: sta( imm() );				incpc(1);	break;
-		case 0x00: brk(); 						incpc(1);	break;
 		case 0xEA: nop();						incpc(1);	break;
+		case 0x00: brk(); 						incpc(1);	break;
 		default:											break;
 
 	}

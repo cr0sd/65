@@ -12,6 +12,7 @@ WINDOW*win;
 #define new(x) malloc(sizeof(x))
 
 #define PRG_ROM_OFFSET 0x8000
+#define STATUSLINE 20
 
 // Print error
 void puterr(const char*msg,...);

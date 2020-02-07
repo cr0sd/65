@@ -7,18 +7,22 @@ reg1=$05
 *=$8000
 main:
 	lda #$ba
-	ldx #$8a
-	ldy #$0e
+	;ldx #$8a
+	;ldy #$0e
 
-	lda #$fe
 	sta reg1
+	lda #$65
+	lda (reg1,x)
 
-	lda $8010
-	lda #$02
-	lda reg1
-	lda ($09,x)
+	;lda #$fe
+	;sta reg1
 
-	nop
+	;lda $8010
+	;lda #$02
+	;lda reg1
+	;lda ($09,x)
+
+	;nop
 
 	jmp main
 	jmp (yoyo)

@@ -3,6 +3,7 @@
 #include"rom.h"
 #include"cpu.h"
 #include"disasm.h"
+#include<stdbool.h>
 
 // Print formatted error message
 void puterr(const char*fmt,...)
@@ -34,7 +35,7 @@ void print_registers(cpu_t*cpu)
 }
 
 // Print hexdump
-void print_hexdump(cpu_t*cpu,ram_t*ram)
+void print_hexdump(cpu_t*cpu,ram_t*ram,uint16_t offset)
 {
 	// Print hexdump at (16,0)
 	attron(COLOR_PAIR(4));
@@ -45,17 +46,17 @@ void print_hexdump(cpu_t*cpu,ram_t*ram)
 	for(int i=0;i<5;++i)
 	{
 		attron(COLOR_PAIR(3));
-		mvprintw(i+1,16,"%04X",cpu->pc+i*8);
+		mvprintw(i+1,16,"%04X",offset+i*8);
 		attroff(COLOR_PAIR(3));
 
 		// Hex output
 		for(int j=0;j<8;++j)
-			mvprintw(i+1,24+j*4,"%02X\n",ram->ram[cpu->pc+i*8+j]);
+			mvprintw(i+1,24+j*4,"%02X\n",ram->ram[offset+i*8+j]);
 
 		// ASCII output
 		for(int j=0;j<8;++j)
 		{
-			char c=ram->ram[cpu->pc+i*8+j];
+			char c=ram->ram[offset+i*8+j];
 			mvprintw(i+1,32+24+j,"%c\n",c<33?'.':c);
 		}
 	}
@@ -76,6 +77,9 @@ int main(int argc,char**argv)
 	rom_t*rom=new(rom_t);
 	ram_t*ram=ram_init();
 
+	uint16_t hex_offset=0x8000;	// Where start drawing hexdump
+	int hex_follow_pc=true;		// Toggle following cpu->pc
+
 	win=initscr();
 	curs_set(0);
 	start_color();
@@ -85,7 +89,7 @@ int main(int argc,char**argv)
 	init_pair(4,COLOR_YELLOW,COLOR_BLACK);
 	init_pair(5,COLOR_BLUE,COLOR_BLACK);
 
-	mvprintw(20,0,"Welcome! Usage: [s] Step [q] Quit");
+	mvprintw(20,1,"Welcome! Usage: [s] Step [q] Quit");
 
 	// Parse command line arguments
 	if(argc>1)
@@ -97,6 +101,7 @@ int main(int argc,char**argv)
 		// Map ROM into $8000 by default
 		// TODO: Learn where exactly to map 'PRG-ROM'
 		rom_map(rom,ram,PRG_ROM_OFFSET);
+		hex_offset=0x8000;
 		refresh();
 	}
 
@@ -112,7 +117,7 @@ int main(int argc,char**argv)
 
 		//clear();
 		print_registers(cpu);
-		print_hexdump(cpu,ram);
+		print_hexdump(cpu,ram,hex_offset);
 		print_disassembly(cpu,ram);
 		refresh();
 		// Get keyboard input
@@ -124,10 +129,40 @@ int main(int argc,char**argv)
 			cpu_exec(cpu,ram);
 			break;
 
+		// Toggle follow pc on/off
+		case 'G':
+			hex_follow_pc=!hex_follow_pc;
+			mvprintw(STATUSLINE,0,"Follow PC: %s                      ",
+				hex_follow_pc?
+				"true":"false");
+			break;
+		// Goto (hexdump)
+		case 'g':
+			{
+				// Get user input
+				char b[512];
+				//uint16_t gowh=0x0000;
+				mvprintw(STATUSLINE,0,"                                                      ");
+				mvprintw(STATUSLINE,0,"Goto where? (0000-ffff): ");
+				getstr(b);
+
+				// Convert to hex offset, then print
+				hex_offset=strtol(b,NULL,16); //atoi(b);
+				mvprintw(STATUSLINE,0,"Goto: $%04x.                 ",
+					hex_offset);
+				//print_hexdump(cpu,ram,gowh);
+				//refresh();
+
+				hex_follow_pc=false;
+			}
+			break;
+
 		// Quit command
 		case 'q':
 			goto quit;
 		}
+
+		if(hex_follow_pc) hex_offset=cpu->pc;
 	}
 
 quit:
