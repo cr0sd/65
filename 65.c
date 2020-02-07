@@ -26,11 +26,11 @@ void print_registers(cpu_t*cpu)
 	attron(COLOR_PAIR(4));
 	mvprintw(0,0,"Registers:");
 	attroff(COLOR_PAIR(4));
-	mvprintw(1,0,"a:  $%02x\n",cpu->a);
-	mvprintw(2,0,"x:  $%02x\n",cpu->x);
-	mvprintw(3,0,"y:  $%02x\n",cpu->y);
-	mvprintw(4,0,"sr: $%02x\n",cpu->sr.reg);
-	mvprintw(5,0,"pc: $%04x\n",cpu->pc);
+	mvprintw(1,0,"a:  $%02X\n",cpu->a);
+	mvprintw(2,0,"x:  $%02X\n",cpu->x);
+	mvprintw(3,0,"y:  $%02X\n",cpu->y);
+	mvprintw(4,0,"sr: $%02X\n",cpu->sr.reg);
+	mvprintw(5,0,"pc: $%04X\n",cpu->pc);
 }
 
 // Print hexdump
@@ -45,12 +45,12 @@ void print_hexdump(cpu_t*cpu,ram_t*ram)
 	for(int i=0;i<5;++i)
 	{
 		attron(COLOR_PAIR(3));
-		mvprintw(i+1,16,"%04x",cpu->pc+i*8);
+		mvprintw(i+1,16,"%04X",cpu->pc+i*8);
 		attroff(COLOR_PAIR(3));
 
 		// Hex output
 		for(int j=0;j<8;++j)
-			mvprintw(i+1,24+j*4,"%02x\n",ram->ram[cpu->pc+i*8+j]);
+			mvprintw(i+1,24+j*4,"%02X\n",ram->ram[cpu->pc+i*8+j]);
 
 		// ASCII output
 		for(int j=0;j<8;++j)

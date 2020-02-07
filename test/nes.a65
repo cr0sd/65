@@ -1,15 +1,21 @@
 .byt	"NES",0
 .word	0,0,0,0,0,0
 
+reg1=$05
+
 .text
 *=$8000
 main:
-	lda #$f0
+	lda #$ba
 	ldx #$8a
 	ldy #$0e
 
+	lda #$fe
+	sta reg1
+
+	lda $8010
 	lda #$02
-	lda $02
+	lda reg1
 	lda ($09,x)
 
 	nop

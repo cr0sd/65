@@ -36,18 +36,16 @@ typedef struct cpu_t
 	uint8_t sp;		// Stack pointer
 }cpu_t;
 
-// Microinstructions
-// Ex: lda $X : lda(fetch())
-// Get next byte
-// Load to pc
-// Load to a
-// Load to x
-// Load to y
+// Micro-instructions ---------------------------
+// Ex: lda $1f : lda( imm() )
 
 // Addressing mode micro-insns
+// NOTE: these are NOT exactly equivalent to
+// 6502 addressing modes
 #ifdef __cpu
 #	undef __cpu
 #endif
+
 #define __cpu cpu
 #define imm()	ram->ram[__cpu->pc+=1]		// Get immediate binary value
 #define imm16()	( imm() | (imm()<<8) )		// Get immediate 16-bit binary value
@@ -68,6 +66,8 @@ typedef struct cpu_t
 #define nop()
 #define brk()
 
+#define sta(x) ram->ram[x]=__cpu->a
+
 // Arithmetic micro-insns
 #define incpc(x)	__cpu->pc+=x
 
@@ -80,6 +80,7 @@ typedef struct cpu_t
 #define sr_z(x)	__cpu->sr.bits.z=(x==0)		// Zero
 #define sr_c(x)	__cpu->sr.bits.c=?			// Carry
 #define sr_nz(x)	sr_n(x);sr_z(x)
+// ----------------------------------------------
 
 cpu_t*cpu_init(void);
 void cpu_exec(cpu_t*cpu,ram_t*ram);

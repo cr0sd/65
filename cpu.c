@@ -26,7 +26,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xA1: lda( xidx( ind( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
 		case 0xA5: lda( zp( imm() ) );			sr_nz(cpu->a); incpc(1);	break;
 		case 0xA9: lda( imm() );				sr_nz(cpu->a); incpc(1);	break;
-		case 0xAD: lda( ab( imm() ) );			sr_nz(cpu->a); incpc(1);	break;
+		case 0xAD: lda( ab( imm16() ) );		sr_nz(cpu->a); incpc(1);	break;
 		case 0xB1: lda( yidx( zp( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
 		case 0xB5: lda( xidx( zp( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
 		case 0xB9: lda( yidx( ab( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
@@ -39,6 +39,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		// Jump/branch ---
 		case 0x4C: ldpc( imm16() );				break;
 		case 0x6C: ldpc( ind( imm16() ) );		break;
+		case 0x85: sta( imm() );				incpc(1);	break;
 		case 0x00: brk(); 						incpc(1);	break;
 		case 0xEA: nop();						incpc(1);	break;
 		default:											break;
