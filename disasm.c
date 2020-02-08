@@ -26,13 +26,13 @@ static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
 	}
 	else if(n==2)
 	{
-		oper[1]=imm();
+		oper[1]=fetch();
 		printw( "\t%02X %02X\t\t", oper[0], oper[1] );
 	}
 	else if(n==3)
 	{
-		oper[1]=imm();
-		oper[2]=imm();
+		oper[1]=fetch();
+		oper[2]=fetch();
 		printw( "\t%02X %02X %02X\t", oper[0], oper[1], oper[2] );
 	}
 	else if(n==0)

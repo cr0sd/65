@@ -247,7 +247,6 @@ uint16_t linear_search(uint16_t from,ram_t*ram)
 	{
 		mvprintw(STATUSLINE,0,"Not searching%s",
 			"                                   ");
-		memcpy(prev,b,8);
 		return from;
 	}
 	// Repeat last search
@@ -285,6 +284,8 @@ uint16_t linear_search(uint16_t from,ram_t*ram)
 			memcpy(prev,b,8);
 			return i;
 		}
+
+	// Default: did not find byte
 	mvprintw(STATUSLINE,0,"Can't find $%X%s",
 		byte,
 		"                                   ");

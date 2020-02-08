@@ -4,20 +4,13 @@
 .text
 *=$8000
 main:
-	; $05 <-- #9
-	lda #9
-	sta $05
+	lda #$00
+	sta $00
+	lda #$80
+	sta $01
 
-	; a <-- #0
-	lda #0
+	jmp ($0000)
 
-	; y <-- #2
-	ldy #2
-
-	; a <-- ($03)+2
-	lda ($03),y
-
-	jmp (main)
 	jmp main
 
 .byt "string",0

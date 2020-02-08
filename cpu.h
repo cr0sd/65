@@ -1,6 +1,8 @@
 #pragma once
 #include"65.h"
 #include"rom.h"
+#include"ram.h"
+#include"cpu.h"
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -37,27 +39,29 @@ typedef struct cpu_t
 }cpu_t;
 
 // Micro-instructions ---------------------------
-// Ex: lda $1f : lda( imm() )
-
-// Addressing mode micro-insns
-// NOTE: these are NOT exactly equivalent to
-// 6502 addressing modes
+// Ex: lda $1f : lda( fetch() )
 #ifdef __cpu
 #	undef __cpu
 #endif
 
+// General purpose "micro-insns"/macros
 #define __cpu cpu
-#define imm()	(ram->ram[__cpu->pc+=1])		// Get immediate binary value
-#define imm16()	( imm() | (imm()<<8) )		// Get immediate 16-bit binary value
-#define imm_pk(x)	ram->ram[__cpu->pc+x]	// Peek immediate
-#define imm16_pk(x) \
-	( imm_pk(x) | (imm_pk(x+1)<<8) )		// Peek immediate 16-bit
-#define zp(x)	ram->ram[x]					// Get value at $0000 + x
-#define ab(x)	ram->ram[x]					// Get value at $xxxx
-#define ind(x)	ram->ram[ram->ram[x]]		// Get value at ram[ ram[x] ]
-#define ind16(x) ( (ram->ram[x]) | (ram->ram[x+1]<<8) )
+#define fetch()		(ram->ram[cpu_fetch(__cpu)])		// Get immediate binary value
+#define fetch16()	( fetch() | (fetch()<<8) )		// Get immediate 16-bit binary value
+
+// Addressing mode "micro-insns"
+#define imm		fetch
+#define imm16	fetch16						// Get immediate 16-bit binary value
+#define zp		fetch					// Get value at $0000 + x
+#define ab		imm16						// Get 16-bit address
+#define ind()	ram_indirect_address(ram,fetch16())
+
 #define xidx(m)	__cpu->x+m					// Get value at y + (m)
 #define yidx(m)	__cpu->y+m					// Get value at x + (m)
+
+// Peek (without fetching)
+#define imm_pk(x)	ram->ram[__cpu->pc+x]	// Peek immediate
+#define imm16_pk(x) ( imm_pk(x) | (imm_pk(x+1)<<8) )		// Peek immediate 16-bit
 
 // Move micro-insns
 #define lda(x)	__cpu->a=(x)
@@ -85,3 +89,4 @@ typedef struct cpu_t
 
 cpu_t*cpu_init(void);
 void cpu_exec(cpu_t*cpu,ram_t*ram);
+uint16_t cpu_fetch(cpu_t*cpu);

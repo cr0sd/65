@@ -10,6 +10,11 @@ cpu_t*cpu_init(void)
 	return cpu;
 }
 
+uint16_t cpu_fetch(cpu_t*cpu)
+{
+	return cpu->pc+=1;
+}
+
 // Execute next instruction in RAM
 // through CPU
 void cpu_exec(cpu_t*cpu,ram_t*ram)
@@ -23,31 +28,25 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 
 		// Move/load/transfer ---
 		// a
-		//case 0xA1: lda( xidx( zp( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
-		case 0xA1: lda( ind16( zp( xidx( imm() ) ) ) );	sr_nz(cpu->a); break;
-		case 0xA5: lda( zp( imm() ) );			sr_nz(cpu->a); incpc(1);	break;
+		//case 0xA1: lda( xidx( zp() ) );	sr_nz(cpu->a); incpc(1);	break;
+		//case 0xA1: lda( ind( xidx( fetch() ) ) );	sr_nz(cpu->a); break;
+		case 0xA5: lda( zp() );			sr_nz(cpu->a); incpc(1);	break;
 		case 0xA9: lda( imm() );				sr_nz(cpu->a); incpc(1);	break;
-		case 0xAD: lda( ab( imm16() ) );		sr_nz(cpu->a); incpc(1);	break;
-		case 0xB1: lda( yidx( ind16( imm() ) ) );	sr_nz(cpu->a);			break;
-		case 0xB5: lda( xidx( zp( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
-		case 0xB9: lda( yidx( ab( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
-		case 0xBD: lda( xidx( ab( imm() ) ) );	sr_nz(cpu->a); incpc(1);	break;
-		case 0x85: sta( imm() );				incpc(1);	break;
+		case 0xAD: lda( ab() );		sr_nz(cpu->a); incpc(1);	break;
+		//case 0xB1: lda( ind( zp() ) );	sr_nz(cpu->a);			break;
+		//case 0xB5: lda( xidx( zp() ) );	sr_nz(cpu->a); incpc(1);	break;
+		//case 0xB9: lda( yidx( fetch() ) );	sr_nz(cpu->a); incpc(1);	break;
+		//case 0xBD: lda( xidx( fetch() ) );	sr_nz(cpu->a); incpc(1);	break;
+
+		case 0x85: sta( fetch() );				incpc(1);	break;
 		// x
-		case 0xA2: ldx( imm() );				sr_nz(cpu->x); incpc(1);	break;
+		case 0xA2: ldx( fetch() );				sr_nz(cpu->x); incpc(1);	break;
 		// y
-		case 0xA0: ldy( imm() );				sr_nz(cpu->y); incpc(1);	break;
+		case 0xA0: ldy( fetch() );				sr_nz(cpu->y); incpc(1);	break;
 
 		// Jump/branch ---
-		case 0x4C: ldpc( imm16() );				break;
-		case 0x6C: //ldpc( ind16( imm16() ) );		break;
-			{
-				uint16_t addr, oper;
-				oper = ram->ram[cpu->pc+=1];
-				oper |= ram->ram[cpu->pc+=1]<<8;
-				addr = ram->ram[oper];
-				cpu->pc = addr;
-			}
+		case 0x4C: ldpc( ab() );				break;
+		case 0x6C: ldpc( ind() );		break;
 		case 0xEA: nop();						incpc(1);	break;
 		case 0x00: brk(); 						incpc(1);	break;
 		default:											break;
