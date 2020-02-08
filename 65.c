@@ -234,27 +234,40 @@ uint16_t prompt_address(char*prompt,cpu_t*cpu)
 uint16_t linear_search(uint16_t from,ram_t*ram)
 {
 	char b[8];
+	static char prev[8];
 	uint8_t byte=0;
 
 	// Prompt for desired byte to find
 	mvprintw(STATUSLINE,0,"                                               ");
-	mvprintw(STATUSLINE,0,"Search for byte (00-ff): ");
+	mvprintw(STATUSLINE,0,"Search for byte (00-ff,n): ");
 	getnstr(b,2);
 
-	// Validate input
+	// Special values
 	if(strcmp(b,"")==0)
-		{
-			mvprintw(STATUSLINE,0,"Not searching%s",
-				"                                   ");
-			return from;
-		}
+	{
+		mvprintw(STATUSLINE,0,"Not searching%s",
+			"                                   ");
+		memcpy(prev,b,8);
+		return from;
+	}
+	// Repeat last search
+	else if(strcmp(b,"n")==0)
+	{
+		mvprintw(STATUSLINE,0,"Repeating last search%s",
+			"                                   ");
+		memcpy(b,prev,8);
+	}
 
+	// Validate input
 	for(int i=0;i<2&&b[i];++i)
+	{
 		if(!isxdigit(b[i]))
 		{
 			mvprintw(STATUSLINE,0,"Error: Invalid hexadecimal digit");
+			memcpy(prev,b,8);
 			return from;
 		}
+	}
 
 	// Convert to integer and notify
 	byte=strtol(b,NULL,16);
@@ -269,10 +282,12 @@ uint16_t linear_search(uint16_t from,ram_t*ram)
 			mvprintw(STATUSLINE,0,"Found $%X at $%04X (%+d)%s",
 				byte,i,i-from,
 				"                                   ");
+			memcpy(prev,b,8);
 			return i;
 		}
 	mvprintw(STATUSLINE,0,"Can't find $%X%s",
 		byte,
 		"                                   ");
+	memcpy(prev,b,8);
 	return from;
 }
