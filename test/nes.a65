@@ -4,12 +4,15 @@
 .text
 *=$8000
 main:
-	lda #$00
-	sta $00
-	lda #$80
-	sta $01
 
-	jmp ($0000)
+	lda #$00
+	sta $01
+	lda #$80
+	sta $02
+
+	lda #$00
+	ldx #$1
+	lda ($00,x)
 
 	jmp main
 

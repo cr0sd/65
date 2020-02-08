@@ -94,6 +94,8 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0xB5: p2( "lda x, zp $%02X", imm_pk(1) ); end();
 		case 0xB9: p2( "lda y, abs $%02X", imm_pk(1) ); end();
 		case 0xBD: p2( "lda y, abs $%02X", imm_pk(1) ); end();
+
+		case 0x81: p2( "sta zp ($%02X, x)", imm_pk(1) ); end();
 		case 0x85: p2( "sta zp $%02X", imm_pk(1) ); end();
 		// x
 		case 0xA2: p2( "ldx #$%02X", imm_pk(1) ); end();
@@ -102,7 +104,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 
 		// Jump/branch
 		case 0x4C: p3( "jmp abs $%04X", imm16_pk(1) ); end();
-		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), imm16_pk(2) ); end();
+		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), *((uint16_t*)ram->ram) ); end();
 		case 0xEA: p1( "nop" ); end();
 		case 0x00: p1( "brk" ); end();
 
@@ -112,14 +114,14 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 
 		default:
 			mvprintw(y,0,"-                                             ");
-			//p0("incpc(1)");
-			incpc(1);
+			//p0("fetch()");
+			incpc();
 			//printw("\t(pc:$%04X)\t",cpuc->pc);
 		}
 
 		// Next line of disassembly
 		//cpuc->pc+=1;
-		incpc(1);
+		incpc();
 		++y;
 	}
 }

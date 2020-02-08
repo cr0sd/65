@@ -46,44 +46,44 @@ typedef struct cpu_t
 
 // General purpose "micro-insns"/macros
 #define __cpu cpu
-#define fetch()		(ram->ram[cpu_fetch(__cpu)])		// Get immediate binary value
+#define incpc		fetch
+#define fetch()		(ram->ram[cpu_fetch(__cpu)])	// Get immediate binary value
 #define fetch16()	( fetch() | (fetch()<<8) )		// Get immediate 16-bit binary value
+#define deref(x)	(ram_indirect_address(ram,x))
 
 // Addressing mode "micro-insns"
-#define imm		fetch
-#define imm16	fetch16						// Get immediate 16-bit binary value
-#define zp		fetch					// Get value at $0000 + x
-#define ab		imm16						// Get 16-bit address
-#define ind()	ram_indirect_address(ram,fetch16())
-
-#define xidx(m)	__cpu->x+m					// Get value at y + (m)
-#define yidx(m)	__cpu->y+m					// Get value at x + (m)
+#define imm			fetch
+#define imm16		fetch16							// Get immediate 16-bit binary value
+#define zp			fetch							// Get value at $0000 + x
+#define ab			imm16							// Get 16-bit address
+#define ind()		ram_indirect_address(ram,fetch16())
+#define xidx(z)		(__cpu->x+z)						// Get value at y + (m)
+#define yidx(z)		(__cpu->y+z)						// Get value at x + (m)
 
 // Peek (without fetching)
-#define imm_pk(x)	ram->ram[__cpu->pc+x]	// Peek immediate
-#define imm16_pk(x) ( imm_pk(x) | (imm_pk(x+1)<<8) )		// Peek immediate 16-bit
+#define imm_pk(x)	ram->ram[__cpu->pc+x]			// Peek immediate
+#define imm16_pk(x)	( imm_pk(x) | (imm_pk(x+1)<<8) )// Peek immediate 16-bit
 
 // Move micro-insns
-#define lda(x)	__cpu->a=(x)
-#define ldx(m)	__cpu->x=m
-#define ldy(x)	__cpu->y=(x)
-#define ldpc(x)	__cpu->pc=(x)
+#define lda(x)		(__cpu->a=(x))
+#define ldx(m)		(__cpu->x=m)
+#define ldy(x)		(__cpu->y=(x))
+#define ldpc(x)		(__cpu->pc=(x))
 #define nop()
 #define brk()
-
-#define sta(x) ram->ram[x]=__cpu->a
+#define sta(x)		(ram->ram[x]=__cpu->a)
 
 // Arithmetic micro-insns
-#define incpc(x)	__cpu->pc+=x
+// ...
 
 // Status register micro-insns
-#define sr_n(x)	__cpu->sr.bits.n=(x<0) 		// Negative
-#define sr_v(x)	__cpu->sr.bits.v=?			// Overflow
-#define sr_b(x)	__cpu->sr.bits.b=?			// Break
-#define sr_d(x)	__cpu->sr.bits.d=?			// Decimal (BCD)
-#define sr_i(x)	__cpu->sr.bits.i=x			// Interrupt (enable/disable)
-#define sr_z(x)	__cpu->sr.bits.z=(x==0)		// Zero
-#define sr_c(x)	__cpu->sr.bits.c=?			// Carry
+#define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative
+#define sr_v(x)		(__cpu->sr.bits.v=?)			// Overflow
+#define sr_b(x)		(__cpu->sr.bits.b=?)			// Break
+#define sr_d(x)		(__cpu->sr.bits.d=?)			// Decimal (BCD)
+#define sr_i(x)		(__cpu->sr.bits.i=x)			// Interrupt (enable/disable)
+#define sr_z(x)		(__cpu->sr.bits.z=(x==0))		// Zero
+#define sr_c(x)		(__cpu->sr.bits.c=?)			// Carry
 #define sr_nz(x)	sr_n(x);sr_z(x)
 // ----------------------------------------------
 
