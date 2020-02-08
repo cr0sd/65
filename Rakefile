@@ -11,7 +11,6 @@ OBJS	=	'65.o cpu.o ram.o rom.o disasm.o'
 
 # Functions
 # -----------------------------
-# Start sub rake
 # Remove file extension
 def get_name(x)
 	x.scan(/([\-a-z_0-9]+)\.(.*)/)[0][0]

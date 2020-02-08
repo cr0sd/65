@@ -3,7 +3,138 @@
 #include"rom.h"
 #include"cpu.h"
 #include"disasm.h"
+#include<ctype.h>
 #include<stdbool.h>
+
+// Internal prototypes
+void print_registers(cpu_t*cpu);
+void print_memory(cpu_t*cpu,ram_t*ram,uint16_t offset);
+void print_disassembly(cpu_t*cpu,ram_t*ram);
+uint16_t prompt_address(char*prompt,cpu_t*cpu);
+uint16_t linear_search(uint16_t from,ram_t*ram);
+
+// Entry point
+int main(int argc,char**argv)
+{
+	cpu_t*cpu=cpu_init();
+	rom_t*rom=new(rom_t);
+	ram_t*ram=ram_init();
+
+	uint16_t hex_offset=0x8000;	// Where start drawing memory hexdump
+	int hex_follow_pc=true;		// Toggle following cpu->pc
+
+	win=initscr();
+	curs_set(0);
+	start_color();
+	init_pair(1,COLOR_WHITE,COLOR_BLACK);
+	init_pair(2,COLOR_RED,COLOR_BLACK);
+	init_pair(3,COLOR_CYAN,COLOR_BLACK);
+	init_pair(4,COLOR_YELLOW,COLOR_BLACK);
+	init_pair(5,COLOR_BLUE,COLOR_BLACK);
+
+	mvprintw(STATUSLINE+1,0,
+		"Welcome! [s] Step [q] Quit [g] Goto [G] Follow [p] PC [/] Search");
+
+	// Parse command line arguments
+	if(argc>1)
+	{
+		rom_load_file(rom,argv[1]);
+		//rom_print_header_info(rom);
+		refresh();
+
+		// Map ROM into $8000 by default
+		// TODO: Learn where exactly to map 'PRG-ROM'
+		rom_map(rom,ram,PRG_ROM_OFFSET);
+		hex_offset=0x8000;
+		refresh();
+	}
+
+	// Verify ROM is loaded
+	if(rom->rom)
+		cpu->pc=PRG_ROM_OFFSET;
+	else
+		puterr("%s: No ROM loaded\n",__func__);
+
+	// Render -----
+	while(true)
+	{
+
+		//clear();
+		print_registers(cpu);
+		print_memory(cpu,ram,hex_offset);
+		print_disassembly(cpu,ram);
+
+		// Display if following
+		if(hex_follow_pc)
+		{
+			attron(COLOR_PAIR(2));
+			mvprintw(0,30,"F");
+			attroff(COLOR_PAIR(2));
+		}
+		else
+			mvprintw(0,30," ");
+
+		refresh();
+		// Get keyboard input
+		switch(getchar())
+		{
+
+		// Single step
+		case 's':
+			cpu_exec(cpu,ram);
+			break;
+
+		// Scroll up/down through memory hexdump
+		case 'k': // Up
+			hex_follow_pc=false;
+			hex_offset= (hex_offset>8) ? (hex_offset-8) : 0;
+			break;
+		case 'j': // Down
+			hex_follow_pc=false;
+			hex_offset= (hex_offset<LASTHEXOFFSET-8) ? (hex_offset+8) : LASTHEXOFFSET;
+			break;
+
+		// Toggle follow pc on/off
+		case 'G':
+			hex_follow_pc=!hex_follow_pc;
+			mvprintw(STATUSLINE,0,"Follow PC: %s                      ",
+				hex_follow_pc?
+				"true":"false");
+			break;
+		// Goto (memory hexdump)
+		case 'g':
+			hex_offset=prompt_address("View offset",cpu);
+			hex_follow_pc=false;
+			break;
+
+		// Set PC manually
+		case 'p':
+			cpu->pc=prompt_address("Set PC",cpu);
+			break;
+
+		// Linear search for character/byte
+		case '/':
+			hex_follow_pc=false;
+			hex_offset=linear_search(hex_offset,ram);
+			break;
+
+		// Quit command
+		case 'q':
+			goto quit;
+		}
+
+		if(hex_follow_pc) hex_offset=cpu->pc;
+	}
+
+quit:
+	// Free memory
+	free(cpu);
+	rom_del(rom);
+	free(rom);
+	ram_del(ram);
+	free(ram);
+	endwin();
+}
 
 // Print formatted error message
 void puterr(const char*fmt,...)
@@ -34,12 +165,12 @@ void print_registers(cpu_t*cpu)
 	mvprintw(5,0,"pc: $%04X\n",cpu->pc);
 }
 
-// Print hexdump
-void print_hexdump(cpu_t*cpu,ram_t*ram,uint16_t offset)
+// Print memory hexdump
+void print_memory(cpu_t*cpu,ram_t*ram,uint16_t offset)
 {
-	// Print hexdump at (16,0)
+	// Print memory hexdump at (16,0)
 	attron(COLOR_PAIR(4));
-	mvprintw(0,16,"Hexdump:");
+	mvprintw(0,16,"Memory:");
 	attroff(COLOR_PAIR(4));
 
 	// Print multiple lines
@@ -70,140 +201,78 @@ void print_disassembly(cpu_t*cpu,ram_t*ram)
 	da_print_disassembly(cpu,ram);
 }
 
-// Entry point
-int main(int argc,char**argv)
+uint16_t prompt_address(char*prompt,cpu_t*cpu)
 {
-	cpu_t*cpu=cpu_init();
-	rom_t*rom=new(rom_t);
-	ram_t*ram=ram_init();
+	char b[8];
+	uint16_t gowh=0;
 
-	uint16_t hex_offset=0x8000;	// Where start drawing hexdump
-	int hex_follow_pc=true;		// Toggle following cpu->pc
+	// Prompt for desired goto address
+	mvprintw(STATUSLINE,0,"                                                      ");
+	mvprintw(STATUSLINE,0,"%s (0000-ffff,G,pc): ",
+		prompt);
+	getnstr(b,4);
 
-	win=initscr();
-	curs_set(0);
-	start_color();
-	init_pair(1,COLOR_WHITE,COLOR_BLACK);
-	init_pair(2,COLOR_RED,COLOR_BLACK);
-	init_pair(3,COLOR_CYAN,COLOR_BLACK);
-	init_pair(4,COLOR_YELLOW,COLOR_BLACK);
-	init_pair(5,COLOR_BLUE,COLOR_BLACK);
-
-	mvprintw(20,1,"Welcome! Usage: [s] Step [q] Quit [g] Goto [G] Follow");
-
-	// Parse command line arguments
-	if(argc>1)
-	{
-		rom_load_file(rom,argv[1]);
-		//rom_print_header_info(rom);
-		refresh();
-
-		// Map ROM into $8000 by default
-		// TODO: Learn where exactly to map 'PRG-ROM'
-		rom_map(rom,ram,PRG_ROM_OFFSET);
-		hex_offset=0x8000;
-		refresh();
-	}
-
-	// Verify ROM is loaded
-	if(rom->rom)
-		cpu->pc=PRG_ROM_OFFSET;
+	// Special values
+	if(strcmp(b,"G")==0) gowh=LASTHEXOFFSET;	// Goto end
+	if(strcmp(b,"pc")==0) gowh=cpu->pc;	// Goto end
+	else if(strlen(b)==0) gowh=0;	// Goto $0000 if empty
+	// Normal case
 	else
-		puterr("%s: No ROM loaded\n",__func__);
-
-	// Render -----
-	while(true)
 	{
-
-		//clear();
-		print_registers(cpu);
-		print_hexdump(cpu,ram,hex_offset);
-		print_disassembly(cpu,ram);
-
-		// Display if following
-		if(hex_follow_pc)
-		{
-			attron(COLOR_PAIR(2));
-			mvprintw(0,30,"F");
-			attroff(COLOR_PAIR(2));
-		}
-		else
-			mvprintw(0,30," ");
-
-		refresh();
-		// Get keyboard input
-		switch(getchar())
-		{
-
-		// Single step
-		case 's':
-			cpu_exec(cpu,ram);
-			break;
-
-		// Scroll up/down through hexdump
-		case 'k': // Up
-			hex_follow_pc=false;
-			hex_offset= (hex_offset>8) ? (hex_offset-8) : 0;
-			break;
-		case 'j': // Down
-			hex_follow_pc=false;
-			hex_offset= (hex_offset<LASTHEXOFFSET-8) ? (hex_offset+8) : LASTHEXOFFSET;
-			break;
-
-		// Toggle follow pc on/off
-		case 'G':
-			hex_follow_pc=!hex_follow_pc;
-			mvprintw(STATUSLINE,0,"Follow PC: %s                      ",
-				hex_follow_pc?
-				"true":"false");
-			break;
-		// Goto (hexdump)
-		case 'g':
-			{
-				char b[512];
-				uint16_t gowh=0;
-
-				// Prompt for desired goto address
-				mvprintw(STATUSLINE,0,"                                                      ");
-				mvprintw(STATUSLINE,0,"Goto where? (0000-ffff) (Use 'G' for end): ");
-				getnstr(b,4);
-
-				// Special values
-				if(strcmp(b,"G")==0) gowh=LASTHEXOFFSET;	// Goto end
-				else if(strlen(b)==0) gowh=0;	// Goto $0000 if empty
-				// Normal case
-				else
-				{
-					gowh=strtol(b,NULL,16);
-					// Validate input
-					if(gowh>LASTHEXOFFSET) gowh=LASTHEXOFFSET;
-				}
-
-				// Convert to hex offset, then print
-				hex_offset=gowh; //atoi(b);
-				mvprintw(STATUSLINE,0,"Goto: $%04x.                 ",
-					hex_offset);
-				//print_hexdump(cpu,ram,gowh);
-				//refresh();
-
-				hex_follow_pc=false;
-			}
-			break;
-
-		// Quit command
-		case 'q':
-			goto quit;
-		}
-
-		if(hex_follow_pc) hex_offset=cpu->pc;
+		gowh=strtol(b,NULL,16);
+		// Validate input
+		if(gowh>LASTHEXOFFSET) gowh=LASTHEXOFFSET;
 	}
 
-quit:
-	// Free memory
-	free(cpu);
-	rom_del(rom);
-	free(rom);
-	ram_del(ram);
-	free(ram);
-	endwin();
+	// Display result
+	mvprintw(STATUSLINE,0,"Goto: $%04x.                 ",
+		gowh);
+
+	return gowh;
+}
+
+uint16_t linear_search(uint16_t from,ram_t*ram)
+{
+	char b[8];
+	uint8_t byte=0;
+
+	// Prompt for desired byte to find
+	mvprintw(STATUSLINE,0,"                                               ");
+	mvprintw(STATUSLINE,0,"Search for byte (00-ff): ");
+	getnstr(b,2);
+
+	// Validate input
+	if(strcmp(b,"")==0)
+		{
+			mvprintw(STATUSLINE,0,"Not searching%s",
+				"                                   ");
+			return from;
+		}
+
+	for(int i=0;i<2&&b[i];++i)
+		if(!isxdigit(b[i]))
+		{
+			mvprintw(STATUSLINE,0,"Error: Invalid hexadecimal digit");
+			return from;
+		}
+
+	// Convert to integer and notify
+	byte=strtol(b,NULL,16);
+	mvprintw(STATUSLINE,0,"Search for $%X%s",
+		byte,
+		"                                   ");
+
+	// Search (linearly, until $ffff) from hex_offset
+	for(int i=from+1;i<0xffff;++i)
+		if(ram->ram[i]==byte)
+		{
+			mvprintw(STATUSLINE,0,"Found $%X at $%04X (%+d)%s",
+				byte,i,i-from,
+				"                                   ");
+			return i;
+		}
+	mvprintw(STATUSLINE,0,"Can't find $%X%s",
+		byte,
+		"                                   ");
+	return from;
 }
