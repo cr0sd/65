@@ -14,6 +14,16 @@ main:
 	ldx #$1
 	lda ($00,x)
 
-	jmp main
+	lda #$02
+	sta $00
+
+	ldy #$44
+	lda ($00),y
+
+	lda #$9
+	sta $01
+
+	jmp ($0001)
+	;jmp main
 
 .byt "string",0

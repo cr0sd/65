@@ -31,5 +31,5 @@ void ram_del(ram_t*ram)
 
 uint16_t ram_indirect_address(ram_t*ram,uint16_t src)
 {
-	return ram->ram[src] | (ram->ram[src+1]<<8);
+	return *(uint16_t*)(ram->ram+src);
 }

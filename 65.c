@@ -5,6 +5,7 @@
 #include"disasm.h"
 #include<ctype.h>
 #include<stdbool.h>
+#include<unistd.h>
 
 // Internal prototypes
 void print_registers(cpu_t*cpu);
@@ -214,7 +215,7 @@ uint16_t prompt_address(char*prompt,cpu_t*cpu)
 
 	// Special values
 	if(strcmp(b,"G")==0) gowh=LASTHEXOFFSET;	// Goto end
-	if(strcmp(b,"pc")==0) gowh=cpu->pc;	// Goto end
+	else if(strcmp(b,"pc")==0) gowh=cpu->pc;	// Goto end
 	else if(strlen(b)==0) gowh=0;	// Goto $0000 if empty
 	// Normal case
 	else

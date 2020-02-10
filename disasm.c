@@ -87,10 +87,11 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		// Move/transfer
 		// a
 		case 0xA1: p2( "lda ($%02X,x)", imm_pk(1) ); end();
+		case 0xB1: p2( "lda ($%02X),y", imm_pk(1) ); end();
 		case 0xA5: p2( "lda zp $%02X", imm_pk(1) ); end();
 		case 0xA9: p2( "lda #$%02X", imm_pk(1) ); end();
 		case 0xAD: p3( "lda abs $%04X", imm16_pk(1) );  end();
-		case 0xB1: p2( "lda ind ($%02X),y", imm_pk(1) ); end();
+		//case 0xB1: p2( "lda ind ($%02X),y", imm_pk(1) ); end();
 		case 0xB5: p2( "lda x, zp $%02X", imm_pk(1) ); end();
 		case 0xB9: p2( "lda y, abs $%02X", imm_pk(1) ); end();
 		case 0xBD: p2( "lda y, abs $%02X", imm_pk(1) ); end();
@@ -104,7 +105,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 
 		// Jump/branch
 		case 0x4C: p3( "jmp abs $%04X", imm16_pk(1) ); end();
-		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), *((uint16_t*)ram->ram) ); end();
+		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), *(uint16_t*)(ram->ram+imm16_pk(1)) ); end();
 		case 0xEA: p1( "nop" ); end();
 		case 0x00: p1( "brk" ); end();
 
