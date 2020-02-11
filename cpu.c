@@ -31,7 +31,8 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		// Move/load/transfer ---
 		// a
 		case 0xA1: lda( deref( deref( fetch() + cpu->x ) ) );	sr_nz(cpu->a); incpc(); break;
-		case 0xB1: lda( zp() + cpu->y ); sr_nz(cpu->a); incpc(); break;
+		//case 0xB1: lda( zp() + cpu->y ); sr_nz(cpu->a); incpc(); break;
+		case 0xB1: lda( deref( deref( zp() + cpu->y ) ) ); sr_nz(cpu->a); incpc(); break;
 		case 0xA5: lda( zp() );			sr_nz(cpu->a); incpc();	break;
 		case 0xA9: lda( imm() );				sr_nz(cpu->a); incpc();	break;
 		case 0xAD: lda( ab() );		sr_nz(cpu->a); incpc();	break;
@@ -41,6 +42,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		//case 0xBD: lda( xidx( fetch() ) );	sr_nz(cpu->a); incpc();	break;
 
 		case 0x85: sta( fetch() );				incpc();	break;
+		case 0x8D: sta( fetch16() );			incpc();	break;
 		// x
 		case 0xA2: ldx( fetch() );				sr_nz(cpu->x); incpc();	break;
 		// y

@@ -5,25 +5,23 @@
 *=$8000
 main:
 
-	lda #$00
+	; INDIRECT INDEXED
+	;lda ($00),y
+	;lda( fetch16( zp( $LL ) + Y ) )
+
+	lda #$99
+	sta $0100
+
+	lda #$01
 	sta $01
-	lda #$80
-	sta $02
 
-	lda #$00
-	ldx #$1
-	lda ($00,x)
-
-	lda #$02
-	sta $00
-
-	ldy #$44
+	ldy #$00
 	lda ($00),y
 
-	lda #$9
-	sta $01
+	; INDEXED INDIRECT
+	;lda ($00,x)
+	;lda( fetch16( zp( $LL + X ) ) )
 
-	jmp ($0001)
-	;jmp main
+	jmp main
 
 .byt "string",0

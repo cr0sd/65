@@ -98,6 +98,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 
 		case 0x81: p2( "sta zp ($%02X, x)", imm_pk(1) ); end();
 		case 0x85: p2( "sta zp $%02X", imm_pk(1) ); end();
+		case 0x8D: p3( "sta abs $%04X", imm16_pk(1) ); end();
 		// x
 		case 0xA2: p2( "ldx #$%02X", imm_pk(1) ); end();
 		// y
