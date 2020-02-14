@@ -209,21 +209,19 @@ uint16_t prompt_address(char*prompt,cpu_t*cpu)
 
 	// Prompt for desired goto address
 	mvprintw(STATUSLINE,0,"                                                      ");
-	mvprintw(STATUSLINE,0,"%s (0000-ffff,G,pc): ",
+	mvprintw(STATUSLINE,0,"%s (0000-ffff,G,pc,p#XX): ",
 		prompt);
 	getnstr(b,4);
 
 	// Special values
-	if(strcmp(b,"G")==0) gowh=LASTHEXOFFSET;	// Goto end
-	else if(strcmp(b,"pc")==0) gowh=cpu->pc;	// Goto end
-	else if(strlen(b)==0) gowh=0;	// Goto $0000 if empty
+	if(strcmp(b,"G")==0) gowh=LASTHEXOFFSET;			// Goto end
+	else if(strcmp(b,"pc")==0) gowh=cpu->pc;			// Goto cpu->pc
+	else if(strlen(b)==0) gowh=0;						// Goto $0000 if empty
+	else if(*b=='p') gowh=0x100*strtol(b+1,NULL,16);	// Goto page
 	// Normal case
-	else
-	{
-		gowh=strtol(b,NULL,16);
-		// Validate input
-		if(gowh>LASTHEXOFFSET) gowh=LASTHEXOFFSET;
-	}
+	else gowh=strtol(b,NULL,16);						// Default: goto abs addr
+	// Validate input
+	if(gowh>LASTHEXOFFSET) gowh=LASTHEXOFFSET;
 
 	// Display result
 	mvprintw(STATUSLINE,0,"Goto: $%04x.                 ",
