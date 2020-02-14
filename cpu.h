@@ -61,7 +61,7 @@ typedef struct cpu_t
 #define yidx(z)		(__cpu->y+z)						// Get value at x + (m)
 
 // Peek (without fetching)
-#define imm_pk(x)	ram->ram[__cpu->pc+x]			// Peek immediate
+#define imm_pk(x)	(ram->ram[__cpu->pc+x])			// Peek immediate
 #define imm16_pk(x)	( imm_pk(x) | (imm_pk(x+1)<<8) )// Peek immediate 16-bit
 
 // Move micro-insns

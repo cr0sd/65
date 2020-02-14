@@ -30,19 +30,24 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 
 		// Move/load/transfer ---
 		// a
-		case 0xA1: lda( deref( deref( fetch() + cpu->x ) ) );	sr_nz(cpu->a); incpc(); break;
-		//case 0xB1: lda( zp() + cpu->y ); sr_nz(cpu->a); incpc(); break;
-		case 0xB1: lda( deref( deref( zp() + cpu->y ) ) ); sr_nz(cpu->a); incpc(); break;
-		case 0xA5: lda( zp() );			sr_nz(cpu->a); incpc();	break;
-		case 0xA9: lda( imm() );				sr_nz(cpu->a); incpc();	break;
+		case 0xA1: lda( deref( deref( zp() + cpu->x ) ) );		sr_nz(cpu->a); incpc(); break;
+		case 0xB1: lda( deref( deref( zp() + cpu->y ) ) );		sr_nz(cpu->a); incpc(); break;
+		case 0xA5: lda( zp() );		sr_nz(cpu->a); incpc();	break;
+		case 0xA9: lda( imm() );	sr_nz(cpu->a); incpc();	break;
 		case 0xAD: lda( ab() );		sr_nz(cpu->a); incpc();	break;
-		//case 0xB1: lda( ind( zp() ) );	sr_nz(cpu->a);			break;
-		//case 0xB5: lda( xidx( zp() ) );	sr_nz(cpu->a); incpc();	break;
-		//case 0xB9: lda( yidx( fetch() ) );	sr_nz(cpu->a); incpc();	break;
-		//case 0xBD: lda( xidx( fetch() ) );	sr_nz(cpu->a); incpc();	break;
+		case 0xB5: lda( deref( fetch() + cpu->x ) );	sr_nz(cpu->a); incpc();	break;
+		case 0xB9: lda( deref( fetch16() + cpu->y ) );	sr_nz(cpu->a); incpc();	break;
+		case 0xBD: lda( deref( fetch16() + cpu->x ) );	sr_nz(cpu->a); incpc();	break;
 
-		case 0x85: sta( fetch() );				incpc();	break;
-		case 0x8D: sta( fetch16() );			incpc();	break;
+		// Store: Do not dereference
+		case 0x85: sta( zp() );				incpc();	break;
+		case 0x95: sta( fetch() + cpu->x );	incpc();	break;
+		case 0x8D: sta( ab() );				incpc();	break;
+		case 0x9D: sta( ab() + cpu->x );	incpc();	break;
+		case 0x99: sta( ab() + cpu->y );	incpc();	break;
+		case 0x81: sta( zp() + cpu->x );		incpc();	break;
+		case 0x91: sta( zp() + cpu->y );		incpc();	break;
+
 		// x
 		case 0xA2: ldx( fetch() );				sr_nz(cpu->x); incpc();	break;
 		// y

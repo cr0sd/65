@@ -1,7 +1,7 @@
 1. Implement instruction set
 	a. Pay attention to address modes
+		- !! Difference in OPC ($LL,x) and ($LL),y
 		- Zeropage, absolute, immediate value, indirect (X, Y)
-		- Difference in OPC ($LL,x) and ($LL),y
 		- Understand memory mapping for 6502
 	b. Move/transfer insns
 	c. Jump/branching insns

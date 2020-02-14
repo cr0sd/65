@@ -5,22 +5,9 @@
 *=$8000
 main:
 
-	; INDIRECT INDEXED
-	;lda ($00),y
-	;lda( fetch16( zp( $LL ) + Y ) )
-
-	lda #$99
-	sta $0100
-
-	lda #$01
-	sta $01
-
-	ldy #$00
-	lda ($00),y
-
-	; INDEXED INDIRECT
-	;lda ($00,x)
-	;lda( fetch16( zp( $LL + X ) ) )
+	lda #$44
+	ldy #2
+	sta ($03),y
 
 	jmp main
 
