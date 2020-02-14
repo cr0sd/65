@@ -10,6 +10,7 @@ WINDOW*win;
 
 #define PROG "65"
 #define new(x) malloc(sizeof(x))
+#define mvclr(y,x) do{move(y,x);clrtoeol();}while(0)
 
 #define PRG_ROM_OFFSET 0x8000
 #define STATUSLINE 20

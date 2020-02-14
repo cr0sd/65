@@ -5,9 +5,38 @@
 *=$8000
 main:
 
-	lda #$44
-	ldy #2
-	sta ($03),y
+	; TEST LDA ---
+	;ldx #20
+	;sta $0101,x
+
+	;lda #$44
+	;ldy #2
+	;sta ($03),y ; debug this <---
+
+	; TEST ADC ---
+	;lda #$13
+	;sta $03
+
+	;lda #$62
+	;adc #$22
+	;adc $03
+
+	; TEST ADC ---
+	lda #9
+	sta $12
+
+	adc #$01
+	sta $13
+
+	lda #$19
+	sta $0103
+
+	lda #$00
+	ldx #1
+	adc $12,x
+	adc $0103
+	ldx #01
+	adc $0102,x
 
 	jmp main
 

@@ -98,6 +98,7 @@ int main(int argc,char**argv)
 		// Toggle follow pc on/off
 		case 'G':
 			hex_follow_pc=!hex_follow_pc;
+			mvclr(STATUSLINE,0);
 			mvprintw(STATUSLINE,0,"Follow PC: %s                      ",
 				hex_follow_pc?
 				"true":"false");
@@ -143,6 +144,7 @@ void puterr(const char*fmt,...)
 	va_list list;
 	va_start(list,fmt);
 	//fprintf(stderr,PROG": Error: ");
+	mvclr(20,0);
 	mvprintw(20,0,PROG": ");
 	attron(COLOR_PAIR(2));
 	printw("Error: ");
@@ -208,7 +210,7 @@ uint16_t prompt_address(char*prompt,cpu_t*cpu)
 	uint16_t gowh=0;
 
 	// Prompt for desired goto address
-	mvprintw(STATUSLINE,0,"                                                      ");
+	mvclr(STATUSLINE,0);
 	mvprintw(STATUSLINE,0,"%s (0000-ffff,G,pc,p#XX): ",
 		prompt);
 	getnstr(b,4);
@@ -224,7 +226,8 @@ uint16_t prompt_address(char*prompt,cpu_t*cpu)
 	if(gowh>LASTHEXOFFSET) gowh=LASTHEXOFFSET;
 
 	// Display result
-	mvprintw(STATUSLINE,0,"Goto: $%04x.                 ",
+	mvclr(STATUSLINE,0);
+	mvprintw(STATUSLINE,0,"Goto: $%04x.",
 		gowh);
 
 	return gowh;
@@ -237,22 +240,22 @@ uint16_t linear_search(uint16_t from,ram_t*ram)
 	uint8_t byte=0;
 
 	// Prompt for desired byte to find
-	mvprintw(STATUSLINE,0,"                                               ");
+	mvclr(STATUSLINE,0);
 	mvprintw(STATUSLINE,0,"Search for byte (00-ff,n): ");
 	getnstr(b,2);
 
 	// Special values
 	if(strcmp(b,"")==0)
 	{
-		mvprintw(STATUSLINE,0,"Not searching%s",
-			"                                   ");
+		mvclr(STATUSLINE,0);
+		mvprintw(STATUSLINE,0,"Not searching");
 		return from;
 	}
 	// Repeat last search
 	else if(strcmp(b,"n")==0)
 	{
-		mvprintw(STATUSLINE,0,"Repeating last search%s",
-			"                                   ");
+		mvclr(STATUSLINE,0);
+		mvprintw(STATUSLINE,0,"Repeating last search");
 		memcpy(b,prev,8);
 	}
 
@@ -261,6 +264,7 @@ uint16_t linear_search(uint16_t from,ram_t*ram)
 	{
 		if(!isxdigit(b[i]))
 		{
+			mvclr(STATUSLINE,0);
 			mvprintw(STATUSLINE,0,"Error: Invalid hexadecimal digit");
 			memcpy(prev,b,8);
 			return from;
@@ -269,25 +273,25 @@ uint16_t linear_search(uint16_t from,ram_t*ram)
 
 	// Convert to integer and notify
 	byte=strtol(b,NULL,16);
-	mvprintw(STATUSLINE,0,"Search for $%X%s",
-		byte,
-		"                                   ");
+	mvclr(STATUSLINE,0);
+	mvprintw(STATUSLINE,0,"Search for $%X",
+		byte);
 
 	// Search (linearly, until $ffff) from hex_offset
 	for(int i=from+1;i<0xffff;++i)
 		if(ram->ram[i]==byte)
 		{
-			mvprintw(STATUSLINE,0,"Found $%X at $%04X (%+d)%s",
-				byte,i,i-from,
-				"                                   ");
+			mvclr(STATUSLINE,0);
+			mvprintw(STATUSLINE,0,"Found $%X at $%04X (%+d)",
+				byte,i,i-from);
 			memcpy(prev,b,8);
 			return i;
 		}
 
 	// Default: did not find byte
-	mvprintw(STATUSLINE,0,"Can't find $%X%s",
-		byte,
-		"                                   ");
+	mvclr(STATUSLINE,0);
+	mvprintw(STATUSLINE,0,"Can't find $%X",
+		byte);
 	memcpy(prev,b,8);
 	return from;
 }

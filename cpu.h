@@ -74,7 +74,7 @@ typedef struct cpu_t
 #define sta(x)		(ram->ram[x]=__cpu->a)
 
 // Arithmetic micro-insns
-// ...
+#define adc(x)		(cpu_adc(__cpu,x))
 
 // Status register micro-insns
 #define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative
@@ -90,3 +90,4 @@ typedef struct cpu_t
 cpu_t*cpu_init(void);
 void cpu_exec(cpu_t*cpu,ram_t*ram);
 uint16_t cpu_fetch(cpu_t*cpu);
+uint8_t cpu_adc(cpu_t*cpu,uint8_t x);
