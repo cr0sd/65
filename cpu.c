@@ -17,9 +17,16 @@ uint16_t cpu_fetch(cpu_t*cpu)
 	return cpu->pc+=1;
 }
 
+// Increment cpu->a by x (for sequence point)
 uint8_t cpu_adc(cpu_t*cpu,uint8_t x)
 {
 	return cpu->a+=x;
+}
+
+// Assign x to cpu->a (for sequence point)
+uint8_t cpu_assign(cpu_t*cpu,uint8_t x)
+{
+	return cpu->a=x;
 }
 
 // Execute next instruction in RAM
@@ -50,6 +57,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x8D: sta( fetch16() );				incpc();	break;
 		case 0x9D: sta( fetch16() + cpu->x );	incpc();	break;
 		case 0x99: sta( fetch16() + cpu->y );	incpc();	break;
+		// TODO Verify these are correct
 		case 0x81: sta( fetch() + cpu->x );		incpc();	break;
 		case 0x91: sta( fetch() + cpu->y );		incpc();	break;
 
@@ -59,16 +67,36 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xA0: ldy( fetch() );				sr_nz(cpu->y); incpc();	break;
 
 		// Arithmetic ---
-		// TODO Check for DECIMAL FLAG for conditional behavior
+		// TODO Check ADC for DECIMAL FLAG for conditional behavior
+		// TODO Fix C + V SR flags for these
 		case 0x65: adc( deref( fetch() ) );	sr_nz(cpu->a);	incpc();	break;
 		case 0x69: adc( fetch() );			sr_nz(cpu->a);	incpc();	break;
 		case 0x75: adc( deref( fetch() + cpu->x ) );	sr_nz(cpu->a);	incpc();	break;
 		case 0x6D: adc( deref( fetch16() ) );			sr_nz(cpu->a);	incpc();	break;
 		case 0x7D: adc( deref( fetch16() + cpu->x ) );			sr_nz(cpu->a);	incpc();	break;
+		case 0x79: adc( deref( fetch16() + cpu->y ) );			sr_nz(cpu->a);	incpc();	break;
+		// TODO Verify these are correct (use ind() )
+		case 0x61: adc( ind( fetch() + cpu->x ) );			sr_nz(cpu->a);	incpc();	break;
+		case 0x71: adc( ind( fetch() + cpu->y ) );			sr_nz(cpu->a);	incpc();	break;
+
+		// Bitwise ---
+		// AND
+		case 0x29: and( fetch() ); incpc(); break;
+		case 0x25: and( deref( fetch() ) ); incpc(); break;
+		case 0x35: and( deref( fetch() + cpu->x ) ); incpc(); break;
+		case 0x2D: and( deref( fetch16() ) ); incpc(); break;
+		case 0x3D: and( deref( fetch16() + cpu->x ) ); incpc(); break;
+		case 0x39: and( deref( fetch16() + cpu->y ) ); incpc(); break;
+		case 0x21: and( deref( deref( fetch() + cpu->x ) ) ); incpc(); break;
+		case 0x31: and( deref( deref( fetch() + cpu->y ) ) ); incpc(); break;
+
+		// ASL
+		case 0x0A: asl( cpu->a ); incpc(); break;
+		case 0x06: asl( deref( fetch() ) ); incpc(); break;
 
 		// Jump/branch ---
 		case 0x4C: ldpc( fetch16() );				break;
-		case 0x6C: ldpc( ind() );				break;
+		case 0x6C: ldpc( ind( fetch16() ) );				break;
 		case 0xEA: nop();			incpc();	break;
 		case 0x00: brk(); 			incpc();	break;
 		default: incpc();						break;

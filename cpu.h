@@ -56,7 +56,7 @@ typedef struct cpu_t
 #define imm16		fetch16							// Get immediate 16-bit binary value
 #define zp			fetch							// Get value at $0000 + x
 #define ab			imm16							// Get 16-bit address
-#define ind()		ram_indirect_address(ram,fetch16())
+#define ind(x)		ram_indirect_address(ram,x)
 #define xidx(z)		(__cpu->x+z)						// Get value at y + (m)
 #define yidx(z)		(__cpu->y+z)						// Get value at x + (m)
 
@@ -75,6 +75,9 @@ typedef struct cpu_t
 
 // Arithmetic micro-insns
 #define adc(x)		(cpu_adc(__cpu,x))
+// TODO and is not always for accumulator
+#define and(x)		(__cpu->a &= x)
+#define asl(x)		(__cpu->a = x<<1)
 
 // Status register micro-insns
 #define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative
@@ -91,3 +94,4 @@ cpu_t*cpu_init(void);
 void cpu_exec(cpu_t*cpu,ram_t*ram);
 uint16_t cpu_fetch(cpu_t*cpu);
 uint8_t cpu_adc(cpu_t*cpu,uint8_t x);
+uint8_t cpu_assign(cpu_t*cpu,uint8_t x);

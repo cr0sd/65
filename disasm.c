@@ -100,8 +100,8 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x8D: p3( "sta abs $%04X", imm16_pk(1) ); end();
 		case 0x9D: p3( "sta abs $%04X,x", imm16_pk(1) ); end();
 		case 0x99: p3( "sta abs $%04X,y", imm16_pk(1) ); end();
-		case 0x81: p2( "sta zp ($%02X,x)", imm_pk(1) ); end();
-		case 0x91: p2( "sta zp ($%02X),y", imm_pk(1) ); end();
+		case 0x81: p2( "sta ind ($%02X,x)", imm_pk(1) ); end();
+		case 0x91: p2( "sta ind ($%02X),y", imm_pk(1) ); end();
 		// x
 		case 0xA2: p2( "ldx #$%02X", imm_pk(1) ); end();
 		// y
@@ -109,10 +109,30 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 
 		// Arithmetic
 		case 0x65: p2( "adc zp $%02X", imm_pk(1) ); end();
-		case 0x69: p2( "adc $%02X", imm_pk(1) ); end();
+		case 0x69: p2( "adc #$%02X", imm_pk(1) ); end();
 		case 0x75: p2( "adc zp $%02X,x", imm_pk(1) ); end();
 		case 0x6D: p3( "adc abs $%04X", imm16_pk(1) ); end();
 		case 0x7D: p3( "adc abs $%04X,x", imm16_pk(1) ); end();
+		case 0x79: p3( "adc abs $%04X,y", imm16_pk(1) ); end();
+		// TODO fix these two:
+		case 0x61: p2( "adc ind ($%02X,x)", imm_pk(1) ); end();
+		case 0x71: p2( "adc ind ($%02X),y", imm_pk(1) ); end();
+
+		// Bitwise
+		// AND
+		case 0x29: p2( "and #$%02X", imm_pk(1) ); end();
+		case 0x25: p2( "and zp $%02X", imm_pk(1) ); end();
+		case 0x35: p2( "and zp $%02X,x", imm_pk(1) ); end();
+		case 0x2D: p3( "and abs $%04X", imm16_pk(1) ); end();
+		case 0x3D: p3( "and abs $%04X,x", imm16_pk(1) ); end();
+		case 0x39: p3( "and abs $%04X,y", imm16_pk(1) ); end();
+		// TODO Verify these work ($LL,x) & ($LL),y
+		case 0x21: p2( "and zp ($%02X,x)", imm_pk(1) ); end();
+		case 0x31: p2( "and zp ($%02X),y", imm_pk(1) ); end();
+
+		// ASL
+		case 0x0A: p1( "asl a" ); end();
+		case 0x06: p2( "asl zp $%02X", imm_pk(1) ); end();
 
 		// Jump/branch
 		case 0x4C: p3( "jmp abs $%04X", imm16_pk(1) ); end();
