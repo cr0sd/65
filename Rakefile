@@ -105,5 +105,5 @@ task :objs do
 end
 
 task :clean do
-	clean '65 nes.nes *.o test/*.nes'.split
+	clean '65 *.nes *.o test/*.nes'.split
 end
