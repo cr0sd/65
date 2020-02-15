@@ -5,7 +5,7 @@ PROG= 65
 OBJS= 65.o cpu.o ram.o rom.o disasm.o
 
 TESTDIR= test
-TESTOBJS= nes.nes
+TESTOBJS= nes.nes asciitest.nes
 
 CFLAGS = -Wfatal-errors
 LDFLAGS += -lncurses
@@ -13,7 +13,7 @@ LDFLAGS += -lncurses
 $(PROG): $(OBJS)
 	$(CC) $(OBJS) -o $(PROG) $(CFLAGS) $(LDFLAGS)
 test: $(foreach x,$(TESTOBJS),$(TESTDIR)/$(x))
-	cp $(TESTDIR)/nes.nes .
+	cp $(TESTDIR)/*.nes .
 .a65.nes:
 	$(AS65) $(AS65FLAGS) $*.a65 -o $*.nes
 clean:

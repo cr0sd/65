@@ -1,0 +1,16 @@
+.byt "NES",0
+.word 0,0,0,0,0,0
+*=$8000
+main:
+	lda #0
+	ldx #0
+	jmp loop
+
+ascii:
+.byt "Hello there",0
+
+loop:
+	lda ascii,x
+	sta $00,x
+	inx
+	jmp loop

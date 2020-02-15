@@ -92,8 +92,8 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0xA9: p2( "lda #$%02X", imm_pk(1) ); end();
 		case 0xAD: p3( "lda abs $%04X", imm16_pk(1) );  end();
 		case 0xB5: p2( "lda zp $%02X,x", imm_pk(1) ); end();
-		case 0xB9: p2( "lda abs $%04X,y", imm16_pk(1) ); end();
-		case 0xBD: p2( "lda abs $%04X,x", imm16_pk(1) ); end();
+		case 0xB9: p3( "lda abs $%04X,y", imm16_pk(1) ); end();
+		case 0xBD: p3( "lda abs $%04X,x", imm16_pk(1) ); end();
 
 		case 0x85: p2( "sta zp $%02X", imm_pk(1) ); end();
 		case 0x95: p2( "sta zp $%02X,x", imm_pk(1) ); end();
@@ -117,6 +117,10 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		// TODO fix these two:
 		case 0x61: p2( "adc ind ($%02X,x)", imm_pk(1) ); end();
 		case 0x71: p2( "adc ind ($%02X),y", imm_pk(1) ); end();
+
+		// INC/DEC
+		case 0xE8: p1( "inx" ); end();
+		case 0xC8: p1( "iny" ); end();
 
 		// Bitwise
 		// AND
