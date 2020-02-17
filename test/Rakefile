@@ -4,6 +4,7 @@ require 'fileutils'
 # -----------------------------
 AS65	=	'xa'
 CC		=	'cc'
+OBJS	=	'nes.nes asciitest.nes'
 
 
 # Functions
@@ -85,12 +86,12 @@ end
 # Rules
 # -----------------------------
 task :default do
-	make 'nes.nes'.split
-	`set -x; cp nes.nes ..`
+	make OBJS.split
+	`set -x; cp #{OBJS} ..`
 end
 
 task :clean do
-	clean 'nes.nes'.split
+	clean OBJS.split
 end
 
 task :sim65 do

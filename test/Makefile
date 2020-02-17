@@ -1,9 +1,11 @@
 AS65= xa
 AS65FLAGS= -C
 
-all: nes.nes
+OBJS= nes.nes asciitest.nes
+
+all: $(OBJS)
 .a65.nes:
 	$(AS65) $(AS65FLAGS) $*.a65 -o $*.nes
 clean:
-	$(RM) nes.nes
+	$(RM) $(OBJS)
 .SUFFIXES: .a65 .nes
