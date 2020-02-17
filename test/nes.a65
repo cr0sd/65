@@ -7,18 +7,11 @@ reg=$0102
 *=$8000
 main:
 
-	; 0100 0100
-	lda #$44
-	ldx #0
-	sta $01,x
+	lda #$10
+	sta $0101
 
-	inx
-	lda #$33
-	sta $01,x
-
-	; 1001 1001
-	lda #$99
-	eor $01,x
+	asl $0101
+	sta $0101
 
 	jmp main
 

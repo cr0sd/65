@@ -152,6 +152,9 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		// ASL
 		case 0x0A: p1( "asl a" ); end();
 		case 0x06: p2( "asl zp $%02X", imm_pk(1) ); end();
+		case 0x16: p2( "asl zp $%02X,x", imm_pk(1) ); end();
+		case 0x0E: p3( "asl abs $%04X", imm16_pk(1) ); end();
+		case 0x1E: p3( "asl abs $%04X,x", imm16_pk(1) ); end();
 
 		// Jump/branch
 		case 0x4C: p3( "jmp abs $%04X", imm16_pk(1) ); end();

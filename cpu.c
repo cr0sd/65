@@ -110,8 +110,13 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x51: eor( deref( deref( fetch() + cpu->y ) ) ); incpc(); break;
 
 		// ASL
+		// Move memory, not accumulator
+		// TODO make sure zp/similar offsets are WRAPPED to 8-bits!
 		case 0x0A: asl( cpu->a ); incpc(); break;
 		case 0x06: asl( deref( fetch() ) ); incpc(); break;
+		case 0x16: asl( deref( fetch() + cpu->x ) ); incpc(); break;
+		case 0x0E: asl( deref( fetch16() ) ); incpc(); break;
+		case 0x1E: asl( deref( fetch16() + cpu->x ) ); incpc(); break;
 
 		// Jump/branch ---
 		case 0x4C: ldpc( fetch16() );				break;
