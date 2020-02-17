@@ -99,6 +99,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x31: and( deref( deref( fetch() + cpu->y ) ) ); incpc(); break;
 
 		// EOR
+		// TODO Check if accumulator is changed, or memory
 		// TODO Verify 0x4D onward work correctly
 		case 0x49: eor( fetch() ); incpc(); break;
 		case 0x45: eor( deref( fetch() ) ); incpc(); break;
@@ -109,8 +110,18 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x41: eor( deref( deref( fetch() + cpu->x ) ) ); incpc(); break;
 		case 0x51: eor( deref( deref( fetch() + cpu->y ) ) ); incpc(); break;
 
+		// ORA
+		case 0x09: ora( fetch() ); incpc(); break;
+		case 0x05: ora( deref( fetch() ) ); incpc(); break;
+		case 0x15: ora( deref( fetch() + cpu->x ) ); incpc(); break;
+		case 0x0D: ora( deref( fetch16() ) ); incpc(); break;
+		case 0x1D: ora( deref( fetch16() + cpu->x ) ); incpc(); break;
+		case 0x19: ora( deref( fetch16() + cpu->y ) ); incpc(); break;
+		case 0x01: ora( deref( deref( fetch() + cpu->x ) ) ); incpc(); break;
+		case 0x11: ora( deref( deref( fetch() + cpu->y ) ) ); incpc(); break;
+
 		// ASL
-		// Move memory, not accumulator
+		// TODO Move memory, not accumulator
 		// TODO make sure zp/similar offsets are WRAPPED to 8-bits!
 		case 0x0A: asl( cpu->a ); incpc(); break;
 		case 0x06: asl( deref( fetch() ) ); incpc(); break;

@@ -9,9 +9,17 @@ main:
 
 	lda #$10
 	sta $0101
+	sta $01
+	lda #$02
+	sta $02
 
-	asl $0101
-	sta $0101
+	ldx #$01
+	ldy #$02
+
+	ora $01
+	ora $0101
+	ora $01,x
+	ora $00,y
 
 	jmp main
 

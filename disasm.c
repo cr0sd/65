@@ -149,6 +149,17 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x41: p2( "eor zp ($%02X,x)", imm_pk(1) ); end();
 		case 0x51: p2( "eor zp ($%02X),y", imm_pk(1) ); end();
 
+		// ORA
+		case 0x09: p2( "ora #$%02X", imm_pk(1) ); end();
+		case 0x05: p2( "ora zp $%02X", imm_pk(1) ); end();
+		case 0x15: p2( "ora zp $%02X,x", imm_pk(1) ); end();
+		case 0x0D: p3( "ora abs $%04X", imm16_pk(1) ); end();
+		case 0x1D: p3( "ora abs $%04X,x", imm16_pk(1) ); end();
+		case 0x19: p3( "ora abs $%04X,y", imm16_pk(1) ); end();
+		// TODO Verify these work ($LL,x) & ($LL),y
+		case 0x01: p2( "ora zp ($%02X,x)", imm_pk(1) ); end();
+		case 0x11: p2( "ora zp ($%02X),y", imm_pk(1) ); end();
+
 		// ASL
 		case 0x0A: p1( "asl a" ); end();
 		case 0x06: p2( "asl zp $%02X", imm_pk(1) ); end();

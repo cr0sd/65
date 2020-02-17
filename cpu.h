@@ -75,9 +75,10 @@ typedef struct cpu_t
 
 // Arithmetic micro-insns
 #define adc(x)		(cpu_adc(__cpu,x))
-// TODO and is not always for accumulator
+// TODO AND is not always for accumulator
 #define and(x)		(__cpu->a &= x)
 #define eor(x)		(__cpu->a ^= x)
+#define ora(x)		(__cpu->a |= x)
 #define asl(x)		(__cpu->a = x<<1)
 
 // Status register micro-insns
