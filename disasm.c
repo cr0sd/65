@@ -138,6 +138,17 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x21: p2( "and zp ($%02X,x)", imm_pk(1) ); end();
 		case 0x31: p2( "and zp ($%02X),y", imm_pk(1) ); end();
 
+		// EOR
+		case 0x49: p2( "eor #$%02X", imm_pk(1) ); end();
+		case 0x45: p2( "eor zp $%02X", imm_pk(1) ); end();
+		case 0x55: p2( "eor zp $%02X,x", imm_pk(1) ); end();
+		case 0x4D: p3( "eor abs $%04X", imm16_pk(1) ); end();
+		case 0x5D: p3( "eor abs $%04X,x", imm16_pk(1) ); end();
+		case 0x59: p3( "eor abs $%04X,y", imm16_pk(1) ); end();
+		// TODO Verify these work ($LL,x) & ($LL),y
+		case 0x41: p2( "eor zp ($%02X,x)", imm_pk(1) ); end();
+		case 0x51: p2( "eor zp ($%02X),y", imm_pk(1) ); end();
+
 		// ASL
 		case 0x0A: p1( "asl a" ); end();
 		case 0x06: p2( "asl zp $%02X", imm_pk(1) ); end();

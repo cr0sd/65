@@ -98,6 +98,17 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x21: and( deref( deref( fetch() + cpu->x ) ) ); incpc(); break;
 		case 0x31: and( deref( deref( fetch() + cpu->y ) ) ); incpc(); break;
 
+		// EOR
+		// TODO Verify 0x4D onward work correctly
+		case 0x49: eor( fetch() ); incpc(); break;
+		case 0x45: eor( deref( fetch() ) ); incpc(); break;
+		case 0x55: eor( deref( fetch() + cpu->x ) ); incpc(); break;
+		case 0x4D: eor( deref( fetch16() ) ); incpc(); break;
+		case 0x5D: eor( deref( fetch16() + cpu->x ) ); incpc(); break;
+		case 0x59: eor( deref( fetch16() + cpu->y ) ); incpc(); break;
+		case 0x41: eor( deref( deref( fetch() + cpu->x ) ) ); incpc(); break;
+		case 0x51: eor( deref( deref( fetch() + cpu->y ) ) ); incpc(); break;
+
 		// ASL
 		case 0x0A: asl( cpu->a ); incpc(); break;
 		case 0x06: asl( deref( fetch() ) ); incpc(); break;

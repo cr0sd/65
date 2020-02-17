@@ -7,13 +7,19 @@ reg=$0102
 *=$8000
 main:
 
-	lda #5
-	ldx #7
-	sta reg+7
+	; 0100 0100
+	lda #$44
+	ldx #0
+	sta $01,x
 
-loop:
-	inc reg,x
+	inx
+	lda #$33
+	sta $01,x
 
-	jmp loop
+	; 1001 1001
+	lda #$99
+	eor $01,x
+
+	jmp main
 
 .byt "string",0
