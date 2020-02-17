@@ -62,9 +62,18 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x91: sta( fetch() + cpu->y );		incpc();	break;
 
 		// x
-		case 0xA2: ldx( fetch() );				sr_nz(cpu->x); incpc();	break;
+		case 0xA2: ldx( fetch() );						sr_nz(cpu->x); incpc();	break;
+		case 0xA6: ldx( deref( fetch() ) );				sr_nz(cpu->x); incpc();	break;
+		case 0xB6: ldx( deref( fetch() + cpu->y ) );	sr_nz(cpu->x); incpc();	break;
+		case 0xAE: ldx( deref( fetch16() ) );			sr_nz(cpu->x); incpc();	break;
+		case 0xBE: ldx( deref( fetch16() + cpu->y) );	sr_nz(cpu->x); incpc();	break;
+
 		// y
-		case 0xA0: ldy( fetch() );				sr_nz(cpu->y); incpc();	break;
+		case 0xA0: ldy( fetch() );						sr_nz(cpu->y); incpc();	break;
+		case 0xA4: ldy( deref( fetch() ) );				sr_nz(cpu->y); incpc();	break;
+		case 0xB4: ldy( deref( fetch() + cpu->x ) );	sr_nz(cpu->y); incpc();	break;
+		case 0xAC: ldy( deref( fetch16() ) );			sr_nz(cpu->y); incpc();	break;
+		case 0xBC: ldy( deref( fetch16() + cpu->x) );	sr_nz(cpu->y); incpc();	break;
 
 		// Arithmetic ---
 		// TODO Check ADC for DECIMAL FLAG for conditional behavior
