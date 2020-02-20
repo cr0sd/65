@@ -1,0 +1,22 @@
+.byt "NES",0
+.word 0,0,0,0,0,0
+*=$8000
+
+reg=$08
+
+main:
+
+	lda #$80
+	lsr
+	lsr
+	lsr
+	sta reg
+
+	lsr reg
+	lsr reg
+	lsr reg
+
+	lda #0
+	sta reg
+
+	jmp main

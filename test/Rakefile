@@ -4,7 +4,7 @@ require 'fileutils'
 # -----------------------------
 AS65	=	'xa'
 CC		=	'cc'
-OBJS	=	'nes.nes asciitest.nes'
+OBJS	=	'nes.nes asciitest.nes asl.nes'
 
 
 # Functions
