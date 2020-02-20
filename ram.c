@@ -18,6 +18,18 @@ ram_t*ram_init(void)
 	return ram;
 }
 
+// Arithmetic Shift Left
+void ram_asl(ram_t*ram,uint16_t byte)
+{
+	ram->ram[byte]=ram->ram[byte]<<1;
+}
+
+// Logical Shift Right
+void ram_lsr(ram_t*ram,uint16_t byte)
+{
+	ram->ram[byte]=ram->ram[byte]>>1;
+}
+
 // Free data belonging to ram object
 void ram_del(ram_t*ram)
 {

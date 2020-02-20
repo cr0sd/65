@@ -17,3 +17,5 @@ typedef struct ram_t
 ram_t*ram_init(void);
 void ram_del(ram_t*ram);
 uint16_t ram_indirect_address(ram_t*ram,uint16_t src);
+void ram_asl(ram_t*ram,uint16_t byte);
+void ram_lsr(ram_t*ram,uint16_t byte);

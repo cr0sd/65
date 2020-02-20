@@ -85,8 +85,8 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x7D: adc( deref( fetch16() + cpu->x ) );			sr_nz(cpu->a);	incpc();	break;
 		case 0x79: adc( deref( fetch16() + cpu->y ) );			sr_nz(cpu->a);	incpc();	break;
 		// TODO Verify these are correct (use ind() )
-		case 0x61: adc( ind( fetch() + cpu->x ) );			sr_nz(cpu->a);	incpc();	break;
-		case 0x71: adc( ind( fetch() + cpu->y ) );			sr_nz(cpu->a);	incpc();	break;
+		case 0x61: adc( deref( fetch() + cpu->x ) );			sr_nz(cpu->a);	incpc();	break;
+		case 0x71: adc( deref( fetch() + cpu->y ) );			sr_nz(cpu->a);	incpc();	break;
 
 		// INC/DEC
 		case 0xE8: cpu->x += 1;		incpc();		break;
@@ -132,15 +132,24 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		// ASL
 		// TODO Move memory, not accumulator
 		// TODO make sure zp/similar offsets are WRAPPED to 8-bits!
-		case 0x0A: asl( cpu->a ); incpc(); break;
-		case 0x06: asl( deref( fetch() ) ); incpc(); break;
-		case 0x16: asl( deref( fetch() + cpu->x ) ); incpc(); break;
-		case 0x0E: asl( deref( fetch16() ) ); incpc(); break;
-		case 0x1E: asl( deref( fetch16() + cpu->x ) ); incpc(); break;
+		case 0x0A: cpu->a = cpu->a << 1 ; incpc(); break;
+		case 0x06: asl( ( fetch() ) ); incpc(); break;
+		case 0x16: asl( ( fetch() + cpu->x ) ); incpc(); break;
+		case 0x0E: asl( ( fetch16() ) ); incpc(); break;
+		case 0x1E: asl( ( fetch16() + cpu->x ) ); incpc(); break;
+
+		// LSR
+		// TODO Move memory, not accumulator
+		// TODO make sure zp/similar offsets are WRAPPED to 8-bits!
+		case 0x4A: cpu->a = cpu->a >> 1; incpc(); break;
+		case 0x46: lsr( fetch() ); incpc(); break;
+		case 0x56: lsr( fetch() + cpu->x ); incpc(); break;
+		case 0x4E: lsr( fetch16() ); incpc(); break;
+		case 0x5E: lsr( fetch16() + cpu->x ); incpc(); break;
 
 		// Jump/branch ---
 		case 0x4C: ldpc( fetch16() );				break;
-		case 0x6C: ldpc( ind( fetch16() ) );				break;
+		case 0x6C: ldpc( deref( fetch16() ) );				break;
 		case 0xEA: nop();			incpc();	break;
 		case 0x00: brk(); 			incpc();	break;
 		default: incpc();						break;

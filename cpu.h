@@ -46,7 +46,7 @@ typedef struct cpu_t
 
 // General purpose "micro-insns"/macros
 #define __cpu cpu
-#define incpc		fetch
+#define incpc()		(__cpu->pc+=1)
 #define fetch()		(ram->ram[cpu_fetch(__cpu)])	// Get immediate binary value
 #define fetch16()	( fetch() | (fetch()<<8) )		// Get immediate 16-bit binary value
 #define deref(x)	(ram_indirect_address(ram,x))
@@ -54,11 +54,8 @@ typedef struct cpu_t
 // Addressing mode "micro-insns"
 #define imm			fetch
 #define imm16		fetch16							// Get immediate 16-bit binary value
-#define zp			fetch							// Get value at $0000 + x
-#define ab			imm16							// Get 16-bit address
-#define ind(x)		ram_indirect_address(ram,x)
-#define xidx(z)		(__cpu->x+z)						// Get value at y + (m)
-#define yidx(z)		(__cpu->y+z)						// Get value at x + (m)
+//#define zp			fetch							// Get value at $0000 + x
+//#define ab			imm16							// Get 16-bit address
 
 // Peek (without fetching)
 #define imm_pk(x)	(ram->ram[__cpu->pc+x])			// Peek immediate
@@ -76,10 +73,13 @@ typedef struct cpu_t
 // Arithmetic micro-insns
 #define adc(x)		(cpu_adc(__cpu,x))
 // TODO AND is not always for accumulator
-#define and(x)		(__cpu->a &= x)
-#define eor(x)		(__cpu->a ^= x)
-#define ora(x)		(__cpu->a |= x)
-#define asl(x)		(__cpu->a = x<<1)
+#define and(x)		(__cpu->a &= (x))
+#define eor(x)		(__cpu->a ^= (x))
+#define ora(x)		(__cpu->a |= (x))
+#define asl(x)		(ram_asl(ram,(x)))
+#define lsr(x)		(ram_lsr(ram,(x)))
+//#define asl(z)		(z = z << 1)
+//#define lsr(z)		(z = z >> 1)
 
 // Status register micro-insns
 #define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative

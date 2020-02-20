@@ -176,6 +176,13 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x0E: p3( "asl abs $%04X", imm16_pk(1) ); end();
 		case 0x1E: p3( "asl abs $%04X,x", imm16_pk(1) ); end();
 
+		// LSR
+		case 0x4A: p1( "lsr a" ); end();
+		case 0x46: p2( "lsr zp $%02X", imm_pk(1) ); end();
+		case 0x56: p2( "lsr zp $%02X,x", imm_pk(1) ); end();
+		case 0x4E: p3( "lsr abs $%04X", imm16_pk(1) ); end();
+		case 0x5E: p3( "lsr abs $%04X,x", imm16_pk(1) ); end();
+
 		// Jump/branch
 		case 0x4C: p3( "jmp abs $%04X", imm16_pk(1) ); end();
 		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), *(uint16_t*)(ram->ram+imm16_pk(1)) ); end();
