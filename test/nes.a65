@@ -12,6 +12,10 @@ main:
 	ldx #$04
 
 	ldy $0101,x
+	sty $0106
+
+	ldx $0105
+	stx $0109
 
 	jmp main
 

@@ -12,7 +12,7 @@ $(PROG): $(OBJS)
 test:
 	make -C test
 clean:
-	$(RM) *.o $(PROG)
+	$(RM) *.o $(PROG) *.nes
 	make clean -C test
 .SUFFIXES: .nes .o65 .a65
 .PHONY: all clean test

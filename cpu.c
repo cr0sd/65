@@ -62,6 +62,12 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x91: sta( fetch() + cpu->y );		incpc();	break;
 
 		// x
+		// Store
+		case 0x86: stx( fetch() );	incpc();	break;
+		case 0x96: stx( fetch() + cpu->y );	incpc();	break;
+		case 0x8E: stx( fetch16() );	incpc();	break;
+
+		// Load
 		case 0xA2: ldx( fetch() );						sr_nz(cpu->x); incpc();	break;
 		case 0xA6: ldx( deref( fetch() ) );				sr_nz(cpu->x); incpc();	break;
 		case 0xB6: ldx( deref( fetch() + cpu->y ) );	sr_nz(cpu->x); incpc();	break;
@@ -69,6 +75,11 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xBE: ldx( deref( fetch16() + cpu->y) );	sr_nz(cpu->x); incpc();	break;
 
 		// y
+		// Store
+		case 0x84: sty( fetch() );	incpc();	break;
+		case 0x94: sty( fetch() + cpu->y );	incpc();	break;
+		case 0x8C: sty( fetch16() );	incpc();	break;
+
 		case 0xA0: ldy( fetch() );						sr_nz(cpu->y); incpc();	break;
 		case 0xA4: ldy( deref( fetch() ) );				sr_nz(cpu->y); incpc();	break;
 		case 0xB4: ldy( deref( fetch() + cpu->x ) );	sr_nz(cpu->y); incpc();	break;

@@ -95,6 +95,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0xB9: p3( "lda abs $%04X,y", imm16_pk(1) ); end();
 		case 0xBD: p3( "lda abs $%04X,x", imm16_pk(1) ); end();
 
+		// Store
 		case 0x85: p2( "sta zp $%02X", imm_pk(1) ); end();
 		case 0x95: p2( "sta zp $%02X,x", imm_pk(1) ); end();
 		case 0x8D: p3( "sta abs $%04X", imm16_pk(1) ); end();
@@ -102,7 +103,12 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x99: p3( "sta abs $%04X,y", imm16_pk(1) ); end();
 		case 0x81: p2( "sta ind ($%02X,x)", imm_pk(1) ); end();
 		case 0x91: p2( "sta ind ($%02X),y", imm_pk(1) ); end();
+
 		// x
+		case 0x86: p2( "stx zp $%02X", imm_pk(1) ); end();
+		case 0x96: p2( "stx zp $%02X,y", imm_pk(1) ); end();
+		case 0x8E: p3( "stx abs $%04X", imm16_pk(1) ); end();
+
 		case 0xA2: p2( "ldx #$%02X", imm_pk(1) ); end();
 		case 0xA6: p2( "ldx zp $%02X", imm_pk(1) ); end();
 		case 0xB6: p2( "ldx zp $%02X,y", imm_pk(1) ); end();
@@ -110,6 +116,10 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0xBE: p3( "ldx abs $%04X,y", imm16_pk(1) ); end();
 
 		// y
+		case 0x84: p2( "sty zp $%02X", imm_pk(1) ); end();
+		case 0x94: p2( "sty zp $%02X,x", imm_pk(1) ); end();
+		case 0x8C: p3( "sty abs $%04X", imm16_pk(1) ); end();
+
 		case 0xA0: p2( "ldy #$%02X", imm_pk(1) ); end();
 		case 0xA4: p2( "ldy zp $%02X", imm_pk(1) ); end();
 		case 0xB4: p2( "ldy zp $%02X,x", imm_pk(1) ); end();

@@ -69,6 +69,8 @@ typedef struct cpu_t
 #define nop()
 #define brk()
 #define sta(x)		(ram->ram[x]=__cpu->a)
+#define stx(z)		(ram->ram[z]=__cpu->x)
+#define sty(z)		(ram->ram[z]=__cpu->y)
 
 // Arithmetic micro-insns
 #define adc(x)		(cpu_adc(__cpu,x))
