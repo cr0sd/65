@@ -7,15 +7,11 @@ reg=$0102
 *=$8000
 main:
 
-	lda #$44
-	sta $0105
-	ldx #$04
+	ldx #$05
+	inx
 
-	ldy $0101,x
-	sty $0106
-
-	ldx $0105
-	stx $0109
+	ldy #$07
+	iny
 
 	jmp main
 

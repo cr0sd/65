@@ -100,12 +100,13 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x71: adc( deref( fetch() + cpu->y ) );			sr_nz(cpu->a);	incpc();	break;
 
 		// INC/DEC
-		case 0xE8: cpu->x += 1;		incpc();		break;
-		case 0xC8: cpu->y += 1;		incpc();		break;
 		case 0xE6: ram->ram[ fetch() ] += 1;	incpc();	break;
 		case 0xF6: ram->ram[ fetch() + cpu->x ] += 1;	incpc();	break;
 		case 0xEE: ram->ram[ fetch16() ] += 1;	incpc();	break;
 		case 0xFE: ram->ram[ fetch16() + cpu->x ] += 1;	incpc();	break;
+
+		case 0xC8: cpu-> y += 1; incpc(); sr_nz(cpu->y); break;
+		case 0xE8: cpu-> x += 1; incpc(); sr_nz(cpu->x); break;
 
 		// Bitwise ---
 		// AND

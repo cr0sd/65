@@ -138,12 +138,13 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x71: p2( "adc ind ($%02X),y", imm_pk(1) ); end();
 
 		// INC/DEC
-		case 0xE8: p1( "inx" ); end();
-		case 0xC8: p1( "iny" ); end();
 		case 0xE6: p2( "inc zp $%02X", imm_pk(1) ); end();
 		case 0xF6: p2( "inc zp $%02X,x", imm_pk(1) ); end();
 		case 0xEE: p3( "inc abs $%04X", imm16_pk(1) ); end();
 		case 0xFE: p3( "inc abs $%04X,x", imm16_pk(1) ); end();
+
+		case 0xC8: p1( "iny" ); end();
+		case 0xE8: p1( "inx" ); end();
 
 		// Bitwise
 		// AND
