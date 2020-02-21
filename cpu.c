@@ -41,50 +41,57 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		#define __cpu cpu
 
 		// Move/load/transfer ---
-		// a
-		case 0xA1: lda( deref( deref( fetch() + cpu->x ) ) );		sr_nz(cpu->a); incpc(); break;
-		case 0xB1: lda( deref( deref( fetch() + cpu->y ) ) );		sr_nz(cpu->a); incpc(); break;
-		case 0xA5: lda( fetch() );		sr_nz(cpu->a); incpc();	break;
-		case 0xA9: lda( fetch() );	sr_nz(cpu->a); incpc();	break;
-		case 0xAD: lda( fetch16() );		sr_nz(cpu->a); incpc();	break;
+		// Load a
+		case 0xA1: lda( deref( deref( fetch() + cpu->x ) ) );	sr_nz(cpu->a); incpc(); break;
+		case 0xB1: lda( deref( deref( fetch() + cpu->y ) ) );	sr_nz(cpu->a); incpc(); break;
+		case 0xA5: lda( fetch() );						sr_nz(cpu->a); incpc();	break;
+		case 0xA9: lda( fetch() );						sr_nz(cpu->a); incpc();	break;
+		case 0xAD: lda( fetch16() );					sr_nz(cpu->a); incpc();	break;
 		case 0xB5: lda( deref( fetch() + cpu->x ) );	sr_nz(cpu->a); incpc();	break;
 		case 0xB9: lda( deref( fetch16() + cpu->y ) );	sr_nz(cpu->a); incpc();	break;
 		case 0xBD: lda( deref( fetch16() + cpu->x ) );	sr_nz(cpu->a); incpc();	break;
 
-		// Store: Do not dereference
+		// Store a: Do not dereference
 		case 0x85: sta( fetch() );				incpc();	break;
-		case 0x95: sta( fetch() + cpu->x );	incpc();	break;
-		case 0x8D: sta( fetch16() );				incpc();	break;
+		case 0x95: sta( fetch() + cpu->x );		incpc();	break;
+		case 0x8D: sta( fetch16() );			incpc();	break;
 		case 0x9D: sta( fetch16() + cpu->x );	incpc();	break;
 		case 0x99: sta( fetch16() + cpu->y );	incpc();	break;
 		// TODO Verify these are correct
 		case 0x81: sta( fetch() + cpu->x );		incpc();	break;
 		case 0x91: sta( fetch() + cpu->y );		incpc();	break;
 
-		// x
-		// Store
-		case 0x86: stx( fetch() );	incpc();	break;
-		case 0x96: stx( fetch() + cpu->y );	incpc();	break;
-		case 0x8E: stx( fetch16() );	incpc();	break;
+		// Store x
+		case 0x86: stx( fetch() );			incpc(); break;
+		case 0x96: stx( fetch() + cpu->y );	incpc(); break;
+		case 0x8E: stx( fetch16() );		incpc(); break;
 
-		// Load
+		// Load x
 		case 0xA2: ldx( fetch() );						sr_nz(cpu->x); incpc();	break;
 		case 0xA6: ldx( deref( fetch() ) );				sr_nz(cpu->x); incpc();	break;
 		case 0xB6: ldx( deref( fetch() + cpu->y ) );	sr_nz(cpu->x); incpc();	break;
 		case 0xAE: ldx( deref( fetch16() ) );			sr_nz(cpu->x); incpc();	break;
 		case 0xBE: ldx( deref( fetch16() + cpu->y) );	sr_nz(cpu->x); incpc();	break;
 
-		// y
-		// Store
-		case 0x84: sty( fetch() );	incpc();	break;
-		case 0x94: sty( fetch() + cpu->y );	incpc();	break;
-		case 0x8C: sty( fetch16() );	incpc();	break;
+		// Store y
+		case 0x84: sty( fetch() );			incpc(); break;
+		case 0x94: sty( fetch() + cpu->y );	incpc(); break;
+		case 0x8C: sty( fetch16() );		incpc(); break;
 
+		// Load y
 		case 0xA0: ldy( fetch() );						sr_nz(cpu->y); incpc();	break;
 		case 0xA4: ldy( deref( fetch() ) );				sr_nz(cpu->y); incpc();	break;
 		case 0xB4: ldy( deref( fetch() + cpu->x ) );	sr_nz(cpu->y); incpc();	break;
 		case 0xAC: ldy( deref( fetch16() ) );			sr_nz(cpu->y); incpc();	break;
 		case 0xBC: ldy( deref( fetch16() + cpu->x) );	sr_nz(cpu->y); incpc();	break;
+
+		// Transfer
+		case 0xA8: ldy( cpu->a );		sr_nz(cpu->a); incpc(); break;
+		case 0xBA: ldx( cpu->sp );		sr_nz(cpu->x); incpc(); break;
+		case 0x8A: lda( cpu->x );		sr_nz(cpu->a); incpc(); break;
+		case 0x9A: cpu->sp = cpu->x;	sr_nz(cpu->x); incpc(); break;
+		case 0x98: lda( cpu->y );		sr_nz(cpu->a); incpc(); break;
+
 
 		// Arithmetic ---
 		// TODO Check ADC for DECIMAL FLAG for conditional behavior

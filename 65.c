@@ -166,6 +166,7 @@ void print_registers(cpu_t*cpu)
 	mvprintw(3,0,"y:  $%02X\n",cpu->y);
 	mvprintw(4,0,"sr: $%02X\n",cpu->sr.reg);
 	mvprintw(5,0,"pc: $%04X\n",cpu->pc);
+	mvprintw(6,0,"sp: $%02X\n",cpu->sp);
 }
 
 // Print memory hexdump
@@ -177,7 +178,7 @@ void print_memory(cpu_t*cpu,ram_t*ram,uint16_t offset)
 	attroff(COLOR_PAIR(4));
 
 	// Print multiple lines
-	for(int i=0;i<5;++i)
+	for(int i=0;i<6;++i)
 	{
 		attron(COLOR_PAIR(3));
 		mvprintw(i+1,16,"%04X",offset+i*8);
@@ -199,7 +200,7 @@ void print_memory(cpu_t*cpu,ram_t*ram,uint16_t offset)
 void print_disassembly(cpu_t*cpu,ram_t*ram)
 {
 	attron(COLOR_PAIR(4));
-	mvprintw(7,0,"Disassembly:");
+	mvprintw(8,0,"Disassembly:");
 	attroff(COLOR_PAIR(4));
 	da_print_disassembly(cpu,ram);
 }

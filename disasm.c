@@ -60,7 +60,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 	#undef __cpu
 	#define __cpu cpuc
 
-	int y=8;	// Which line to draw on
+	int y=9;	// Which line to draw on
 	cpu_t*cpuc=alloca(sizeof(cpu_t));
 
 	// Create copy of cpu
@@ -85,7 +85,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		{
 
 		// Move/transfer
-		// a
+		// Load a
 		case 0xA1: p2( "lda ($%02X,x)", imm_pk(1) ); end();
 		case 0xB1: p2( "lda ($%02X),y", imm_pk(1) ); end();
 		case 0xA5: p2( "lda zp $%02X", imm_pk(1) ); end();
@@ -95,7 +95,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0xB9: p3( "lda abs $%04X,y", imm16_pk(1) ); end();
 		case 0xBD: p3( "lda abs $%04X,x", imm16_pk(1) ); end();
 
-		// Store
+		// Store a
 		case 0x85: p2( "sta zp $%02X", imm_pk(1) ); end();
 		case 0x95: p2( "sta zp $%02X,x", imm_pk(1) ); end();
 		case 0x8D: p3( "sta abs $%04X", imm16_pk(1) ); end();
@@ -104,27 +104,34 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x81: p2( "sta ind ($%02X,x)", imm_pk(1) ); end();
 		case 0x91: p2( "sta ind ($%02X),y", imm_pk(1) ); end();
 
-		// x
+		// Store x
 		case 0x86: p2( "stx zp $%02X", imm_pk(1) ); end();
 		case 0x96: p2( "stx zp $%02X,y", imm_pk(1) ); end();
 		case 0x8E: p3( "stx abs $%04X", imm16_pk(1) ); end();
-
+		// Load x
 		case 0xA2: p2( "ldx #$%02X", imm_pk(1) ); end();
 		case 0xA6: p2( "ldx zp $%02X", imm_pk(1) ); end();
 		case 0xB6: p2( "ldx zp $%02X,y", imm_pk(1) ); end();
 		case 0xAE: p3( "ldx abs $%04X", imm16_pk(1) ); end();
 		case 0xBE: p3( "ldx abs $%04X,y", imm16_pk(1) ); end();
 
-		// y
+		// Store y
 		case 0x84: p2( "sty zp $%02X", imm_pk(1) ); end();
 		case 0x94: p2( "sty zp $%02X,x", imm_pk(1) ); end();
 		case 0x8C: p3( "sty abs $%04X", imm16_pk(1) ); end();
-
+		// Load y
 		case 0xA0: p2( "ldy #$%02X", imm_pk(1) ); end();
 		case 0xA4: p2( "ldy zp $%02X", imm_pk(1) ); end();
 		case 0xB4: p2( "ldy zp $%02X,x", imm_pk(1) ); end();
 		case 0xAC: p3( "ldy abs $%04X", imm16_pk(1) ); end();
 		case 0xBC: p3( "ldy abs $%04X,x", imm16_pk(1) ); end();
+
+		// Transfer
+		case 0xA8: p1( "tay" ); end();
+		case 0xBA: p1( "tsx" ); end();
+		case 0x8A: p1( "txa" ); end();
+		case 0x9A: p1( "txs" ); end();
+		case 0x98: p1( "tya" ); end();
 
 		// Arithmetic
 		case 0x65: p2( "adc zp $%02X", imm_pk(1) ); end();
