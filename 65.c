@@ -165,8 +165,8 @@ void print_registers(cpu_t*cpu)
 	mvprintw(2,0,"x:  $%02X\n",cpu->x);
 	mvprintw(3,0,"y:  $%02X\n",cpu->y);
 	mvprintw(4,0,"sr: $%02X\n",cpu->sr.reg);
-	mvprintw(5,0,"pc: $%04X\n",cpu->pc);
-	mvprintw(6,0,"sp: $%02X\n",cpu->sp);
+	mvprintw(5,0,"sp: $%02X\n",cpu->sp);
+	mvprintw(6,0,"pc: $%04X\n",cpu->pc);
 }
 
 // Print memory hexdump
