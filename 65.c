@@ -144,8 +144,8 @@ void puterr(const char*fmt,...)
 	va_list list;
 	va_start(list,fmt);
 	//fprintf(stderr,PROG": Error: ");
-	mvclr(20,0);
-	mvprintw(20,0,PROG": ");
+	mvclr(STATUSLINE,0);
+	mvprintw(STATUSLINE,0,PROG": ");
 	attron(COLOR_PAIR(2));
 	printw("Error: ");
 	attron(COLOR_PAIR(1));
