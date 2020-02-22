@@ -17,6 +17,12 @@ uint16_t cpu_fetch(cpu_t*cpu)
 	return cpu->pc+=1;
 }
 
+// Push byte, dec cpu SP
+void cpu_push(cpu_t*cpu,ram_t*ram,uint8_t b)
+{
+	ram->ram[cpu->sp--]=b;
+}
+
 // Increment cpu->a by x (for sequence point)
 uint8_t cpu_adc(cpu_t*cpu,uint8_t x)
 {
@@ -168,7 +174,10 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 
 		// Jump/branch ---
 		case 0x4C: ldpc( fetch16() );				break;
-		case 0x6C: ldpc( deref( fetch16() ) );				break;
+		case 0x6C: ldpc( deref( fetch16() ) );		break;
+		case 0x20: push( cpu->pc & 0x00ff ); push( cpu->pc & 0xff00 ); ldpc( fetch16() );	break;
+
+		// Misc ---
 		case 0xEA: nop();			incpc();	break;
 		case 0x00: brk(); 			incpc();	break;
 		default: incpc();						break;

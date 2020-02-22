@@ -2,6 +2,7 @@
 #include<ncurses.h>
 #include<yaml.h>
 #include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 #include"ram.h"
 

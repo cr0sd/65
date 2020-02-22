@@ -83,6 +83,9 @@ typedef struct cpu_t
 //#define asl(z)		(z = z << 1)
 //#define lsr(z)		(z = z >> 1)
 
+// Stack micro-insns
+#define push(x)		(cpu_push(__cpu,ram,(x)))
+
 // Status register micro-insns
 #define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative
 #define sr_v(x)		(__cpu->sr.bits.v=?)			// Overflow
@@ -99,3 +102,4 @@ void cpu_exec(cpu_t*cpu,ram_t*ram);
 uint16_t cpu_fetch(cpu_t*cpu);
 uint8_t cpu_adc(cpu_t*cpu,uint8_t x);
 uint8_t cpu_assign(cpu_t*cpu,uint8_t x);
+void cpu_push(cpu_t*cpu,ram_t*ram,uint8_t b);

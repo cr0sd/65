@@ -17,6 +17,7 @@ static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
 	// reversing the evaluation of stack-sensitive
 	// values:
 	int oper[3];
+
 	oper[0] = ram->ram[ cpu->pc ];
 
 	// Print binary representation
@@ -43,7 +44,7 @@ static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
 	va_start(list,fmt);
 	vwprintw(win,fmt,list);
 	va_end(list);
-
+	
 	//printw(" (pc:$%04X)\t",cpu->pc);
 }
 
@@ -204,6 +205,9 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		// Jump/branch
 		case 0x4C: p3( "jmp abs $%04X", imm16_pk(1) ); end();
 		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), *(uint16_t*)(ram->ram+imm16_pk(1)) ); end();
+		case 0x20: p3( "jsr abs $%04X", imm16_pk(1) ); end();
+
+		// Misc ---
 		case 0xEA: p1( "nop" ); end();
 		case 0x00: p1( "brk" ); end();
 

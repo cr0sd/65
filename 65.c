@@ -150,7 +150,8 @@ void puterr(const char*fmt,...)
 	printw("Error: ");
 	attron(COLOR_PAIR(1));
 	//vfprintf(stderr,fmt,list);
-	vwprintw(win,fmt,list);
+	vfprintf(stderr,fmt,list);
+	//vwprintw(win,fmt,list);
 	va_end(list);
 }
 

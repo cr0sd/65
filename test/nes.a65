@@ -17,6 +17,6 @@ main:
 	txs
 	txa
 
-	jmp main
+	jsr main
 
 .byt "string",0
