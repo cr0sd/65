@@ -8,7 +8,21 @@ A 6502 CPU emulator/simulator with ncurses UI.
 
 #### Usage
 
-`65 FILE.NES`
+`./65 FILE.NES`
+
+#### Building
+
+Dependencies:
+
+ncurses / pdcurses (on Windows)
+
+To build using GNUMake:
+
+	make
+
+To build using Ruby rake
+
+	rake
 
 #### Key bindings:
 
@@ -22,6 +36,8 @@ G.........Toggle follow (to follow CPU PC)
 j.........Scroll down through hexdump
 
 k.........Scroll up through hexdump
+
+/.........Search for octet
 
 q.........Quit program
 ```

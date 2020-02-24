@@ -7,15 +7,22 @@ reg=$0102
 *=$8000
 main:
 
-	lda #$01
-	tay
+	ldx #$00
 
-	ldy #$55
-	tya
+	lda #$00
+	sta $05,x
 
-	ldx #$44
-	txs
-	txa
+	inx
+
+	lda #$10
+	sta $05,x
+
+	lda #$55
+	sta $0100
+
+	lda #$99
+	ldx #$00
+	sbc ($05,x)
 
 	jsr main
 

@@ -1,6 +1,6 @@
 #pragma once
 #include<ncurses.h>
-#include<yaml.h>
+//#include<yaml.h>
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -22,7 +22,7 @@
 		//   bytes: 1
 		//   ...
 
-yaml_parser_t parser;
-yaml_event_t event;
+//yaml_parser_t parser;
+//yaml_event_t event;
 
 void da_print_disassembly(cpu_t*cpu,ram_t*ram);

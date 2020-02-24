@@ -29,6 +29,12 @@ uint8_t cpu_adc(cpu_t*cpu,uint8_t x)
 	return cpu->a+=x;
 }
 
+// Increment cpu->a by x (for sequence point)
+uint8_t cpu_sbc(cpu_t*cpu,uint8_t x)
+{
+	return cpu->a-=x;
+}
+
 // Assign x to cpu->a (for sequence point)
 uint8_t cpu_assign(cpu_t*cpu,uint8_t x)
 {
@@ -111,6 +117,17 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		// TODO Verify these are correct (use ind() )
 		case 0x61: adc( deref( fetch() + cpu->x ) );			sr_nz(cpu->a);	incpc();	break;
 		case 0x71: adc( deref( fetch() + cpu->y ) );			sr_nz(cpu->a);	incpc();	break;
+
+		// SBC
+		case 0xE5: sbc( deref( fetch() ) );				sr_nz(cpu->a); incpc(); break;
+		case 0xE9: sbc( fetch() );						sr_nz(cpu->a); incpc(); break;
+		case 0xF5: sbc( deref( fetch() + cpu->x ) );	sr_nz(cpu->a); incpc(); break;
+		case 0xED: sbc( deref( fetch16() ) );			sr_nz(cpu->a); incpc(); break;
+		case 0xFD: sbc( deref( fetch16() + cpu->x ) );	sr_nz(cpu->a); incpc(); break;
+		case 0xF9: sbc( deref( fetch16() + cpu->y ) );	sr_nz(cpu->a); incpc(); break;
+		// TODO Verify these are correct
+		case 0xE1: sbc( deref( deref( fetch() + cpu->x ) ) );	sr_nz(cpu->a); incpc(); break;
+		case 0xF1: sbc( deref( deref( fetch() + cpu->y ) ) );	sr_nz(cpu->a); incpc(); break;
 
 		// INC/DEC
 		case 0xE6: ram->ram[ fetch() ] += 1;	incpc();	break;

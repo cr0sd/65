@@ -135,6 +135,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x98: p1( "tya" ); end();
 
 		// Arithmetic
+		// ADC
 		case 0x65: p2( "adc zp $%02X", imm_pk(1) ); end();
 		case 0x69: p2( "adc #$%02X", imm_pk(1) ); end();
 		case 0x75: p2( "adc zp $%02X,x", imm_pk(1) ); end();
@@ -144,6 +145,16 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		// TODO fix these two:
 		case 0x61: p2( "adc ind ($%02X,x)", imm_pk(1) ); end();
 		case 0x71: p2( "adc ind ($%02X),y", imm_pk(1) ); end();
+
+		// SBC
+		case 0xE5: p2( "sbc zp $%02X", imm_pk(1) ); end();
+		case 0xE9: p2( "sbc #$%02X", imm_pk(1) ); end();
+		case 0xF5: p2( "sbc zp $%02X,x", imm_pk(1) ); end();
+		case 0xED: p3( "sbc abs $%04X", imm16_pk(1) ); end();
+		case 0xFD: p3( "sbc abs $%04X,x", imm16_pk(1) ); end();
+		case 0xF9: p3( "sbc abs $%04X,y", imm16_pk(1) ); end();
+		case 0xE1: p2( "sbc ind ($%02X,x)", imm_pk(1) ); end();
+		case 0xF1: p2( "sbc ind ($%02X),y", imm_pk(1) ); end();
 
 		// INC/DEC
 		case 0xE6: p2( "inc zp $%02X", imm_pk(1) ); end();

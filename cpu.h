@@ -74,6 +74,7 @@ typedef struct cpu_t
 
 // Arithmetic micro-insns
 #define adc(x)		(cpu_adc(__cpu,x))
+#define sbc(x)		(cpu_sbc(__cpu,x))
 // TODO AND is not always for accumulator
 #define and(x)		(__cpu->a &= (x))
 #define eor(x)		(__cpu->a ^= (x))
@@ -101,5 +102,6 @@ cpu_t*cpu_init(void);
 void cpu_exec(cpu_t*cpu,ram_t*ram);
 uint16_t cpu_fetch(cpu_t*cpu);
 uint8_t cpu_adc(cpu_t*cpu,uint8_t x);
+uint8_t cpu_sbc(cpu_t*cpu,uint8_t x);
 uint8_t cpu_assign(cpu_t*cpu,uint8_t x);
 void cpu_push(cpu_t*cpu,ram_t*ram,uint8_t b);
