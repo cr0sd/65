@@ -17,8 +17,9 @@ all: $(PROG) test
 	@echo "CC	$*.o"
 	@$(CC) -c $*.c $(CFLAGS) $(LDFLAGS)
 clean:
-	@echo "RM	*.o $(PROG) *.nes"
+	@echo "RM	$(PROG) *.o *.nes"
 	@$(RM) *.o $(PROG) *.nes
-	@make clean -C test
+	@echo "RM	test/*.nes"
+	@$(RM) test/*.nes
 .SUFFIXES: .nes .o65 .a65 .c .o
 .PHONY: all clean test

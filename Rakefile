@@ -102,7 +102,11 @@ end
 
 # Rules
 # -----------------------------
-task :default => [:_65, :test] do
+task :default => [:_65] do
+	
+end
+
+task :all => [:_65, :test] do
 	
 end
 
