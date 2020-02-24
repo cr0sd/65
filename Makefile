@@ -8,11 +8,17 @@ CFLAGS = -Wfatal-errors
 LDFLAGS += -lncurses
 
 $(PROG): $(OBJS)
-	$(CC) $(OBJS) -o $(PROG) $(CFLAGS) $(LDFLAGS)
+	@echo "CC	$@"
+	@$(CC) $(OBJS) -o $(PROG) $(CFLAGS) $(LDFLAGS)
 test:
-	make -C test
+	@make -C test
+all: $(PROG) test
+.c.o:
+	@echo "CC	$*.o"
+	@$(CC) -c $*.c $(CFLAGS) $(LDFLAGS)
 clean:
-	$(RM) *.o $(PROG) *.nes
-	make clean -C test
-.SUFFIXES: .nes .o65 .a65
+	@echo "RM	*.o $(PROG) *.nes"
+	@$(RM) *.o $(PROG) *.nes
+	@make clean -C test
+.SUFFIXES: .nes .o65 .a65 .c .o
 .PHONY: all clean test

@@ -5,8 +5,10 @@ OBJS= nes.nes asciitest.nes asl.nes
 
 all: $(OBJS)
 .a65.nes:
-	$(AS65) $(AS65FLAGS) $*.a65 -o $*.nes
-	cp $*.nes ..
+	@echo "AS65	$*.nes"
+	@$(AS65) $(AS65FLAGS) $*.a65 -o $*.nes
+	@cp $*.nes ..
 clean:
-	$(RM) $(OBJS)
+	@echo "RM	$(OBJS)"
+	@$(RM) $(OBJS)
 .SUFFIXES: .a65 .nes

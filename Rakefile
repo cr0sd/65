@@ -8,10 +8,17 @@ CFLAGS	=	'-Wfatal-errors'
 LDFLAGS	=	'-lncurses'
 OBJS	=	'65.o cpu.o ram.o rom.o disasm.o'
 
+$stdout_mutex=Mutex.new
 
 # Functions
 # -----------------------------
 # Remove file extension
+def thread_print(x)
+	$stdout_mutex.synchronize do
+		puts x
+	end
+end
+
 def get_name(x)
 	x.scan(/([\-a-z_0-9]+)\.(.*)/)[0][0]
 end
@@ -30,9 +37,12 @@ def a65_nes(x)
 
 	# Run command if needed
 	if !FileUtils.uptodate?('#{y}.nes',['#{y}.a65'])
-		`set -x; #{AS65} #{y}.a65 -o #{y}.nes`
+		#`set -x; #{AS65} #{y}.a65 -o #{y}.nes`
+
+		thread_print"AS65 #{y}.nes"
+		`#{AS65} #{y}.a65 -o #{y}.nes`
 	else
-		puts"nothing to be done for #{x}"
+		thread_print"nothing to be done for #{x}"
 	end
 end
 
@@ -44,9 +54,12 @@ def c_o(x)
 
 	# Run command if needed
 	if !FileUtils.uptodate?('#{y}.o',['#{y}.c'])
-		`set -x; #{CC} #{CFLAGS} #{LDFLAGS} -c #{y}.c`
+		#`set -x; #{CC} #{CFLAGS} #{LDFLAGS} -c #{y}.c`
+
+		thread_print"CC\t#{y}.o"
+		`#{CC} #{CFLAGS} #{LDFLAGS} -c #{y}.c`
 	else
-		puts"nothing to be done for #{x}"
+		thread_print"nothing to be done for #{x}"
 	end
 end
 
@@ -59,7 +72,7 @@ def thread_make(x)
 		when 'nes'
 			a65_nes(x)
 		else
-			puts"No rule to make target \"#{x}\""
+			thread_print"No rule to make target \"#{x}\""
 	end
 end
 
@@ -78,7 +91,10 @@ end
 def clean(x)
 	threads=[]
 	x.each do |y|
-		threads.push(Thread.new{`set -x; rm -f #{y}`})
+		#threads.push(Thread.new{`set -x; rm -f #{y}`})
+
+		thread_print"RM\t#{y}"
+		threads.push(Thread.new{`rm -f #{y}`})
 	end
 	threads.each do |z| z.join end
 end
@@ -91,13 +107,14 @@ task :default => [:_65, :test] do
 end
 
 task :_65 => [:objs] do
-	`set -x; cc #{CFLAGS} #{LDFLAGS} #{OBJS} -o 65`
+	thread_print"CC\t65"
+	`cc #{CFLAGS} #{LDFLAGS} #{OBJS} -o 65`
 end
 
 task :test do
-	puts'Entering directory test'
-	`cd test; set -x; rake`
-	puts'Leaving directory test'
+	thread_print'Entering directory test'
+	thread_print`cd test; rake`
+	thread_print'Leaving directory test'
 end
 
 task :objs do
