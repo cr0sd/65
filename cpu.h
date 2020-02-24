@@ -84,7 +84,7 @@ typedef struct cpu_t
 //#define lsr(z)		(z = z >> 1)
 
 // Stack micro-insns
-#define push(x)		(cpu_push(__cpu,ram,(x)))
+#define push(x)		(cpu_push(__cpu,ram,(uint8_t)(x)))
 
 // Status register micro-insns
 #define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative

@@ -33,9 +33,6 @@ int main(int argc,char**argv)
 	init_pair(4,COLOR_YELLOW,COLOR_BLACK);
 	init_pair(5,COLOR_BLUE,COLOR_BLACK);
 
-	mvprintw(STATUSLINE+1,0,
-		"Welcome! [s] Step [q] Quit [g] Goto [G] Follow [p] PC [/] Search");
-
 	// Parse command line arguments
 	if(argc>1)
 	{
@@ -64,6 +61,9 @@ int main(int argc,char**argv)
 		print_registers(cpu);
 		print_memory(cpu,ram,hex_offset);
 		print_disassembly(cpu,ram);
+
+		mvprintw(STATUSLINE+1,0,
+			"Welcome! [s] Step [q] Quit [g] Goto [G] Follow [p] PC [/] Search");
 
 		// Display if following
 		if(hex_follow_pc)
@@ -143,15 +143,12 @@ void puterr(const char*fmt,...)
 {
 	va_list list;
 	va_start(list,fmt);
-	//fprintf(stderr,PROG": Error: ");
 	mvclr(STATUSLINE,0);
 	mvprintw(STATUSLINE,0,PROG": ");
 	attron(COLOR_PAIR(2));
 	printw("Error: ");
 	attron(COLOR_PAIR(1));
-	//vfprintf(stderr,fmt,list);
-	vfprintf(stderr,fmt,list);
-	//vwprintw(win,fmt,list);
+	vw_printw(win,fmt,list);
 	va_end(list);
 }
 

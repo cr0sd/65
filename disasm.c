@@ -42,7 +42,7 @@ static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
 	// Print rest of vararg stuff (insn name, operands)
 	va_list list;
 	va_start(list,fmt);
-	vwprintw(win,fmt,list);
+	vw_printw(win,fmt,list);
 	va_end(list);
 	
 	//printw(" (pc:$%04X)\t",cpu->pc);
