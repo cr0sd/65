@@ -13,7 +13,6 @@ $stdout_mutex=Mutex.new
 # -----------------------------
 task :default do
 	make $OBJS.split
-	thread_print"CP\t#{$OBJS} .."
 	`cp #{$OBJS} ..`
 end
 

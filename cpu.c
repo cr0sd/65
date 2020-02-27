@@ -18,9 +18,20 @@ uint16_t cpu_fetch(cpu_t*cpu)
 }
 
 // Push byte, dec cpu SP
-void cpu_push(cpu_t*cpu,ram_t*ram,uint8_t b)
+void cpu_push16(cpu_t*cpu,ram_t*ram,uint16_t d)
 {
-	ram->ram[cpu->sp--]=b;
+	ram->ram[cpu->sp--]=(uint8_t)(d&0x00ff);
+	ram->ram[cpu->sp--]=(uint8_t)(d&0xff00);
+	//((uint16_t*)ram->ram)[cpu->sp]=d;
+}
+
+// Pull byte, inc cpu SP
+void cpu_pull16(cpu_t*cpu,ram_t*ram,uint16_t*d)
+{
+	// Convert here for clarity of intent in prototype
+	uint8_t*p=(uint8_t*)d;
+	*p++=ram->ram[cpu->sp++];
+	*p++=ram->ram[cpu->sp++];
 }
 
 // Increment cpu->a by x (for sequence point)
@@ -192,7 +203,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		// Jump/branch ---
 		case 0x4C: ldpc( fetch16() );				break;
 		case 0x6C: ldpc( deref( fetch16() ) );		break;
-		case 0x20: push( cpu->pc & 0x00ff ); push( cpu->pc & 0xff00 ); ldpc( fetch16() );	break;
+		case 0x20: push16( cpu->pc & 0x00ff ); ldpc( fetch16() );	break;
 
 		// Misc ---
 		case 0xEA: nop();			incpc();	break;
