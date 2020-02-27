@@ -10,16 +10,20 @@
 #include<string.h>
 // 1975, baby!
 
+// This 6502 implementation is LITTLE-ENDIAN
+// and also assumes host machine is
+// LITTLE-ENDIAN as well!
+
 typedef struct ram_t ram_t;
 
 typedef struct cpu_t
 {
 	uint16_t pc;		// Program counter
-	uint8_t a;		// Accumulator
+	uint8_t a;			// Accumulator
 	uint8_t x;
 	uint8_t y;
 
-	union			// Status register
+	union				// Status register
 	{
 		uint8_t reg;	// Entire 8-bit register
 		struct
@@ -85,8 +89,8 @@ typedef struct cpu_t
 //#define lsr(z)		(z = z >> 1)
 
 // Stack micro-insns
-#define push16(x)	(cpu_push16(__cpu,ram,(uint8_t)(x)))
-#define pull16(x)	(cpu_pull16(__cpu,ram,(uint8_t)(x)))
+#define push16(x)	(cpu_push16(__cpu,ram,(x)))
+#define pull16(x)	(cpu_pull16(__cpu,ram,(x)))
 
 // Status register micro-insns
 #define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative

@@ -218,6 +218,9 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), *(uint16_t*)(ram->ram+imm16_pk(1)) ); end();
 		case 0x20: p3( "jsr abs $%04X", imm16_pk(1) ); end();
 
+		// Return
+		case 0x60: p1( "rts" ); end();
+
 		// Misc ---
 		case 0xEA: p1( "nop" ); end();
 		case 0x00: p1( "brk" ); end();

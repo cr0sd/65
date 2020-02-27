@@ -7,23 +7,22 @@ reg=$0102
 *=$8000
 main:
 
-	ldx #$00
+	ldx #$ff
+	txs
 
-	lda #$00
-	sta $05,x
+	ldx #9
 
-	inx
+	jsr function
 
-	lda #$10
-	sta $05,x
+	lda #$04
 
-	lda #$55
-	sta $0100
+	jmp *
 
-	lda #$99
-	ldx #$00
-	sbc ($05,x)
-
-	jsr main
 
 .byt "string",0
+
+function:
+
+	lda #$e1
+
+	rts
