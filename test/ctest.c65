@@ -1,0 +1,10 @@
+int getone(void)
+{
+	int y=99;
+	return y+5;
+}
+
+void main(void)
+{
+	int m=getone();
+}
