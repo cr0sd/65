@@ -1,11 +1,13 @@
-AS65= xa
-AS65FLAGS= -C
+AS65 = xa
+AS65FLAGS = -C
 
-PROG= 65
-OBJS= 65.o cpu.o ram.o rom.o disasm.o
+PROG = 65
+OBJS = 65.o cpu.o ram.o rom.o disasm.o
 
 CFLAGS = -Wfatal-errors
 LDFLAGS += -lncurses
+
+RM = rm -f # for BSDmake
 
 $(PROG): $(OBJS)
 	@echo "CC	$@"

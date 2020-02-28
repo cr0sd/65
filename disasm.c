@@ -134,6 +134,9 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x9A: p1( "txs" ); end();
 		case 0x98: p1( "tya" ); end();
 
+		case 0x48: p1( "pha" ); end();
+		case 0x68: p1( "pla" ); end();
+
 		// Arithmetic
 		// ADC
 		case 0x65: p2( "adc zp $%02X", imm_pk(1) ); end();
@@ -217,6 +220,8 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x4C: p3( "jmp abs $%04X", imm16_pk(1) ); end();
 		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), *(uint16_t*)(ram->ram+imm16_pk(1)) ); end();
 		case 0x20: p3( "jsr abs $%04X", imm16_pk(1) ); end();
+		case 0xF0: p2( "beq rel $%02X", imm_pk(1) ); end();
+		case 0xD0: p2( "bne rel $%02X", imm_pk(1) ); end();
 
 		// Return
 		case 0x60: p1( "rts" ); end();

@@ -10,11 +10,14 @@ main:
 	ldx #$ff
 	txs
 
-	ldx #9
+	ldx #0
 
-	jsr function
+	;jsr function
+	bne function
 
 	lda #$04
+
+loo:
 
 	jmp *
 
@@ -25,4 +28,5 @@ function:
 
 	lda #$e1
 
-	rts
+	jmp loo
+	;rts

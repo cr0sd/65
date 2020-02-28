@@ -91,6 +91,8 @@ typedef struct cpu_t
 // Stack micro-insns
 #define push16(x)	(cpu_push16(__cpu,ram,(x)))
 #define pull16(x)	(cpu_pull16(__cpu,ram,(x)))
+#define push(x)		(cpu_push(__cpu,ram,(x)))
+#define pull(x)		(cpu_pull(__cpu,ram,(x)))
 
 // Status register micro-insns
 #define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative
@@ -111,3 +113,5 @@ uint8_t cpu_sbc(cpu_t*cpu,uint8_t x);
 uint8_t cpu_assign(cpu_t*cpu,uint8_t x);
 void cpu_push16(cpu_t*cpu,ram_t*ram,uint16_t d);
 void cpu_pull16(cpu_t*cpu,ram_t*ram,uint16_t*d);
+void cpu_push(cpu_t*cpu,ram_t*ram,uint8_t d);
+void cpu_pull(cpu_t*cpu,ram_t*ram,uint8_t*d);

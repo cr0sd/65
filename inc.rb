@@ -29,7 +29,7 @@ def a65_nes(x)
 	if !FileUtils.uptodate?('#{y}.nes',['#{y}.a65'])
 		#`set -x; #{$AS65} #{y}.a65 -o #{y}.nes`
 
-		thread_print"AS65 #{y}.nes"
+		thread_print"AS65\t#{y}.nes"
 		`#{$AS65} #{y}.a65 -o #{y}.nes`
 	else
 		thread_print"nothing to be done for #{x}"

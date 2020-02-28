@@ -18,14 +18,26 @@ uint16_t cpu_fetch(cpu_t*cpu)
 }
 
 // Push byte, dec cpu SP
+void cpu_push(cpu_t*cpu,ram_t*ram,uint8_t d)
+{
+	ram->ram[--cpu->sp]=d;
+}
+
+// Push byte, dec cpu SP
+void cpu_pull(cpu_t*cpu,ram_t*ram,uint8_t*d)
+{
+	*d=ram->ram[cpu->sp++];
+}
+
+// Push word, dec cpu SP
 void cpu_push16(cpu_t*cpu,ram_t*ram,uint16_t d)
 {
 	cpu->sp-=2;
-	ram->ram[cpu->sp+1]=(uint8_t)((d&0xff00)>>8);
-	ram->ram[cpu->sp]=(uint8_t)(d&0x00ff);
+	ram->ram[cpu->sp+1]=(uint8_t)(d>>8);
+	ram->ram[cpu->sp]=(uint8_t)(d&0xff);
 }
 
-// Pull byte, inc cpu SP
+// Pull word, inc cpu SP
 void cpu_pull16(cpu_t*cpu,ram_t*ram,uint16_t*d)
 {
 	*d=(ram->ram[cpu->sp]|(ram->ram[cpu->sp+1]<<8));
@@ -112,6 +124,9 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x8A: lda( cpu->x );		sr_nz(cpu->a); incpc(); break;
 		case 0x9A: cpu->sp = cpu->x;	sr_nz(cpu->x); incpc(); break;
 		case 0x98: lda( cpu->y );		sr_nz(cpu->a); incpc(); break;
+
+		case 0x48: push( cpu->a );		incpc(); break;
+		case 0x68: pull( &cpu->a );		incpc(); break;
 
 
 		// Arithmetic ---
@@ -202,6 +217,8 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x4C: ldpc( fetch16() );				break;
 		case 0x6C: ldpc( deref( fetch16() ) );		break;
 		case 0x20: push16( cpu->pc + 3 ); ldpc( fetch16() );	break;
+		case 0xF0: ( cpu->sr.bits.z ) ? ( ldpc( cpu->pc + (int8_t)fetch() ) ) : ( 0 ); incpc(); incpc(); break;
+		case 0xD0: ( !cpu->sr.bits.z ) ? ( ldpc( cpu->pc + (int8_t)fetch() ) ) : ( 0 ); incpc(); incpc(); break;
 
 		// Return ---
 		case 0x60: pull16( &cpu->pc ); break;
