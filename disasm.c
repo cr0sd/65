@@ -226,6 +226,13 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 
 		// Comparison
 		case 0xC9: p2( "cmp #$%02X", imm_pk(1) ); end();
+		case 0xC5: p2( "cmp zp $%02X", imm_pk(1) ); end();
+		case 0xD5: p2( "cmp zp $%02X,x", imm_pk(1) ); end();
+		case 0xCD: p3( "cmp abs $%04X", imm16_pk(1) ); end();
+		case 0xDD: p3( "cmp abs $%04X,x", imm16_pk(1) ); end();
+		case 0xD9: p3( "cmp abs $%04X,y", imm16_pk(1) ); end();
+		case 0xC1: p3( "cmp ind ($%04X,x)", imm16_pk(1) ); end();
+		case 0xD1: p3( "cmp ind ($%04X),y", imm16_pk(1) ); end();
 
 		// Return
 		case 0x60: p1( "rts" ); end();

@@ -228,7 +228,14 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xD0: ( !cpu->sr.bits.z ) ? ( ldpc( cpu->pc + (int8_t)fetch() ) ) : ( 0 ); incpc(); incpc(); break;
 
 		// Comparison ---
-		case 0xC9: cmp( cpu->a, fetch() );	incpc(); break;
+		case 0xC9: cmp( cpu->a, fetch() );						incpc(); break;
+		case 0xC5: cmp( cpu->a, deref( fetch() ) );				incpc(); break;
+		case 0xD5: cmp( cpu->a, deref( fetch() + cpu->x ) );	incpc(); break;
+		case 0xCD: cmp( cpu->a, deref( fetch16() ) );			incpc(); break;
+		case 0xDD: cmp( cpu->a, deref( fetch16() + cpu->x ) );	incpc(); break;
+		case 0xD9: cmp( cpu->a, deref( fetch16() + cpu->x ) );	incpc(); break;
+		case 0xC1: cmp( cpu->a, deref( deref( fetch() + cpu->x ) ) );	incpc(); break;
+		case 0xD1: cmp( cpu->a, deref( deref( fetch() + cpu->y ) ) );	incpc(); break;
 
 		// Return ---
 		case 0x60: pull16( &cpu->pc ); break;
