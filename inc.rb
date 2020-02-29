@@ -1,5 +1,8 @@
 # Basic Rakefile functionality include file
 
+require'fileutils'
+require'pathname'
+
 # Functions
 # -----------------------------
 # Remove file extension
@@ -53,16 +56,56 @@ def c_o(x)
 	end
 end
 
+# Rule for .c65 to .nes
+def c65_nes(x)
+
+	# Get base filename
+	y="#{Dir.getwd}/#{get_name(x)}"
+
+	# Run command if needed
+	if !FileUtils.uptodate?('#{y}.o',['#{y}.c65'])
+		thread_print"CC65\t#{y}.o"
+		`#{$CC65} #{y}.c65`
+		`#{$CCAS65} -b 0-10000 -o #{y}.o65 #{y}.s`
+		`#{$CAT} ines_header #{y}.o65 > #{y}.nes`
+		`#{$RM} #{y}.o65 #{y}.s`
+	else
+		thread_print"nothing to be done for #{x}"
+	end
+end
+
+# Test if file exists
+def file_exists(x)
+	x="#{Dir.getwd}/#{x}"
+	begin
+		#puts"looking for \"#{x}\""
+		if Pathname.new(x).exist?
+			#puts"found file #{x}"
+			return true
+		end
+	rescue
+		#puts"error finding file #{x}"
+	end
+		#puts"error finding file #{x}"
+	return false
+end
+
 # Internal make method to allow
 # multi-threaded builds
 def thread_make(x)
 	case get_ext(x)
-		when 'o'
-			c_o(x)
-		when 'nes'
+	when 'o'
+		c_o(x)
+	when 'nes'
+		if file_exists("#{get_name(x)}.c65")
+			c65_nes(x)
+		elsif file_exists("#{get_name(x)}.a65")
 			a65_nes(x)
 		else
 			thread_print"No rule to make target \"#{x}\""
+		end
+	else
+		thread_print"No rule to make target \"#{x}\""
 	end
 end
 

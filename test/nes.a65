@@ -1,32 +1,19 @@
 .byt	"NES",0
 .word	0,0,0,0,0,0
 
-reg=$0102
-
 .text
 *=$8000
 main:
 
-	ldx #$ff
-	txs
+	jsr function
 
-	ldx #0
-
-	;jsr function
-	bne function
-
-	lda #$04
-
-loo:
-
+	cmp #9
+	lda #0
 	jmp *
-
 
 .byt "string",0
 
 function:
 
 	lda #$e1
-
-	jmp loo
-	;rts
+	rts

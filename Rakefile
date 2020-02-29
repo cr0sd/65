@@ -3,11 +3,11 @@ require'./inc.rb'
 
 # Variables
 # -----------------------------
-$AS65	=	'xa'
-$CC		=	'cc'
-$CFLAGS	=	'-Wfatal-errors'
+$AS65		=	'xa'
+$CC			=	'cc'
+$CFLAGS		=	'-Wfatal-errors'
 $LDFLAGS	=	'-lncurses'
-$OBJS	=	'65.o cpu.o ram.o rom.o disasm.o'
+$OBJS		=	'65.o cpu.o ram.o rom.o disasm.o'
 
 $stdout_mutex=Mutex.new
 

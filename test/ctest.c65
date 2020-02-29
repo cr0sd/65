@@ -6,5 +6,7 @@ int getone(void)
 
 void main(void)
 {
-	int m=getone();
+	int x=0;
+	if(getone())
+		x=5;
 }
