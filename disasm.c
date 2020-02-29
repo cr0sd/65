@@ -223,6 +223,8 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x20: p3( "jsr abs $%04X", imm16_pk(1) ); end();
 		case 0xF0: p2( "beq rel $%02X", imm_pk(1) ); end();
 		case 0xD0: p2( "bne rel $%02X", imm_pk(1) ); end();
+		case 0xB0: p2( "bcs rel $%02X", imm_pk(1) ); end();
+		case 0x90: p2( "bcc rel $%02X", imm_pk(1) ); end();
 
 		// Comparison
 		case 0xC9: p2( "cmp #$%02X", imm_pk(1) ); end();

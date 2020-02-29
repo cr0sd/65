@@ -4,16 +4,17 @@
 .text
 *=$8000
 main:
-
-	jsr function
-
-	cmp #9
-	lda #0
-	jmp *
-
-.byt "string",0
-
+	ldx #$ff
+	txs
+	lda #1
+	cmp #5
+	bcs function
+	jmp otherfunction
 function:
-
-	lda #$e1
-	rts
+	lda #$11
+	jmp halt
+otherfunction:
+	lda #$22
+	jmp halt
+halt:
+	jmp *
