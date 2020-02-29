@@ -94,6 +94,9 @@ typedef struct cpu_t
 #define push(x)		(cpu_push(__cpu,ram,(x)))
 #define pull(x)		(cpu_pull(__cpu,ram,(x)))
 
+// Comparison
+#define cmp(x,y)	(cpu_cmp(cpu,(x),(y)))
+
 // Status register micro-insns
 #define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative
 #define sr_v(x)		(__cpu->sr.bits.v=?)			// Overflow
@@ -115,3 +118,4 @@ void cpu_push16(cpu_t*cpu,ram_t*ram,uint16_t d);
 void cpu_pull16(cpu_t*cpu,ram_t*ram,uint16_t*d);
 void cpu_push(cpu_t*cpu,ram_t*ram,uint8_t d);
 void cpu_pull(cpu_t*cpu,ram_t*ram,uint8_t*d);
+void cpu_cmp(cpu_t*cpu,uint8_t x,uint8_t y);

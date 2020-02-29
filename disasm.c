@@ -1,3 +1,4 @@
+#include"65.h"
 #include"disasm.h"
 #include"stdlib.h"
 #include"stdarg.h"
@@ -61,7 +62,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 	#undef __cpu
 	#define __cpu cpuc
 
-	int y=9;	// Which line to draw on
+	int y=TOPROWHEIGHT+3;	// Which line to draw on
 	cpu_t*cpuc=alloca(sizeof(cpu_t));
 
 	// Create copy of cpu
@@ -222,6 +223,9 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x20: p3( "jsr abs $%04X", imm16_pk(1) ); end();
 		case 0xF0: p2( "beq rel $%02X", imm_pk(1) ); end();
 		case 0xD0: p2( "bne rel $%02X", imm_pk(1) ); end();
+
+		// Comparison
+		case 0xC9: p2( "cmp #$%02X", imm_pk(1) ); end();
 
 		// Return
 		case 0x60: p1( "rts" ); end();

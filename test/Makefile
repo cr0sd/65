@@ -1,12 +1,7 @@
 CC65		= cc65
-CCAS65		= asm6502 -b 8000-10000
-
-AS65		= xa
-AS65FLAGS	= -C
-
-CAT			= cat
+CCAS65		= asmx -C 6502 -b 8000-10000
+AS65		= xa -C
 RM			= rm -f # for BSD
-
 OBJS		= nes.nes asciitest.nes asl.nes ctest.nes
 
 all: $(OBJS)
@@ -18,7 +13,7 @@ all: $(OBJS)
 	@echo "CC65	$*.nes"
 	@$(CC65) $*.c65
 	@-$(CCAS65) -b 0-10000 -o $*.o65 $*.s
-	@$(CAT) ines_header $*.o65 > $*.nes
+	@cat ines_header $*.o65 > $*.nes
 	@$(RM) $*.o65 $*.s
 clean:
 	@echo "RM	$(OBJS)"

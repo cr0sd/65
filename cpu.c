@@ -17,6 +17,13 @@ uint16_t cpu_fetch(cpu_t*cpu)
 	return cpu->pc+=1;
 }
 
+// Compare
+void cpu_cmp(cpu_t*cpu,uint8_t x,uint8_t y)
+{
+	if((x-y)==0)cpu->sr.bits.z=true;
+	if(x<y)cpu->sr.bits.c=true;
+}
+
 // Push byte, dec cpu SP
 void cpu_push(cpu_t*cpu,ram_t*ram,uint8_t d)
 {
@@ -219,6 +226,9 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x20: push16( cpu->pc + 3 ); ldpc( fetch16() );	break;
 		case 0xF0: ( cpu->sr.bits.z ) ? ( ldpc( cpu->pc + (int8_t)fetch() ) ) : ( 0 ); incpc(); incpc(); break;
 		case 0xD0: ( !cpu->sr.bits.z ) ? ( ldpc( cpu->pc + (int8_t)fetch() ) ) : ( 0 ); incpc(); incpc(); break;
+
+		// Comparison ---
+		case 0xC9: cmp( cpu->a, fetch() );	incpc(); break;
 
 		// Return ---
 		case 0x60: pull16( &cpu->pc ); break;
