@@ -2,7 +2,7 @@ CC65		= cc65
 CCAS65		= asmx -C 6502 -b 8000-10000
 AS65		= xa -C
 RM			= rm -f # for BSD
-OBJS		= nes.nes asciitest.nes asl.nes ctest.nes
+OBJS		= nes.nes asciitest.nes ctest.nes vram.nes
 
 all: $(OBJS)
 	@cp $(OBJS) ..

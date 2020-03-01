@@ -2,6 +2,7 @@
 #include"ram.h"
 #include"rom.h"
 #include"cpu.h"
+#include"joy.h"
 #include"disasm.h"
 #include<ctype.h>
 #include<stdbool.h>

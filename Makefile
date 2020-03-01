@@ -3,7 +3,7 @@ LDFLAGS	+= -lncurses
 AS65	= xa -C
 RM		= rm -f # for BSDmake
 PROG	= 65
-OBJS	= 65.o cpu.o ram.o rom.o disasm.o
+OBJS	= 65.o cpu.o ram.o rom.o disasm.o joy.o vis.o
 
 $(PROG): $(OBJS)
 	@echo "CC	$@"
