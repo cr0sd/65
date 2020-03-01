@@ -96,6 +96,7 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0xB5: p2( "lda zp $%02X,x", imm_pk(1) ); end();
 		case 0xB9: p3( "lda abs $%04X,y", imm16_pk(1) ); end();
 		case 0xBD: p3( "lda abs $%04X,x", imm16_pk(1) ); end();
+		case 0xAA: p1( "tax" ); end();
 
 		// Store a
 		case 0x85: p2( "sta zp $%02X", imm_pk(1) ); end();

@@ -20,8 +20,8 @@ uint16_t cpu_fetch(cpu_t*cpu)
 // Compare
 void cpu_cmp(cpu_t*cpu,uint8_t x,uint8_t y)
 {
-	if((x-y)==0)cpu->sr.bits.z=true;
-	if(x<y)cpu->sr.bits.c=true;
+	cpu->sr.bits.z=(x-y)==0;
+	cpu->sr.bits.c=(x<y);
 }
 
 // Push byte, dec cpu SP
@@ -127,6 +127,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 
 		// Transfer
 		case 0xA8: ldy( cpu->a );		sr_nz(cpu->a); incpc(); break;
+		case 0xAA: ldx( cpu->a );						sr_nz(cpu->a); incpc(); break;
 		case 0xBA: ldx( cpu->sp );		sr_nz(cpu->x); incpc(); break;
 		case 0x8A: lda( cpu->x );		sr_nz(cpu->a); incpc(); break;
 		case 0x9A: cpu->sp = cpu->x;	sr_nz(cpu->x); incpc(); break;

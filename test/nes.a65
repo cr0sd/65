@@ -1,20 +1,22 @@
-.byt	"NES",0
-.word	0,0,0,0,0,0
-
-.text
+.byt "NES",0,0,0,0,0
+.byt 0,0,0,0,0,0,0,0
 *=$8000
 main:
 	ldx #$ff
 	txs
-	lda #1
-	cmp #5
-	bcs function
-	jmp otherfunction
+	lda #$8a
+
+loop:
+	ldx #0
+	jsr function
+	jmp loop
+
 function:
-	lda #$11
-	jmp halt
-otherfunction:
-	lda #$22
-	jmp halt
-halt:
-	jmp *
+	lda #$ff
+	sta $01,x
+	txa
+	adc #2
+	tax
+	cmp #8
+	bcs function
+	rts

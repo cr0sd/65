@@ -42,14 +42,14 @@ int main(int argc,char**argv)
 
 		// Map ROM into $8000 by default
 		// TODO: Learn where exactly to map 'PRG-ROM'
-		rom_map(rom,ram,PRG_ROM_OFFSET);
+		rom_map(rom,ram,PRGROM);
 		hex_offset=0x8000;
 		refresh();
 	}
 
 	// Verify ROM is loaded
 	if(rom->rom)
-		cpu->pc=PRG_ROM_OFFSET;
+		cpu->pc=PRGROM;
 	else
 		puterr("%s: No ROM loaded\n",__func__);
 
