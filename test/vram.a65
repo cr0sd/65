@@ -28,11 +28,6 @@ loop:
 	lda #0
 	sta VRAM,x
 
-	; move player
-	lda me
-	adc #2
-	sta me
-
 	jmp loop
 .)
 
@@ -108,15 +103,16 @@ moveme:
 	lda JOYP
 	cmp #$82
 	beq down
+
 	jmp end
 
 down:
-	lda #0
-	sta JOYP
-
 	lda me
 	adc #30
 	sta me
+
+	lda #0
+	sta JOYP
 
 end:
 	rts

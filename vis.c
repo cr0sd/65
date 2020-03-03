@@ -12,10 +12,12 @@ int vis_display(cpu_t*cpu,ram_t*ram)
 		int b=ram->ram[VRAM+i];
 		move(i/w,i%w);
 		if(b==0xff)
-			addch((ram->ram[VRAM+i])?(ACS_CKBOARD):(' '));
+			addch(b?(ACS_CKBOARD):(' '));
 		else if(b==0x21)
 			addch('@');
-		//mvprintw(i/w,i%w,"%c",(ram->ram[i])?(ACS_CKBOARD):(' '));
-		//mvprintw(i/w,i%w,"%c",ram->ram[i]);
+
+		//mvprintw(i/w,i%w,"%c",b?(ACS_CKBOARD):(' '));
+		//mvprintw(i/w,i%w,"%c",b);
+		//mvprintw(i/w,i%w,"%c",(b<0x20)?('.'):(b));
 	}
 }

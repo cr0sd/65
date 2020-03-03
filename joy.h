@@ -12,11 +12,33 @@
 #define K_LEFT	0x83
 #define K_RIGHT	0x84
 
+#define JOY_A	'z'
+#define JOY_B	'x'
+#define JOY_X	'a'
+#define JOY_Y	's'
+
 typedef struct joy_t
 {
 	uint16_t mem_addr;
 	pthread_mutex_t mut;
-	int button;
+
+	// Buttons
+	union
+	{
+		uint8_t reg;
+		struct
+		{
+			int up:1;
+			int down:1;
+			int left:1;
+			int right:1;
+			int a:1;
+			int b:1;
+			int x:1;
+			int y:1;
+		}bits;
+	}buttons;
+
 }joy_t;
 
 joy_t*joy_init(uint16_t addr,int n);

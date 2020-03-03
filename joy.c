@@ -26,7 +26,7 @@ void joy_del(joy_t*joy)
 void joy_update_ram(joy_t*joy,ram_t*ram)
 {
 	pthread_mutex_lock(&(joy->mut));
-	ram->ram[joy->mem_addr]=(uint8_t)joy->button;
+	ram->ram[joy->mem_addr]=(uint8_t)joy->buttons.reg;
 	pthread_mutex_unlock(&(joy->mut));
 }
 
@@ -43,22 +43,26 @@ void*joy_thread_update(void*d)
 	{
 		read(1,b,1);
 
+		// Update joy_t information
+		pthread_mutex_lock(&(joy->mut));
+
+		// Get multi-byte codes
 		if(*b=='\033')
 		{
 			read(1,b,2);
-			if(b[1]=='A')			x=K_UP;
-			else if(b[1]=='B')		x=K_DOWN;
-			else if(b[1]=='D')		x=K_RIGHT;
-			else if(b[1]=='C')		x=K_LEFT;
-			else
-				x=0;
+			if(b[1]=='A')			joy->buttons.bits.up=1;//x=K_UP;
+			else if(b[1]=='B')		joy->buttons.bits.down=1;//x=K_DOWN;
+			else if(b[1]=='D')		joy->buttons.bits.right=1;//x=K_RIGHT;
+			else if(b[1]=='C')		joy->buttons.bits.left=1;//x=K_LEFT;
+			//else
+				//x=0;
 		}
-		else
-			x=*b;
 
-		// Update joy_t information
-		pthread_mutex_lock(&(joy->mut));
-		joy->button=x;
+				if(*b==JOY_A)	joy->buttons.bits.a=1;
+		else	if(*b==JOY_B)	joy->buttons.bits.b=1;
+		else	if(*b==JOY_X)	joy->buttons.bits.x=1;
+		else	if(*b==JOY_Y)	joy->buttons.bits.y=1;
+
 		pthread_mutex_unlock(&(joy->mut));
 	}
 

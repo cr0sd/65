@@ -9,129 +9,18 @@ DELAY	= $000F
 *=$8000
 main:
 .(
-	; setup stack
 	ldx #$ff
 	txs
 
-	lda #$24+30
-	sta me
-
-	; main loop
 loop:
-	jsr drawbg
-	jsr drawme
-	jsr moveme
-	jsr wait
-
-	; clear player pos
-	ldx me
-	lda #0
-	sta VRAM,x
-
-	; move player
-	lda me
-	adc #2
-	sta me
-
-	jmp loop
-.)
-
-; draw bg in VRAM
-drawbg:
-.(
-	ldx #0
-top:
-	lda #$ff
-	sta VRAM,x
-	inx
-
-	txa
-	cmp #30
-	bcs top
-
-	ldx #0
-bot:
-	lda #$ff
-	sta VRAM+30*7,x
-	inx
-
-	txa
-	cmp #30
-	bcs bot
-
-	ldx #0
-left:
-	lda #$ff
-	sta VRAM,x
-
-	txa
-	adc #30
-	tax
-
-	cmp #30*8
-	bcs left
-
-	ldx #0
-right:
-	lda #$ff
-	sta VRAM+29,x
-
-	txa
-	adc #30
-	tax
-
-	cmp #30*8
-	bcs right
-
-	rts
-.)
-
-; draw 'character' in VRAM
-drawme:
-.(
-	ldx me
-	lda #$21
-	sta VRAM,x
-
-	rts
-.)
-
-; check joypad inputs, move character
-moveme:
-.(
-	; clear player pos
-	ldx me
-	lda #0
-	sta VRAM,x
-
-	; check keyboard input
 	lda JOYP
-	cmp #$82
-	beq down
-	jmp end
+	and #1
+	cmp #1
+	bne loop
 
-down:
+end:
 	lda #0
 	sta JOYP
 
-	lda me
-	adc #30
-	sta me
-
-end:
-	rts
-.)
-
-; delay for 256 cycles or something
-wait:
-.(
-	lda #0
-	ldx #0
-
-loop:
-	adc #1
-	cmp #$ff
-	bcs loop
-
-	rts
+	jmp end
 .)

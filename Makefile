@@ -1,6 +1,5 @@
 CFLAGS	= -Wfatal-errors
 LDFLAGS	+= -lncurses -lpthread -pthread
-AS65	= xa -C
 RM		= rm -f # for BSDmake
 PROG	= 65
 OBJS	= cpu.o ram.o rom.o disasm.o joy.o vis.o

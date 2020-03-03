@@ -15,6 +15,7 @@ void print_memory(cpu_t*cpu,ram_t*ram,uint16_t offset);
 void print_disassembly(cpu_t*cpu,ram_t*ram);
 uint16_t prompt_address(char*prompt,cpu_t*cpu);
 uint16_t linear_search(uint16_t from,ram_t*ram);
+uint8_t prompt_byte(char*prompt,uint16_t from,ram_t*ram,char*prev,char*b);
 
 // Entry point
 int main(int argc,char**argv)
@@ -121,6 +122,16 @@ int main(int argc,char**argv)
 			hex_follow_pc=false;
 			hex_offset=linear_search(hex_offset,ram);
 			break;
+
+		// Set byte at address
+		case 'b':
+			{
+				uint16_t addr=prompt_address("Set byte at address: ",cpu);
+				char b[512];
+				char prev[8];
+				ram->ram[addr]=prompt_byte("Set byte: ",addr,ram,prev,b);
+				break;
+			}
 
 		// Quit command
 		case 'q':
@@ -236,15 +247,13 @@ uint16_t prompt_address(char*prompt,cpu_t*cpu)
 	return gowh;
 }
 
-uint16_t linear_search(uint16_t from,ram_t*ram)
+uint8_t prompt_byte(char*prompt,uint16_t from,ram_t*ram,char*prev,char*b)
 {
-	char b[8];
-	static char prev[8];
 	uint8_t byte=0;
 
 	// Prompt for desired byte to find
 	mvclr(STATUSLINE,0);
-	mvprintw(STATUSLINE,0,"Search for byte (00-ff,n): ");
+	mvprintw(STATUSLINE,0,"%s (00-ff,n): ",prompt);
 	getnstr(b,2);
 
 	// Special values
@@ -277,8 +286,16 @@ uint16_t linear_search(uint16_t from,ram_t*ram)
 	// Convert to integer and notify
 	byte=strtol(b,NULL,16);
 	mvclr(STATUSLINE,0);
-	mvprintw(STATUSLINE,0,"Search for $%X",
+	mvprintw(STATUSLINE,0,"Byte: $%X",
 		byte);
+	return byte;
+}
+
+uint16_t linear_search(uint16_t from,ram_t*ram)
+{
+	static char prev[8];
+	char b[8];
+	uint8_t byte=prompt_byte("Search for byte",from,ram,prev,b);
 
 	// Search (linearly, until $ffff) from hex_offset
 	for(int i=from+1;i<0xffff;++i)

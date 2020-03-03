@@ -11,13 +11,16 @@
 #include<unistd.h>
 #include<pthread.h>
 
+// 65 with VRAM display
+// instead of disassembly, registers & memory
+
 // Entry point
 int main(int argc,char**argv)
 {
 	cpu_t*cpu=cpu_init();
 	rom_t*rom=new(rom_t);
 	ram_t*ram=ram_init();
-	joy_t*joy=joy_init(0x10,2);
+	joy_t*joy=joy_init(JOYPREG,2);
  	pthread_t thread;
 
 	//printf("ram->ram:\t%p\njoy->ram->ram:\t%p\n",ram->ram,joy->ram->ram);
@@ -61,7 +64,11 @@ int main(int argc,char**argv)
 
 		vis_display(cpu,ram);
 		mvclr(15,0);
-		mvprintw(15,0,"joy button: $%02X",joy->button);
+		mvprintw(15,0,"joy button: $%02X",joy->buttons.reg);
+		mvclr(16,0);
+		mvprintw(16,0,"$%04X: $%02X (%c)",
+			JOYPREG,ram->ram[JOYPREG],
+			(ram->ram[JOYPREG]<0x20)?('.'):(ram->ram[JOYPREG]));
 		refresh();
 		usleep(1);
 	}
