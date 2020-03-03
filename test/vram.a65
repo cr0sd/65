@@ -101,7 +101,8 @@ moveme:
 
 	; check keyboard input
 	lda JOYP
-	cmp #$82
+	and #$02
+	cmp #$02
 	beq down
 
 	jmp end

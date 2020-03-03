@@ -57,8 +57,7 @@ void*joy_thread_update(void*d)
 			//else
 				//x=0;
 		}
-
-				if(*b==JOY_A)	joy->buttons.bits.a=1;
+		else	if(*b==JOY_A)	joy->buttons.bits.a=1;
 		else	if(*b==JOY_B)	joy->buttons.bits.b=1;
 		else	if(*b==JOY_X)	joy->buttons.bits.x=1;
 		else	if(*b==JOY_Y)	joy->buttons.bits.y=1;
