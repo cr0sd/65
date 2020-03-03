@@ -12,15 +12,10 @@ main:
 	ldx #$ff
 	txs
 
-loop:
-	lda JOYP
+	lda #$f9
+	sta $01
+
 	and #1
-	cmp #1
-	bne loop
 
-end:
-	lda #0
-	sta JOYP
-
-	jmp end
+	jmp *
 .)

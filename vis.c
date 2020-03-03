@@ -2,6 +2,7 @@
 #include"65.h"
 #include"vis.h"
 
+// Display information stored in VRAM
 int vis_display(cpu_t*cpu,ram_t*ram)
 {
 	int w=VIS_WIDTH;
@@ -11,6 +12,8 @@ int vis_display(cpu_t*cpu,ram_t*ram)
 	{
 		int b=ram->ram[VRAM+i];
 		move(i/w,i%w);
+		clrtoeol();
+		
 		if(b==0xff)
 			addch(b?(ACS_CKBOARD):(' '));
 		else if(b==0x21)

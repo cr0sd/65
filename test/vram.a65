@@ -19,15 +19,9 @@ main:
 	; main loop
 loop:
 	jsr drawbg
-	jsr drawme
 	jsr moveme
-	jsr wait
-
-	; clear player pos
-	ldx me
-	lda #0
-	sta VRAM,x
-
+	jsr drawme
+	;jsr wait
 	jmp loop
 .)
 
@@ -101,19 +95,46 @@ moveme:
 
 	; check keyboard input
 	lda JOYP
-	and #$02
-	cmp #$02
-	beq down
+	and #$01
+	bne up
 
+	lda JOYP
+	and #$02
+	bne down
+
+	lda JOYP
+	and #$04
+	bne left
+
+	lda JOYP
+	and #$08
+	bne right
+
+	jmp end
+
+up:
+	lda me
+	sbc #30
+	sta me
 	jmp end
 
 down:
 	lda me
 	adc #30
 	sta me
+	jmp end
 
-	lda #0
-	sta JOYP
+left:
+	lda me
+	sbc #1
+	sta me
+	jmp end
+
+right:
+	lda me
+	adc #1
+	sta me
+	jmp end
 
 end:
 	rts

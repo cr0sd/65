@@ -172,14 +172,14 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 
 		// Bitwise ---
 		// AND
-		case 0x29: and( fetch() ); incpc(); break;
-		case 0x25: and( deref( fetch() ) ); incpc(); break;
-		case 0x35: and( deref( fetch() + cpu->x ) ); incpc(); break;
-		case 0x2D: and( deref( fetch16() ) ); incpc(); break;
-		case 0x3D: and( deref( fetch16() + cpu->x ) ); incpc(); break;
-		case 0x39: and( deref( fetch16() + cpu->y ) ); incpc(); break;
-		case 0x21: and( deref( deref( fetch() + cpu->x ) ) ); incpc(); break;
-		case 0x31: and( deref( deref( fetch() + cpu->y ) ) ); incpc(); break;
+		case 0x29: and( fetch() );								sr_nz(cpu->a); incpc(); break;
+		case 0x25: and( deref( fetch() ) );						sr_nz(cpu->a); incpc(); break;
+		case 0x35: and( deref( fetch() + cpu->x ) );			sr_nz(cpu->a); incpc(); break;
+		case 0x2D: and( deref( fetch16() ) ); sr_nz(cpu->x);	incpc(); break;
+		case 0x3D: and( deref( fetch16() + cpu->x ) );			sr_nz(cpu->a); incpc(); break;
+		case 0x39: and( deref( fetch16() + cpu->y ) );			sr_nz(cpu->a); incpc(); break;
+		case 0x21: and( deref( deref( fetch() + cpu->x ) ) );	sr_nz(cpu->a); incpc(); break;
+		case 0x31: and( deref( deref( fetch() + cpu->y ) ) );	sr_nz(cpu->a); incpc(); break;
 
 		// EOR
 		// TODO Check if accumulator is changed, or memory

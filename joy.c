@@ -50,17 +50,18 @@ void*joy_thread_update(void*d)
 		if(*b=='\033')
 		{
 			read(1,b,2);
-			if(b[1]=='A')			joy->buttons.bits.up=1;//x=K_UP;
-			else if(b[1]=='B')		joy->buttons.bits.down=1;//x=K_DOWN;
-			else if(b[1]=='D')		joy->buttons.bits.right=1;//x=K_RIGHT;
-			else if(b[1]=='C')		joy->buttons.bits.left=1;//x=K_LEFT;
+			if(b[1]=='A')			joy->buttons.reg=0x1; //joy->buttons.bits.up=1;//x=K_UP;
+			else if(b[1]=='B')		joy->buttons.reg=0x2; //joy->buttons.bits.down=1;//x=K_DOWN;
+			else if(b[1]=='D')		joy->buttons.reg=0x4; //joy->buttons.bits.right=1;//x=K_RIGHT;
+			else if(b[1]=='C')		joy->buttons.reg=0x8; //joy->buttons.bits.left=1;//x=K_LEFT;
 			//else
 				//x=0;
 		}
-		else	if(*b==JOY_A)	joy->buttons.bits.a=1;
-		else	if(*b==JOY_B)	joy->buttons.bits.b=1;
-		else	if(*b==JOY_X)	joy->buttons.bits.x=1;
-		else	if(*b==JOY_Y)	joy->buttons.bits.y=1;
+		else	if(*b==JOY_A)	joy->buttons.reg=0x10; //joy->buttons.bits.a=1;
+		else	if(*b==JOY_B)	joy->buttons.reg=0x20; //joy->buttons.bits.b=1;
+		else	if(*b==JOY_X)	joy->buttons.reg=0x40; //joy->buttons.bits.x=1;
+		else	if(*b==JOY_Y)	joy->buttons.reg=0x80; //joy->buttons.bits.y=1;
+		else	joy->buttons.reg=0;
 
 		pthread_mutex_unlock(&(joy->mut));
 	}
