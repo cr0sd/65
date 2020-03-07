@@ -218,6 +218,11 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x4E: p3( "lsr abs $%04X", imm16_pk(1) ); end();
 		case 0x5E: p3( "lsr abs $%04X,x", imm16_pk(1) ); end();
 
+		case 0x18: p1( "clc" ); end();
+		case 0xD8: p1( "cld" ); end();
+		case 0x58: p1( "cli" ); end();
+		case 0xB8: p1( "clv" ); end();
+
 		// Jump/branch
 		case 0x4C: p3( "jmp abs $%04X", imm16_pk(1) ); end();
 		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), *(uint16_t*)(ram->ram+imm16_pk(1)) ); end();

@@ -9,20 +9,12 @@ DELAY	= $000F
 *=$8000
 main:
 .(
-	ldx #$ff
-	cpx #$01
-
-	ldy #$ff
-	cpy #$ff
-
-	lda #$44
-	sta $02
-
-	ldy #$45
-	cpy $02
-
-	ldy #$44
-	cpy $02
+	lda #$11
+	cmp #$33
+	clc
+	clv
+	cld
+	cli
 
 	jmp *
 .)

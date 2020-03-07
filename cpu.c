@@ -203,6 +203,11 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x01: ora( deref( deref( fetch() + cpu->x ) ) ); incpc(); break;
 		case 0x11: ora( deref( deref( fetch() + cpu->y ) ) ); incpc(); break;
 
+		case 0x18: cpu->sr.bits.c=0;		incpc(); break;
+		case 0xD8: cpu->sr.bits.d=0;		incpc(); break;
+		case 0x58: cpu->sr.bits.i=0;		incpc(); break;
+		case 0xB8: cpu->sr.bits.v=0;		incpc(); break;
+
 		// ASL
 		// TODO Move memory, not accumulator
 		// TODO make sure zp/similar offsets are WRAPPED to 8-bits!
