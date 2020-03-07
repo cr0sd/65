@@ -10,12 +10,19 @@ DELAY	= $000F
 main:
 .(
 	ldx #$ff
-	txs
+	cpx #$01
 
-	lda #$f9
-	sta $01
+	ldy #$ff
+	cpy #$ff
 
-	and #1
+	lda #$44
+	sta $02
+
+	ldy #$45
+	cpy $02
+
+	ldy #$44
+	cpy $02
 
 	jmp *
 .)

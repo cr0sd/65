@@ -240,6 +240,14 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xC1: cmp( cpu->a, deref( deref( fetch() + cpu->x ) ) );	incpc(); break;
 		case 0xD1: cmp( cpu->a, deref( deref( fetch() + cpu->y ) ) );	incpc(); break;
 
+		case 0xE0: cmp( cpu->x, fetch() );						incpc(); break;
+		case 0xE4: cmp( cpu->x, deref( fetch() ) );				incpc(); break;
+		case 0xEC: cmp( cpu->x, deref( fetch16() ) );			incpc(); break;
+
+		case 0xC0: cmp( cpu->y, fetch() );						incpc(); break;
+		case 0xC4: cmp( cpu->y, deref( fetch() ) );				incpc(); break;
+		case 0xCC: cmp( cpu->y, deref( fetch16() ) );			incpc(); break;
+
 		// Return ---
 		case 0x60: pull16( &cpu->pc ); break;
 

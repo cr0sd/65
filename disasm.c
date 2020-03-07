@@ -237,6 +237,14 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0xC1: p3( "cmp ind ($%04X,x)", imm16_pk(1) ); end();
 		case 0xD1: p3( "cmp ind ($%04X),y", imm16_pk(1) ); end();
 
+		case 0xE0: p2( "cpx #$%02X", imm_pk(1) ); end();
+		case 0xE4: p2( "cpx zp $%02X", imm_pk(1) ); end();
+		case 0xEC: p3( "cpx abs $%04X", imm16_pk(1) ); end();
+
+		case 0xC0: p2( "cpy #$%02X", imm_pk(1) ); end();
+		case 0xC4: p2( "cpy zp $%02X", imm_pk(1) ); end();
+		case 0xCC: p3( "cpy abs $%04X", imm16_pk(1) ); end();
+
 		// Return
 		case 0x60: p1( "rts" ); end();
 
