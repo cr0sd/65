@@ -227,6 +227,9 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0xF8: p1( "sed" ); end();
 		case 0x78: p1( "sei" ); end();
 
+		case 0x08: p1( "php" ); end();
+		case 0x28: p1( "plp" ); end();
+
 		// Jump/branch
 		case 0x4C: p3( "jmp abs $%04X", imm16_pk(1) ); end();
 		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), *(uint16_t*)(ram->ram+imm16_pk(1)) ); end();

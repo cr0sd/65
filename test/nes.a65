@@ -9,16 +9,18 @@ DELAY	= $000F
 *=$8000
 main:
 .(
-	lda #$11
-	cmp #$33
-	clc
-	clv
-	cld
-	cli
+	ldx #$ff
+	txs
 
 	sei
-	sed
 	sec
+
+	php
+
+	cli
+	clc
+
+	plp
 
 	jmp *
 .)

@@ -213,6 +213,9 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xF8: cpu->sr.bits.d=1;		incpc(); break;
 		case 0x78: cpu->sr.bits.i=1;		incpc(); break;
 
+		case 0x08: push( cpu->sr.reg );			incpc(); break;
+		case 0x28: pull( &cpu->sr.reg );		incpc(); break;
+
 		// ASL
 		// TODO Move memory, not accumulator
 		// TODO make sure zp/similar offsets are WRAPPED to 8-bits!
