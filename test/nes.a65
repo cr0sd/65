@@ -16,5 +16,9 @@ main:
 	cld
 	cli
 
+	sei
+	sed
+	sec
+
 	jmp *
 .)
