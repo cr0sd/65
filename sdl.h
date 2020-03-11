@@ -10,6 +10,8 @@
 #include<stdio.h>
 #include<time.h>
 
+// SDL2-based visualization of VRAM
+
 typedef struct sdl_t
 {
 	SDL_Window*win;
@@ -22,7 +24,7 @@ typedef struct sdl_t
 
 	ram_t*ram;
 	joy_t*joy;
-	int halt;
+	volatile int halt;	// Tell compiler to always reload this
 } sdl_t;
 
 void sdl_del(sdl_t*sdl);

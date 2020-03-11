@@ -96,6 +96,7 @@ typedef struct cpu_t
 
 // Comparison
 #define cmp(x,y)	(cpu_cmp(cpu,(x),(y)))
+#define bit(x)		()
 
 // Status register micro-insns
 #define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative
@@ -105,7 +106,7 @@ typedef struct cpu_t
 #define sr_i(x)		(__cpu->sr.bits.i=x)			// Interrupt (enable/disable)
 #define sr_z(x)		(__cpu->sr.bits.z=(x==0))		// Zero
 #define sr_c(x)		(__cpu->sr.bits.c=?)			// Carry
-#define sr_nz(x)	sr_n(x);sr_z(x)
+#define sr_nz(x)	do{ uint16_t m=(x); sr_n(m); sr_z(m); }while(0)
 // ----------------------------------------------
 
 cpu_t*cpu_init(void);

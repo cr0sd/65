@@ -12,6 +12,14 @@ main:
 	ldx #$ff
 	txs
 
+	lda #01
+	sta $07
+
+	lda #$01
+
+	bit $07
+	bit $0101
+
 ldx #0
 ldy #0
 lda #$ff

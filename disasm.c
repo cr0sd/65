@@ -204,6 +204,10 @@ void da_print_disassembly(cpu_t*cpu,ram_t*ram)
 		case 0x01: p2( "ora zp ($%02X,x)", imm_pk(1) ); end();
 		case 0x11: p2( "ora zp ($%02X),y", imm_pk(1) ); end();
 
+		// BIT
+		case 0x24: p2( "bit zp $%02X", imm_pk(1) ); end();
+		case 0x2C: p3( "bit abs $%04X", imm16_pk(1) ); end();
+
 		// ASL
 		case 0x0A: p1( "asl a" ); end();
 		case 0x06: p2( "asl zp $%02X", imm_pk(1) ); end();

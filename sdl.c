@@ -5,7 +5,6 @@
 void*sdl_thread(void*d)
 {
 	sdl_t*sdl=(sdl_t*)d;
-	volatile int*halt=&sdl->halt;
 
 	sdl->scr_rect=(SDL_Rect){.x=32,.y=0,.w=255,.h=240};
 	//SDL_Rect scr_rect={.x=32,.y=0,.w=255,.h=240};
@@ -29,7 +28,7 @@ void*sdl_thread(void*d)
 
 	// RENDER LOOP -----
 	// Allow other thread to request quit
-	while(*halt==0)
+	while(!sdl->halt)
 	{
 
 		// Redraw screen

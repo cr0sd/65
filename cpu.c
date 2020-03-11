@@ -203,6 +203,10 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0x01: ora( deref( deref( fetch() + cpu->x ) ) ); incpc(); break;
 		case 0x11: ora( deref( deref( fetch() + cpu->y ) ) ); incpc(); break;
 
+		// BIT
+		case 0x24: sr_nz( cpu->a & deref( imm() ) );	incpc(); break;
+		case 0x2C: sr_nz( cpu->a & deref( imm16() ) );	incpc(); break;
+
 		// Clear SR flags
 		case 0x18: cpu->sr.bits.c=0;		incpc(); break;
 		case 0xD8: cpu->sr.bits.d=0;		incpc(); break;

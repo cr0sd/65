@@ -3,6 +3,8 @@
 #include"ram.h"
 #include"cpu.h"
 
+// Curses-based display of VRAM
+
 #define VIS_WIDTH	30
 #define VIS_HEIGHT	8
 
