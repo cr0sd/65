@@ -5,8 +5,7 @@ require'../inc.rb'
 # -----------------------------
 $AS65	=	'xa'
 $CC		=	'cc'
-#$OBJS	=	'nes.nes asciitest.nes asl.nes ctest.nes'
-$OBJS	=	'nes.nes asciitest.nes asl.nes'
+$OBJS	=	'nes.nes asciitest.nes vram.nes'
 
 $stdout_mutex=Mutex.new
 
