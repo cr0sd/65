@@ -71,12 +71,20 @@ quit:
 void puterr(const char*fmt,...)
 {
 	va_list list;
+	char b[1024];
+
 	va_start(list,fmt);
-	mvclr(STATUSLINE,0);
-	mvprintw(STATUSLINE,0,PROG": ");
-	attron(COLOR_PAIR(2));
-	printw("Error: ");
-	attron(COLOR_PAIR(1));
-	vw_printw(win,fmt,list);
+	//mvclr(STATUSLINE,0);
+	sprintf(b,PROG": ");
+	//attron(COLOR_PAIR(2));
+	sprintf(b,"Error: ");
+	//attron(COLOR_PAIR(1));
+	vsprintf(b,fmt,list);
+	//vw_printw(win,fmt,list);
 	va_end(list);
+
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+		"Error",
+		b,
+		NULL);
 }

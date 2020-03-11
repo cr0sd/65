@@ -1,6 +1,15 @@
 #include"65.h"
 #include"sdl.h"
 
+// SDL_TimerCallback
+uint32_t sdl_timer_cb(uint32_t interval,void*d)
+{
+	sdl_t*sdl=(sdl_t*)d;
+	sdl_redraw(sdl->s,sdl->ram);
+	return interval;
+}
+
+// Pthread thread callback
 void*sdl_thread(void*d)
 {
 	sdl_t*sdl=(sdl_t*)d;
@@ -22,7 +31,9 @@ void*sdl_thread(void*d)
 	sdl->r=SDL_CreateRenderer(sdl->win,-1,0);
 	SDL_SetRenderDrawColor(sdl->r,0,0,0,255);
 
-	sdl_redraw(sdl->s,sdl->ram);
+	SDL_AddTimer(20,sdl_timer_cb,sdl);
+
+	//sdl_redraw(sdl->s,sdl->ram);
 
 	// RENDER LOOP -----
 	// Allow other thread to request quit
@@ -119,7 +130,7 @@ void sdl_del(sdl_t*sdl)
 
 void sdl_redraw(SDL_Surface*s,ram_t*ram)
 {
-	uint8_t*p=(uint8_t*)s->pixels;
+	volatile uint8_t*p=(uint8_t*)s->pixels;
 	for(int i=0;i<(s->w*s->h);++i)
 		p[i]=ram->ram[VRAM+i];
 }

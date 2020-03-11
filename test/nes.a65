@@ -12,24 +12,13 @@ main:
 	ldx #$ff
 	txs
 
-l0:
-	lda #22
-	ldx #0
-l1:
-	cmp #7
-	bcs l2
-	sbc #7
-	jmp l3
-
-l2:
-	lda #0
-	jmp l4
-l3:
+ldx #0
+ldy #0
+lda #$ff
+l:
+	sta VRAM,x
 	inx
-
-l4:
-	cmp #0
-	bne l1
+	jmp l
 
 	jmp *
 .)
