@@ -51,18 +51,34 @@ void*sdl_thread(void*d)
 					//if(k.keysym.sym>=SDLK_a && k.keysym.sym<SDLK_a+26)
 						//printf("key: %c (0x%02X)\n",
 							//k.keysym.sym,k.keysym.sym);
+
+					// KEYB: Directions
 					if(k.keysym.sym==SDLK_LEFT)
 						sdl->joy->buttons.bits.left=1,
-						puts("left");
+						printf("left\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
 					if(k.keysym.sym==SDLK_RIGHT)
 						sdl->joy->buttons.bits.right=1,
-						puts("right");
+						printf("right\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
 					if(k.keysym.sym==SDLK_UP)
 						sdl->joy->buttons.bits.up=1,
-						puts("up");
+						printf("up\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
 					if(k.keysym.sym==SDLK_DOWN)
 						sdl->joy->buttons.bits.down=1,
-						puts("down");
+						printf("down\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+
+					// KEYB: Buttons
+					if(k.keysym.sym==SDLK_z)
+						sdl->joy->buttons.bits.a=1,
+						printf("A\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+					if(k.keysym.sym==SDLK_x)
+						sdl->joy->buttons.bits.b=1,
+						printf("B\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+					if(k.keysym.sym==SDLK_a)
+						sdl->joy->buttons.bits.x=1,
+						printf("X\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+					if(k.keysym.sym==SDLK_s)
+						sdl->joy->buttons.bits.y=1,
+						printf("Y\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
 
 					if(k.keysym.sym==SDLK_ESCAPE)
 					{
