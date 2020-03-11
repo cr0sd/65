@@ -25,5 +25,5 @@ config:
 clean:
 	@echo "RM	$(OBJS)"
 	@$(RM) $(OBJS)
-	@$(RM) *.s *.o65
+	@$(RM) *.s *.o65 config
 .SUFFIXES: .a65 .nes .c65
