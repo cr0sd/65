@@ -1,14 +1,6 @@
 #include"65.h"
 #include"sdl.h"
 
-// SDL_TimerCallback
-uint32_t sdl_timer_cb(uint32_t interval,void*d)
-{
-	sdl_t*sdl=(sdl_t*)d;
-	sdl_redraw(sdl->s,sdl->ram);
-	return interval;
-}
-
 // Pthread thread callback
 void*sdl_thread(void*d)
 {
@@ -18,7 +10,7 @@ void*sdl_thread(void*d)
 	sdl->scr_rect=(SDL_Rect){.x=32,.y=0,.w=255,.h=240};
 	//SDL_Rect scr_rect={.x=32,.y=0,.w=255,.h=240};
 
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER);
 	sdl->win = SDL_CreateWindow("window",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
@@ -31,9 +23,9 @@ void*sdl_thread(void*d)
 	sdl->r=SDL_CreateRenderer(sdl->win,-1,0);
 	SDL_SetRenderDrawColor(sdl->r,0,0,0,255);
 
-	SDL_AddTimer(20,sdl_timer_cb,sdl);
+	sdl->i=SDL_AddTimer(30,sdl_timer_cb,sdl);
 
-	//sdl_redraw(sdl->s,sdl->ram);
+	//sdl_redraw(sdl);
 
 	// RENDER LOOP -----
 	// Allow other thread to request quit
@@ -41,10 +33,11 @@ void*sdl_thread(void*d)
 	{
 
 		// Redraw screen
-		sdl->t=SDL_CreateTextureFromSurface(sdl->r,sdl->s);
-		SDL_RenderClear(sdl->r);
-		SDL_RenderCopy(sdl->r,sdl->t,NULL,&sdl->scr_rect);
-		SDL_RenderPresent(sdl->r);
+		sdl_redraw(sdl);
+		//sdl->t=SDL_CreateTextureFromSurface(sdl->r,sdl->s);
+		//SDL_RenderClear(sdl->r);
+		//SDL_RenderCopy(sdl->r,sdl->t,NULL,&sdl->scr_rect);
+		//SDL_RenderPresent(sdl->r);
 
 		// EVENT LOOP -----
 		//if(SDL_PollEvent(&sdl->e))
@@ -123,14 +116,29 @@ void sdl_del(sdl_t*sdl)
 		if(sdl->s)SDL_FreeSurface(sdl->s);
 		if(sdl->r)SDL_DestroyRenderer(sdl->r);
 		if(sdl->t)SDL_DestroyTexture(sdl->t);
+		if(sdl->i)SDL_RemoveTimer(sdl->i);
 		sdl->halt=1;
 	}
 	already=1;
 }
 
-void sdl_redraw(SDL_Surface*s,ram_t*ram)
+void sdl_redraw(sdl_t*sdl)
 {
-	volatile uint8_t*p=(uint8_t*)s->pixels;
-	for(int i=0;i<(s->w*s->h);++i)
-		p[i]=ram->ram[VRAM+i];
+	volatile uint8_t*p=(uint8_t*)sdl->s->pixels;
+	for(int i=0;i<(sdl->s->w*sdl->s->h);++i)
+		p[i]=sdl->ram->ram[VRAM+i];
+}
+
+// SDL_TimerCallback
+uint32_t sdl_timer_cb(uint32_t interval,void*d)
+{
+	sdl_t*sdl=(sdl_t*)d;
+	sdl_redraw(sdl);
+
+	sdl->t=SDL_CreateTextureFromSurface(sdl->r,sdl->s);
+	SDL_RenderClear(sdl->r);
+	SDL_RenderCopy(sdl->r,sdl->t,NULL,&sdl->scr_rect);
+	SDL_RenderPresent(sdl->r);
+
+	return interval;
 }

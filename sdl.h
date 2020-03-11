@@ -18,6 +18,7 @@ typedef struct sdl_t
 	SDL_Renderer*r;
 	SDL_Texture*t;
 	SDL_Rect scr_rect;
+	SDL_TimerID i;
 
 	ram_t*ram;
 	joy_t*joy;
@@ -25,5 +26,6 @@ typedef struct sdl_t
 } sdl_t;
 
 void sdl_del(sdl_t*sdl);
-void sdl_redraw(SDL_Surface*s,ram_t*ram);
+void sdl_redraw(sdl_t*sdl);
 void*sdl_thread(void*d);
+uint32_t sdl_timer_cb(uint32_t interval,void*d);
