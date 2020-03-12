@@ -13,8 +13,13 @@
 3. Implement other NES hardware
 	a. Joypad
 	b. Graphics
+		- Create 'PPU' hardware with VBLANK period
+			to sync drawing (to prevent seeing direct
+			I/O to VRAM
 	c. Sound
 
+4. Refactor code/build utilities to be more cross-platform/portable
+	a. Remove dependencies on curses from graphics/audio implementations
 
 Useful Links for writing opcodes:
 Instruction set: http://wouter.bbcmicro.net/general/6502/6502_opcodes.html
