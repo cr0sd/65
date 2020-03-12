@@ -52,7 +52,8 @@ int main(int argc,char**argv)
 	}
 
 quit:
-	sdl->halt=1;
+	//sdl->halt=1;
+	sdl_halt(sdl,1);
 	pthread_join(sdl_th,NULL);
 	//pthread_cancel(sdl_th);
 

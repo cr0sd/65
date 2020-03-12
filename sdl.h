@@ -25,9 +25,11 @@ typedef struct sdl_t
 	ram_t*ram;
 	joy_t*joy;
 	volatile int halt;	// Tell compiler to always reload this
+	pthread_mutex_t mut;
 } sdl_t;
 
 void sdl_del(sdl_t*sdl);
 void sdl_redraw(sdl_t*sdl);
 void*sdl_thread(void*d);
 uint32_t sdl_timer_cb(uint32_t interval,void*d);
+void sdl_halt(sdl_t*sdl,int v);

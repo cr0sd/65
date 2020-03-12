@@ -102,6 +102,7 @@ void*sdl_thread(void*d)
 
 quit:
 	// Free memory
+	sdl_halt(sdl,1);
 	sdl_del(sdl);
 	return NULL;
 }
@@ -111,14 +112,16 @@ void sdl_del(sdl_t*sdl)
 	static int already=0;
 	if(!already)
 	{
+		if(sdl->i)SDL_RemoveTimer(sdl->i);
 		SDL_Quit();
 		if(sdl->s)SDL_FreeSurface(sdl->s);
 		if(sdl->r)SDL_DestroyRenderer(sdl->r);
 		if(sdl->t)SDL_DestroyTexture(sdl->t);
-		if(sdl->i)SDL_RemoveTimer(sdl->i);
-		sdl->halt=1;
+		if(sdl->win)SDL_DestroyWindow(sdl->win);
+		sdl_halt(sdl,1);
+		already=1;
+		puts("Destroyed SDL data");
 	}
-	already=1;
 }
 
 void sdl_redraw(sdl_t*sdl)
@@ -140,4 +143,11 @@ uint32_t sdl_timer_cb(uint32_t interval,void*d)
 	SDL_RenderPresent(sdl->r);
 
 	return interval;
+}
+
+void sdl_halt(sdl_t*sdl,int v)
+{
+	pthread_mutex_lock(&sdl->mut);
+	sdl->halt=v;
+	pthread_mutex_unlock(&sdl->mut);
 }
