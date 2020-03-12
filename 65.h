@@ -19,7 +19,7 @@ WINDOW*win;
 // Memory
 #define VRAM	0x6000
 #define PRGROM	0x8000
-#define JOYPREG	0x0010
+#define JOYPREG	0x4016
 
 // Print error
 void puterr(const char*msg,...);

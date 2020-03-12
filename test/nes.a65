@@ -2,7 +2,7 @@
 .byt 0,0,0,0,0,0,0,0
 
 VRAM	= $6000
-JOYP	= $0010
+JOYP	= $4017
 me		= $0009
 DELAY	= $000F
 
@@ -24,7 +24,7 @@ ldx #0
 ldy #0
 lda #$ff
 l:
-	sta VRAM,x
+	sta VRAM+$820,x
 	inx
 	jmp l
 

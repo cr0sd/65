@@ -12,10 +12,10 @@
 #define K_LEFT	0x83
 #define K_RIGHT	0x84
 
-#define JOY_A	'z'
-#define JOY_B	'x'
-#define JOY_X	'a'
-#define JOY_Y	's'
+#define JOY_A		'z'
+#define JOY_B		'x'
+#define JOY_SELECT	'a'
+#define JOY_START	's'
 
 typedef struct joy_t
 {
@@ -34,8 +34,8 @@ typedef struct joy_t
 			int right:1;
 			int a:1;
 			int b:1;
-			int x:1;
-			int y:1;
+			int select:1;
+			int start:1;
 		}bits;
 	}buttons;
 

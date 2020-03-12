@@ -77,11 +77,11 @@ void*sdl_thread(void*d)
 						sdl->joy->buttons.bits.b=1,
 						printf("B\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
 					if(k.keysym.sym==SDLK_a)
-						sdl->joy->buttons.bits.x=1,
-						printf("X\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+						sdl->joy->buttons.bits.start=1,
+						printf("start\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
 					if(k.keysym.sym==SDLK_s)
-						sdl->joy->buttons.bits.y=1,
-						printf("Y\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+						sdl->joy->buttons.bits.select=1,
+						printf("select\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
 
 					if(k.keysym.sym==SDLK_ESCAPE)
 					{
@@ -124,11 +124,24 @@ void sdl_del(sdl_t*sdl)
 	}
 }
 
+
+/*--- sdl_redraw(sdl)                           ---*/
+// We want to draw the screen in RAM at location VRAM
+// as a 256x240 pixel (32x30 [8x8] sprite) resolution
+// screen
+
 void sdl_redraw(sdl_t*sdl)
 {
-	volatile uint8_t*p=(uint8_t*)sdl->s->pixels;
-	for(int i=0;i<(sdl->s->w*sdl->s->h);++i)
-		p[i]=sdl->ram->ram[VRAM+i];
+	volatile uint32_t*p=(uint32_t*)sdl->s->pixels;
+	//for(int i=0;i<(sdl->s->w*sdl->s->h);++i)
+	for(int i=0;i<0x1000;++i)
+	{
+		uint8_t b=sdl->ram->ram[VRAM+i];
+		uint32_t c=(0xff<<24)|(b<<16)|(b<<8)|(b);
+		p[i]=c;
+		//for(int x=0;x<8)
+		//p[i]=c;
+	}
 }
 
 // SDL_TimerCallback
