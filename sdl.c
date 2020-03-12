@@ -20,7 +20,7 @@ void*sdl_thread(void*d)
 	sdl->s=SDL_CreateRGBSurface(0,256,240,32,0x000000ff,0x0000ff00,
 		0x00ff0000,0xff000000);
 	sdl->r=SDL_CreateRenderer(sdl->win,-1,0);
-	SDL_SetRenderDrawColor(sdl->r,0,0,0,255);
+	SDL_SetRenderDrawColor(sdl->r,0x10,0x10,0x10,255);
 
 	sdl->i=SDL_AddTimer(30,sdl_timer_cb,sdl);
 
@@ -34,7 +34,7 @@ void*sdl_thread(void*d)
 		// Redraw screen
 		sdl_redraw(sdl);
 		//sdl->t=SDL_CreateTextureFromSurface(sdl->r,sdl->s);
-		//SDL_RenderClear(sdl->r);
+		SDL_RenderClear(sdl->r);
 		//SDL_RenderCopy(sdl->r,sdl->t,NULL,&sdl->scr_rect);
 		//SDL_RenderPresent(sdl->r);
 
@@ -57,17 +57,29 @@ void*sdl_thread(void*d)
 
 					// KEYB: Directions
 					if(k.keysym.sym==SDLK_LEFT)
-						sdl->joy->buttons.bits.left=1,
+					{
+						sdl->joy->buttons.reg=0;
+						sdl->joy->buttons.bits.left=1;
 						printf("left\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+					}
 					if(k.keysym.sym==SDLK_RIGHT)
-						sdl->joy->buttons.bits.right=1,
+					{
+						sdl->joy->buttons.reg=0;
+						sdl->joy->buttons.bits.right=1;
 						printf("right\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+					}
 					if(k.keysym.sym==SDLK_UP)
-						sdl->joy->buttons.bits.up=1,
+					{
+						sdl->joy->buttons.reg=0;
+						sdl->joy->buttons.bits.up=1;
 						printf("up\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+					}
 					if(k.keysym.sym==SDLK_DOWN)
-						sdl->joy->buttons.bits.down=1,
+					{
+						sdl->joy->buttons.reg=0;
+						sdl->joy->buttons.bits.down=1;
 						printf("down\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+					}
 
 					// KEYB: Buttons
 					if(k.keysym.sym==SDLK_z)
@@ -133,14 +145,21 @@ void sdl_del(sdl_t*sdl)
 void sdl_redraw(sdl_t*sdl)
 {
 	volatile uint32_t*p=(uint32_t*)sdl->s->pixels;
-	//for(int i=0;i<(sdl->s->w*sdl->s->h);++i)
-	for(int i=0;i<0x1000;++i)
+
+	//for(int i=0;i<(sdl->s->w*sdl->s->h);++i)	// W x H
+	//for(int i=0;i<0x4000;++i)					// 1 byte = 1 pixel
+	for(int i=0;i<30*8;++i)						// Like 65v
 	{
 		uint8_t b=sdl->ram->ram[VRAM+i];
 		uint32_t c=(0xff<<24)|(b<<16)|(b<<8)|(b);
-		p[i]=c;
-		//for(int x=0;x<8)
+
 		//p[i]=c;
+
+		for(int j=0;j<8*8;++j)
+			p[((i/20+j/8)+(i/20*8))*256+(i%20+j%8)+(i%20*8)]=c;
+
+		//for(int j=0;j<8*8;++j)
+			//p[(i/256+j/8)*256+(i%256+j%8)]=c;
 	}
 }
 
@@ -158,6 +177,7 @@ uint32_t sdl_timer_cb(uint32_t interval,void*d)
 	return interval;
 }
 
+// Communicate between threads that we want to close/join threads
 void sdl_halt(sdl_t*sdl,int v)
 {
 	pthread_mutex_lock(&sdl->mut);

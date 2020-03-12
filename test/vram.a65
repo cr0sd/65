@@ -2,7 +2,7 @@
 .byt 0,0,0,0,0,0,0,0
 
 VRAM	= $6000
-JOYP	= $0010
+JOYP	= $4016
 me		= $0009
 DELAY	= $000F
 
@@ -13,7 +13,7 @@ main:
 	ldx #$ff
 	txs
 
-	lda #$24+30
+	lda #$24+20
 	sta me
 
 	; main loop
@@ -35,17 +35,17 @@ top:
 	inx
 
 	txa
-	cmp #30
+	cmp #20
 	bcs top
 
 	ldx #0
 bot:
 	lda #$ff
-	sta VRAM+30*7,x
+	sta VRAM+20*7,x
 	inx
 
 	txa
-	cmp #30
+	cmp #20
 	bcs bot
 
 	ldx #0
@@ -54,22 +54,22 @@ left:
 	sta VRAM,x
 
 	txa
-	adc #30
+	adc #20
 	tax
 
-	cmp #30*8
+	cmp #20*8
 	bcs left
 
 	ldx #0
 right:
 	lda #$ff
-	sta VRAM+29,x
+	sta VRAM+19,x
 
 	txa
-	adc #30
+	adc #20
 	tax
 
-	cmp #30*8
+	cmp #20*8
 	bcs right
 
 	rts
@@ -104,23 +104,23 @@ moveme:
 
 	lda JOYP
 	and #$04
-	bne left
+	bne right
 
 	lda JOYP
 	and #$08
-	bne right
+	bne left
 
 	jmp end
 
 up:
 	lda me
-	sbc #30
+	sbc #20
 	sta me
 	jmp end
 
 down:
 	lda me
-	adc #30
+	adc #20
 	sta me
 	jmp end
 

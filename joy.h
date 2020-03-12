@@ -30,8 +30,8 @@ typedef struct joy_t
 		{
 			int up:1;
 			int down:1;
-			int left:1;
 			int right:1;
+			int left:1;
 			int a:1;
 			int b:1;
 			int select:1;

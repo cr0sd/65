@@ -86,7 +86,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xB1: lda( deref( deref( fetch() + cpu->y ) ) );	sr_nz(cpu->a); incpc(); break;
 		case 0xA5: lda( deref( fetch() ) );						sr_nz(cpu->a); incpc();	break;
 		case 0xA9: lda( fetch() );						sr_nz(cpu->a); incpc();	break;
-		case 0xAD: lda( fetch16() );					sr_nz(cpu->a); incpc();	break;
+		case 0xAD: lda( deref( fetch16() ) );					sr_nz(cpu->a); incpc();	break;
 		case 0xB5: lda( deref( fetch() + cpu->x ) );	sr_nz(cpu->a); incpc();	break;
 		case 0xB9: lda( deref( fetch16() + cpu->y ) );	sr_nz(cpu->a); incpc();	break;
 		case 0xBD: lda( deref( fetch16() + cpu->x ) );	sr_nz(cpu->a); incpc();	break;

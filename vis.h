@@ -5,7 +5,7 @@
 
 // Curses-based display of VRAM
 
-#define VIS_WIDTH	30
+#define VIS_WIDTH	20
 #define VIS_HEIGHT	8
 
 int vis_display(cpu_t*cpu,ram_t*ram);

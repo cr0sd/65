@@ -50,10 +50,10 @@ void*joy_thread_update(void*d)
 		if(*b=='\033')
 		{
 			read(1,b,2);
-			if(b[1]=='A')			joy->buttons.reg=0x1; //joy->buttons.bits.up=1;//x=K_UP;
-			else if(b[1]=='B')		joy->buttons.reg=0x2; //joy->buttons.bits.down=1;//x=K_DOWN;
-			else if(b[1]=='C')		joy->buttons.reg=0x4; //joy->buttons.bits.left=1;//x=K_LEFT;
-			else if(b[1]=='D')		joy->buttons.reg=0x8; //joy->buttons.bits.right=1;//x=K_RIGHT;
+			if(b[1]=='A')			joy->buttons.reg=0, joy->buttons.bits.up=1;
+			else if(b[1]=='B')		joy->buttons.reg=0, joy->buttons.bits.down=1;
+			else if(b[1]=='D')		joy->buttons.reg=0, joy->buttons.bits.left=1;
+			else if(b[1]=='C')		joy->buttons.reg=0, joy->buttons.bits.right=1;
 			//else
 				//x=0;
 		}
