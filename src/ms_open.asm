@@ -1,3 +1,5 @@
+; MASM x86_64 assembly program
+; Modified from C source to cut out unnecessary bits
 INCLUDE listing.inc
 INCLUDELIB LIBCMT
 INCLUDELIB OLDNAMES
