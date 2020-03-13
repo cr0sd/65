@@ -5,7 +5,7 @@ RM			= rm -f # for BSD
 OBJS		= nes.nes asciitest.nes ctest.nes vram.nes pi.nes div.nes
 
 all: config $(OBJS)
-	@cp $(OBJS) ..
+	@#cp $(OBJS) ..
 config:
 	@echo "Checking for $(CC65)..."; echo "`which $(CC65)`" > config
 	@echo "Checking for $(AS65)..."; echo "`which $(AS65)`" >> config

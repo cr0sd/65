@@ -41,7 +41,7 @@ top:
 	ldx #0
 bot:
 	lda #$ff
-	sta VRAM+20*7,x
+	sta VRAM+20*11,x
 	inx
 
 	txa
@@ -57,7 +57,7 @@ left:
 	adc #20
 	tax
 
-	cmp #20*8
+	cmp #20*11
 	bcs left
 
 	ldx #0
@@ -69,7 +69,7 @@ right:
 	adc #20
 	tax
 
-	cmp #20*8
+	cmp #20*11
 	bcs right
 
 	rts
