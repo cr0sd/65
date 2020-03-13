@@ -13,3 +13,4 @@ test:
 clean:
 	@$(MAKE) -C src clean
 	@$(RM) bin/65 bin/65v bin/65sdl test/*.nes
+.PHONY: default all test clean
