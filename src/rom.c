@@ -62,7 +62,9 @@ void rom_load_file(rom_t*rom,const char*filepath)
 
 void rom_print_header_info(rom_t*rom)
 {
+	#ifndef DO_NOT_USE_CURSES
 	attron(COLOR_PAIR(3));
+	#endif
 	printw("ROM info:\n");
 	printw("Reading ROM file \"%s\"\n",rom->filepath);
 	printw("ROM banks (16k): %u\n",rom->header[4]);
@@ -79,7 +81,9 @@ void rom_print_header_info(rom_t*rom)
 	printw("Cartridge: %s\n",(rom->header[9]&0x1)==1?"PAL":"NTSC");
 
 	printw("Rom data length: %d\n",rom->data_len);
+	#ifndef DO_NOT_USE_CURSES
 	attron(COLOR_PAIR(1));
+	#endif
 	printw("_______________\n");
 }
 

@@ -26,9 +26,21 @@ To build using GNUMake:
 
 	make
 
+To build SDL2 version on Windows with Cygwin:
+
+	cd src
+	make -f Makefile.cyg 65sdl
+
 To build using Ruby rake
 
+	cd src
 	rake
+
+To build and run simple included tests:
+
+	make
+	make test
+	./bin/65 test/<TEST ROM FILENAME>
 
 #### Key bindings:
 

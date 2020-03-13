@@ -13,9 +13,9 @@ all: $(PROG) test 65v 65sdl
 65v: $(OBJS) 65v.o vis.o
 	@echo "CC	$@"
 	@$(CC) $@.o vis.o $(OBJS) -o $@ $(CFLAGS) $(LDFLAGS)
-65sdl: $(OBJS) sdl.c 65sdl.c
+65sdl: sdl.c 65sdl.c cpu.c ram.c rom.c joy.c
 	@echo "CC	$@"
-	@$(CC) $(CFLAGS) $(SDL2_CFLAGS) 65sdl.c sdl.c $(OBJS) -o $@ $(LDFLAGS) $(SDL2_LDFLAGS)
+	@$(CC) -DDO_NOT_USE_CURSES $(CFLAGS) $(SDL2_CFLAGS) 65sdl.c sdl.c rom.c joy.c ram.c cpu.c -o $@ $(LDFLAGS) $(SDL2_LDFLAGS)
 test:
 	@make -C test
 .c.o:

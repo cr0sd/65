@@ -1,16 +1,13 @@
 #pragma once
 
-#include<ncurses.h>
+#include"config.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
 #include<stdarg.h>
 
-WINDOW*win;
-
 #define PROG "65"
 #define new(x) malloc(sizeof(x))
-#define mvclr(y,x) do{move(y,x);clrtoeol();}while(0)
 
 #define STATUSLINE		22
 #define TOPROWHEIGHT	7

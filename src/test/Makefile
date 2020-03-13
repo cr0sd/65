@@ -2,14 +2,15 @@ CC65		= cc65
 CCAS65		= asmx
 AS65		= xa
 RM			= rm -f # for BSD
-OBJS		= nes.nes asciitest.nes ctest.nes vram.nes pi.nes div.nes
+OBJS		= nes.nes asciitest.nes vram.nes pi.nes div.nes
 
 all: config $(OBJS)
 	@#cp $(OBJS) ..
 config:
-	@echo "Checking for $(CC65)..."; echo "`which $(CC65)`" > config
-	@echo "Checking for $(AS65)..."; echo "`which $(AS65)`" >> config
-	@echo "Checking for $(CCAS65)..."; echo "`which $(CCAS65)`" >> config
+	@touch config
+	@which $(CC65)
+	@which $(AS65)
+	@which $(CCAS65)
 .a65.nes:
 	@echo "AS65	$*.nes"
 	@$(AS65) -C $*.a65 -o $*.nes
