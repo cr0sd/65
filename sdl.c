@@ -22,7 +22,7 @@ void*sdl_thread(void*d)
 	sdl->r=SDL_CreateRenderer(sdl->win,-1,0);
 	SDL_SetRenderDrawColor(sdl->r,0x10,0x10,0x10,255);
 
-	sdl->i=SDL_AddTimer(30,sdl_timer_cb,sdl);
+	sdl->i=SDL_AddTimer(10,sdl_timer_cb,sdl);
 
 	//sdl_redraw(sdl);
 
@@ -37,6 +37,34 @@ void*sdl_thread(void*d)
 		SDL_RenderClear(sdl->r);
 		//SDL_RenderCopy(sdl->r,sdl->t,NULL,&sdl->scr_rect);
 		//SDL_RenderPresent(sdl->r);
+
+
+		// Check keyboard state
+		{
+			uint8_t*kb;
+			kb=(int8_t*)SDL_GetKeyboardState(NULL);
+
+			if(kb[SDL_SCANCODE_Z])
+				printf("A\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+
+			if(kb[SDL_SCANCODE_X])
+				printf("B\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+
+			if(kb[SDL_SCANCODE_A])
+				printf("Start\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+
+			sdl->joy->buttons.bits.left=(kb[SDL_SCANCODE_LEFT]!=0);
+			sdl->joy->buttons.bits.right=(kb[SDL_SCANCODE_RIGHT]!=0);
+			sdl->joy->buttons.bits.up=(kb[SDL_SCANCODE_UP]!=0);
+			sdl->joy->buttons.bits.down=(kb[SDL_SCANCODE_DOWN]!=0);
+
+			sdl->joy->buttons.bits.a=(kb[SDL_SCANCODE_Z]!=0);
+			sdl->joy->buttons.bits.b=(kb[SDL_SCANCODE_X]!=0);
+			sdl->joy->buttons.bits.start=(kb[SDL_SCANCODE_A]!=0);
+			sdl->joy->buttons.bits.select=(kb[SDL_SCANCODE_S]!=0);
+			if(kb[SDL_SCANCODE_S])
+				printf("Select\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+		}
 
 		// EVENT LOOP -----
 		//if(SDL_PollEvent(&sdl->e))
@@ -54,46 +82,6 @@ void*sdl_thread(void*d)
 					//if(k.keysym.sym>=SDLK_a && k.keysym.sym<SDLK_a+26)
 						//printf("key: %c (0x%02X)\n",
 							//k.keysym.sym,k.keysym.sym);
-
-					// KEYB: Directions
-					if(k.keysym.sym==SDLK_LEFT)
-					{
-						sdl->joy->buttons.reg=0;
-						sdl->joy->buttons.bits.left=1;
-						printf("left\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
-					}
-					if(k.keysym.sym==SDLK_RIGHT)
-					{
-						sdl->joy->buttons.reg=0;
-						sdl->joy->buttons.bits.right=1;
-						printf("right\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
-					}
-					if(k.keysym.sym==SDLK_UP)
-					{
-						sdl->joy->buttons.reg=0;
-						sdl->joy->buttons.bits.up=1;
-						printf("up\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
-					}
-					if(k.keysym.sym==SDLK_DOWN)
-					{
-						sdl->joy->buttons.reg=0;
-						sdl->joy->buttons.bits.down=1;
-						printf("down\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
-					}
-
-					// KEYB: Buttons
-					if(k.keysym.sym==SDLK_z)
-						sdl->joy->buttons.bits.a=1,
-						printf("A\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
-					if(k.keysym.sym==SDLK_x)
-						sdl->joy->buttons.bits.b=1,
-						printf("B\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
-					if(k.keysym.sym==SDLK_a)
-						sdl->joy->buttons.bits.start=1,
-						printf("start\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
-					if(k.keysym.sym==SDLK_s)
-						sdl->joy->buttons.bits.select=1,
-						printf("select\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
 
 					if(k.keysym.sym==SDLK_ESCAPE)
 					{

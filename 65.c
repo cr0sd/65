@@ -24,6 +24,8 @@ int main(int argc,char**argv)
 	rom_t*rom=new(rom_t);
 	ram_t*ram=ram_init();
 
+	char*title=NULL;
+
 	uint16_t hex_offset=0x8000;	// Where start drawing memory hexdump
 	int hex_follow_pc=true;		// Toggle following cpu->pc
 
@@ -40,6 +42,7 @@ int main(int argc,char**argv)
 	if(argc>1)
 	{
 		rom_load_file(rom,argv[1]);
+		title=argv[1];
 		//rom_print_header_info(rom);
 		refresh();
 
@@ -61,6 +64,7 @@ int main(int argc,char**argv)
 	{
 
 		//clear();
+		mvprintw(TOPROWHEIGHT+2,15,"%s",title);
 		print_registers(cpu);
 		print_memory(cpu,ram,hex_offset);
 		print_disassembly(cpu,ram);

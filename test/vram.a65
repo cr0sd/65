@@ -79,7 +79,7 @@ right:
 drawme:
 .(
 	ldx me
-	lda #$21
+	lda #$9a
 	sta VRAM,x
 
 	rts

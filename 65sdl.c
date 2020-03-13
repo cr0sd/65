@@ -48,7 +48,7 @@ int main(int argc,char**argv)
 		joy_update_ram(joy,ram);
 		cpu_exec(cpu,ram);
 		if(sdl->halt) goto quit;
-		usleep(500);
+		usleep(50);
 		//usleep(20000);
 	}
 
