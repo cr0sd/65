@@ -113,12 +113,12 @@ void sdl_del(sdl_t*sdl)
 	if(!already)
 	{
 		if(sdl->i)SDL_RemoveTimer(sdl->i);
-		SDL_Quit();
 		if(sdl->s)SDL_FreeSurface(sdl->s);
 		if(sdl->r)SDL_DestroyRenderer(sdl->r);
 		if(sdl->t)SDL_DestroyTexture(sdl->t);
 		if(sdl->win)SDL_DestroyWindow(sdl->win);
 		sdl_halt(sdl,1);
+		SDL_Quit();
 		already=1;
 		puts("Destroyed SDL data");
 	}
@@ -161,6 +161,8 @@ uint32_t sdl_timer_cb(uint32_t interval,void*d)
 	SDL_RenderClear(sdl->r);
 	SDL_RenderCopy(sdl->r,sdl->t,NULL,&sdl->scr_rect);
 	SDL_RenderPresent(sdl->r);
+	SDL_DestroyTexture(sdl->t);
+	sdl->t=NULL;
 
 	return interval;
 }
