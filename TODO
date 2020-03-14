@@ -1,4 +1,38 @@
-1. Implement instruction set
+1. Implement PPU, APU
+
+	a. Graphics
+		- PPU MEMORY MAP:
+			$2000 Name		table 0 (32x30 tiles)
+			$23C0 Attribute	table 0
+
+			$2400 Name		table 1 (32x30 tiles)
+			$27C0 Attribute	table 1
+
+			$2800 Name		table 2 (32x30 tiles)
+			$2BC0 Attribute	table 2
+
+			$2C00 Name		table 3 (32x30 tiles)
+			$2FC0 Attribute	table 3
+
+			$3F00 Image		Palette
+			$3F10 Sprite	Palette
+		- Create 'PPU' hardware with VBLANK period
+			to sync drawing (to prevent seeing direct
+			I/O to VRAM
+
+	b. Sound
+		- APU MEMORY MAP:
+			CHANNELS:
+				1) $4000 Square 1
+				2) $4004 Square 2
+				3) $4008 Triangle
+				4) $400C Noise
+				5) $4010 DMC (Delta Modulation Channel)
+			$4015 Common (Status)
+
+	c. Joypad
+
+2. Implement instruction set
 	a. Pay attention to address modes
 		- !! Difference in OPC ($LL,x) and ($LL),y
 			I think the (,x) version is like C "(int8_t*)(LL)[x]" or something
@@ -9,19 +43,12 @@
 	d. Arithmetic insns
 	e. Bitwise/logical insns
 
-2. Create suite of tests
-
-3. Implement other NES hardware
-	a. Joypad
-	b. Graphics
-		- Create 'PPU' hardware with VBLANK period
-			to sync drawing (to prevent seeing direct
-			I/O to VRAM
-	c. Sound
+3. Create suite of tests
 
 4. Refactor code/build utilities to be more cross-platform/portable
 	a. Remove dependencies on curses from graphics/audio implementations
 
+-----------------------------------------------------------------------
 Useful Links for writing opcodes:
 Instruction set: http://wouter.bbcmicro.net/general/6502/6502_opcodes.html
 Instruction set: https://www.masswerk.at/6502/6502_instruction_set.html
