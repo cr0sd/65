@@ -15,7 +15,7 @@ void*sdl_thread(void*d)
 		SDL_WINDOWPOS_UNDEFINED,
 		320,
 		240,
- 		SDL_WINDOW_RESIZABLE);
+ 		SDL_WINDOW_SHOWN);
 
 	sdl->s=SDL_CreateRGBSurface(0,256,240,32,0x000000ff,0x0000ff00,
 		0x00ff0000,0xff000000);
@@ -120,7 +120,7 @@ void sdl_del(sdl_t*sdl)
 		sdl_halt(sdl,1);
 		SDL_Quit();
 		already=1;
-		puts("Destroyed SDL data");
+		//puts("SDL_Quit");
 	}
 }
 
