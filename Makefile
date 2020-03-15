@@ -1,6 +1,6 @@
 all:
 	@$(MAKE) -C src
-	@mkdir -p bin
+	@mkdir -p bin test
 	@echo "CP	src/65 src/65sdl"
 	@-cp -p src/65 src/65sdl bin
 	@echo "CP	src/test/*.nes"
