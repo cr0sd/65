@@ -9,6 +9,7 @@ require'pathname'
 def thread_print(x)
 	$stdout_mutex.synchronize do
 		puts x
+		STDOUT.flush
 	end
 end
 

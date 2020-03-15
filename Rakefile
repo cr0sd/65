@@ -1,5 +1,5 @@
 require'fileutils'
-require'./src/inc.rb'
+require'./src/include.rb'
 
 # Variables
 # -----------------------------

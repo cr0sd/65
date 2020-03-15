@@ -11,6 +11,8 @@
 #include<stdio.h>
 #include<time.h>
 
+#define PROG "65sdl"
+
 int main(int argc,char**argv)
 {
 	cpu_t*cpu=cpu_init();

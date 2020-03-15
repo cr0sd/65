@@ -1,4 +1,5 @@
 #include"65.h"
+#include"65db.h"
 #include"ram.h"
 #include"rom.h"
 #include"cpu.h"

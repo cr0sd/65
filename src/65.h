@@ -1,17 +1,11 @@
 #pragma once
 
-#include"config.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdint.h>
 #include<stdarg.h>
 
-#define PROG "65"
 #define new(x) malloc(sizeof(x))
-
-#define STATUSLINE		22
-#define TOPROWHEIGHT	7
-#define LASTHEXOFFSET	(0x10000-TOPROWHEIGHT*8)
 
 // Memory
 #define VRAM	0x2000

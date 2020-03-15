@@ -1,4 +1,5 @@
 #include"65.h"
+#include"65db.h"
 #include"65db_disasm.h"
 #include"stdlib.h"
 #include"stdarg.h"
