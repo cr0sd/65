@@ -60,32 +60,32 @@ void rom_load_file(rom_t*rom,const char*filepath)
 	close(fd);
 }
 
-void rom_print_header_info(rom_t*rom)
-{
-	#ifndef DO_NOT_USE_CURSES
-	attron(COLOR_PAIR(3));
-	#endif
-	printw("ROM info:\n");
-	printw("Reading ROM file \"%s\"\n",rom->filepath);
-	printw("ROM banks (16k): %u\n",rom->header[4]);
-	printw("VROM banks (8k): %u\n",rom->header[5]);
+//void rom_print_header_info(rom_t*rom)
+//{
+	//#ifndef DO_NOT_USE_CURSES
+	//attron(COLOR_PAIR(3));
+	//#endif
+	//printw("ROM info:\n");
+	//printw("Reading ROM file \"%s\"\n",rom->filepath);
+	//printw("ROM banks (16k): %u\n",rom->header[4]);
+	//printw("VROM banks (8k): %u\n",rom->header[5]);
 
-	printw("Vertical mirroring: %s\n",rom->header[6]&0x01?"true":"false");
-	printw("Battery-backed RAM at $6000-$7FFF: %s\n",rom->header[6]&0x01?"true":"false");
-	printw("Contains trainer section: %s\n",rom->header[6]&0x03?"true":"false");
-	printw("Four-screen VRAM: %s\n",rom->header[6]&0x04?"true":"false");
+	//printw("Vertical mirroring: %s\n",rom->header[6]&0x01?"true":"false");
+	//printw("Battery-backed RAM at $6000-$7FFF: %s\n",rom->header[6]&0x01?"true":"false");
+	//printw("Contains trainer section: %s\n",rom->header[6]&0x03?"true":"false");
+	//printw("Four-screen VRAM: %s\n",rom->header[6]&0x04?"true":"false");
 
-	printw("VS System cartridge: %s\n",rom->header[7]&0x01?"true":"false");
-	printw("ROM Mapper type: %u\n",rom->header[6]&0xf0|rom->header[7]&0x0f);
-	printw("RAM banks (8k): %u (if 0, counted as 1)\n",rom->header[8]);
-	printw("Cartridge: %s\n",(rom->header[9]&0x1)==1?"PAL":"NTSC");
+	//printw("VS System cartridge: %s\n",rom->header[7]&0x01?"true":"false");
+	//printw("ROM Mapper type: %u\n",rom->header[6]&0xf0|rom->header[7]&0x0f);
+	//printw("RAM banks (8k): %u (if 0, counted as 1)\n",rom->header[8]);
+	//printw("Cartridge: %s\n",(rom->header[9]&0x1)==1?"PAL":"NTSC");
 
-	printw("Rom data length: %d\n",rom->data_len);
-	#ifndef DO_NOT_USE_CURSES
-	attron(COLOR_PAIR(1));
-	#endif
-	printw("_______________\n");
-}
+	//printw("Rom data length: %d\n",rom->data_len);
+	//#ifndef DO_NOT_USE_CURSES
+	//attron(COLOR_PAIR(1));
+	//#endif
+	//printw("_______________\n");
+//}
 
 // Map ROM information into CPU RAM for fetch-decode-execute
 // offset used to determine where in RAM said ROM data will be mapped

@@ -1,30 +1,30 @@
 CFLAGS			= -Wfatal-errors
-LDFLAGS			+= -lncurses -lpthread -pthread
+LDFLAGS			= -pthread
 SDL2_CFLAGS		= `pkg-config --cflags sdl2`
 SDL2_LDFLAGS	= `pkg-config --libs sdl2`
+LIB				= lib65.a
+OBJS			= cpu.o ram.o rom.o joy.o
 RM				= rm -f # for BSDmake
-PROG			= 65
-OBJS			= cpu.o ram.o rom.o disasm.o joy.o
 
-$(PROG): $(OBJS) $(PROG).o
-	@echo "CC	$@"
-	@$(CC) $@.o $(OBJS) -o $@ $(CFLAGS) $(LDFLAGS)
-all: $(PROG) test 65v 65sdl
-65v: $(OBJS) 65v.o vis.o
-	@echo "CC	$@"
-	@$(CC) $@.o vis.o $(OBJS) -o $@ $(CFLAGS) $(LDFLAGS)
-65sdl: $(OBJS) sdl.o 65sdl.o
-	@echo "CC	$@"
-	@$(CC) 65sdl.o sdl.o $(OBJS) -o $@ $(CFLAGS) $(LDFLAGS) $(SDL2_LDFLAGS) $(SDL2_CFLAGS)
+all: 65 test 65sdl
+65: 65.o 65_disasm.o $(LIB)
+	@echo "CC	65"
+	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS) -lncurses
+65sdl: 65sdl.o sdl.o $(OBJS_SDL2) $(LIB)
+	@echo "CC	65sdl"
+	@$(CC) $^ -o $@ $(CFLAGS) $(SDL2_CFLAGS) $(LDFLAGS) $(SDL2_LDFLAGS)
+lib: $(LIB)
+$(LIB): $(OBJS)
+	@echo "AR	$(LIB)"
+	@$(AR) mc $(LIB) $(OBJS) 
 test:
 	@make -C test
-.c.o:
+%.o: %.c
 	@echo "CC	$*.o"
 	@$(CC) -c $*.c $(CFLAGS) $(LDFLAGS)
 clean:
-	@echo "RM	$(PROG) 65v *.o *.nes"
-	@$(RM) *.o $(PROG) 65v 65sdl *.nes
+	@echo "RM	65 *.o *.nes $(LIB)"
+	@$(RM) *.o 65 65sdl *.nes $(LIB)
 	@echo "RM	test/*.nes"
 	@$(RM) test/*.nes test/config
-.SUFFIXES: .nes .o65 .a65 .c .o
 .PHONY: all clean test

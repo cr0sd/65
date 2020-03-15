@@ -24,4 +24,4 @@ typedef struct romNES_t
 void rom_load_file(rom_t*,const char*);
 void rom_del(rom_t*rom);
 void rom_map(rom_t*rom,ram_t*ram,size_t offset);
-void rom_print_header_info(rom_t*rom);
+//void rom_print_header_info(rom_t*rom);

@@ -9,10 +9,7 @@ OBJS			= cpu.o ram.o rom.o joy.o
 $(PROG): $(OBJS) $(PROG).o disasm.o
 	@echo "CC	$@"
 	@$(CC) $@.o $(OBJS) -o $@ $(CFLAGS) $(LDFLAGS)
-all: $(PROG) test 65v 65sdl
-65v: $(OBJS) 65v.o vis.o
-	@echo "CC	$@"
-	@$(CC) $@.o vis.o $(OBJS) -o $@ $(CFLAGS) $(LDFLAGS)
+all: $(PROG) test 65sdl
 65sdl: sdl.c 65sdl.c cpu.c ram.c rom.c joy.c
 	@echo "CC	$@"
 	@$(CC) -DDO_NOT_USE_CURSES $(CFLAGS) $(SDL2_CFLAGS) 65sdl.c sdl.c rom.c joy.c ram.c cpu.c -o $@ $(LDFLAGS) $(SDL2_LDFLAGS)
@@ -25,8 +22,8 @@ test:
 	@echo "CC	$*.o"
 	@$(CC) -c $*.c $(CFLAGS) $(LDFLAGS)
 clean:
-	@echo "RM	$(PROG) 65v *.o *.nes"
-	@$(RM) *.o $(PROG) 65v 65sdl *.nes
+	@echo "RM	$(PROG) *.o *.nes"
+	@$(RM) *.o $(PROG) 65sdl *.nes
 	@echo "RM	test/*.nes"
 	@$(RM) test/*.nes test/config
 .SUFFIXES: .nes .o65 .a65 .c .o
