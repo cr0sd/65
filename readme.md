@@ -10,8 +10,6 @@ A 6502 CPU emulator/simulator with ncurses UI. Includes implementations using vi
 
 `./65 FILE.NES`
 
-`./65v FILE.NES`
-
 `./65sdl FILE.NES`
 
 #### Building
@@ -26,10 +24,9 @@ To build using GNUMake (Linux/Cygwin):
 
 To build using Ruby rake
 
-	cd src
 	rake
 
-To build and run simple included tests:
+To run simple included tests:
 
 	make
 	./bin/65 test/<TEST ROM FILENAME>
