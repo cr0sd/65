@@ -1,5 +1,5 @@
 language: c
 before_install:
-#- sudo apt update
-#- sudo apt -y install sdl2
+- sudo apt update
+- sudo apt -y install sdl2 xa65
 script: make
