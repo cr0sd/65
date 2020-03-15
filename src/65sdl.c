@@ -16,7 +16,7 @@ int main(int argc,char**argv)
 	cpu_t*cpu=cpu_init();
 	rom_t*rom=new(rom_t);
 	ram_t*ram=ram_init();
-	joy_t*joy=joy_init(JOYPREG,2);
+	joy_t*joy=joy_init(JOY1,2);
 	sdl_t*sdl=new(sdl_t);
 
 	sdl->ram=ram;

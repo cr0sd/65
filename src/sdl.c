@@ -45,13 +45,13 @@ void*sdl_thread(void*d)
 			kb=(int8_t*)SDL_GetKeyboardState(NULL);
 
 			if(kb[SDL_SCANCODE_Z])
-				printf("A\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+				printf("A\tjoy:%02X\n",sdl->ram->ram[JOY1]);
 
 			if(kb[SDL_SCANCODE_X])
-				printf("B\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+				printf("B\tjoy:%02X\n",sdl->ram->ram[JOY1]);
 
 			if(kb[SDL_SCANCODE_A])
-				printf("Start\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+				printf("Start\tjoy:%02X\n",sdl->ram->ram[JOY1]);
 
 			sdl->joy->buttons.bits.left=(kb[SDL_SCANCODE_LEFT]!=0);
 			sdl->joy->buttons.bits.right=(kb[SDL_SCANCODE_RIGHT]!=0);
@@ -63,7 +63,7 @@ void*sdl_thread(void*d)
 			sdl->joy->buttons.bits.start=(kb[SDL_SCANCODE_A]!=0);
 			sdl->joy->buttons.bits.select=(kb[SDL_SCANCODE_S]!=0);
 			if(kb[SDL_SCANCODE_S])
-				printf("Select\tjoy:%02X\n",sdl->ram->ram[JOYPREG]);
+				printf("Select\tjoy:%02X\n",sdl->ram->ram[JOY1]);
 		}
 
 		// EVENT LOOP -----
@@ -136,7 +136,7 @@ void sdl_redraw(sdl_t*sdl)
 
 	//for(int i=0;i<(sdl->s->w*sdl->s->h);++i)	// W x H
 	//for(int i=0;i<0x4000;++i)					// 1 byte = 1 pixel
-	for(int i=0;i<30*8;++i)						// Like 65v
+	for(int i=0;i<32*8;++i)						// Like 65v
 	{
 		uint8_t b=sdl->ram->ram[VRAM+i];
 		uint32_t c=(0xff<<24)|(b<<16)|(b<<8)|(b);

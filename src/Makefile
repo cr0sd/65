@@ -1,3 +1,6 @@
+# Makefile for lib65 + 65 simulator/debugger/disassembler
+# Use `make help` to see targets
+
 CFLAGS			= -Wfatal-errors
 LDFLAGS			= -pthread
 SDL2_CFLAGS		= `pkg-config --cflags sdl2`
@@ -6,7 +9,9 @@ LIB				= lib65.a
 OBJS			= cpu.o ram.o rom.o joy.o
 RM				= rm -f # for BSDmake
 
-all: 65 test 65sdl
+all: 65 65sdl test
+help:
+	@echo "usage: make [65|65sdl|lib|test]"
 65: 65.o 65_disasm.o $(LIB)
 	@echo "CC	65"
 	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS) -lncurses

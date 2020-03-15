@@ -14,9 +14,10 @@
 #define LASTHEXOFFSET	(0x10000-TOPROWHEIGHT*8)
 
 // Memory
-#define VRAM	0x6000
+#define VRAM	0x2000
 #define PRGROM	0x8000
-#define JOYPREG	0x4016
+#define JOY1	0x4016
+#define JOY2	0x4017
 
 // Print error
 void puterr(const char*msg,...);
