@@ -3,7 +3,7 @@
 #include"rom.h"
 #include"cpu.h"
 #include"joy.h"
-#include"65_disasm.h"
+#include"65db_disasm.h"
 #include<ctype.h>
 #include<stdbool.h>
 #include<unistd.h>

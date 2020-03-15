@@ -7,30 +7,41 @@ $AS65			=	'xa'
 $CC				=	'cc'
 $CFLAGS			=	'-Wfatal-errors'
 $LDFLAGS		=	'-lncurses -pthread -lpthread'
-$SDL2_CFLAGS	=	'`pkg-config --cflags sdl2`'
-$SDL2_LDFLAGS	=	'`pkg-config --libs sdl2`'
-$OBJS			=	'cpu.o ram.o rom.o joy.o 65_disasm.o'
+$OBJS			=	'cpu.o ram.o rom.o joy.o 65db_disasm.o'
+$LIB			=	'lib65.a'
+
+if Gem.win_platform?
+	# Cygwin
+	$SDL2_CFLAGS	= '-DSDL_MAIN_HANDLED -I/mingw64/include'
+	$SDL2_LDFLAGS	= '-L/mingw64/lib -lSDL2main -lSDL2'
+else
+	# Linux/Mac/Unix
+	$SDL2_CFLAGS	=	'`pkg-config --cflags sdl2`'
+	$SDL2_LDFLAGS	=	'`pkg-config --libs sdl2`'
+end
 
 $stdout_mutex=Mutex.new
 
 # Rules
 # -----------------------------
-task :default => [:_65] do
+
+task :default => [:_65db, :_65sdl, :test] do
 	
 end
 
-task :all => [:_65, :_65sdl, :test] do
-	
+task :lib65 => [:objs] do
+	thread_print"AR\tlib65.a"
+	`ar mc lib65.a #{$OBJS}`
 end
 
-task :_65 => [:objs] do
-	thread_print"CC\t65"
-	`cc #{$CFLAGS} 65.c #{$LDFLAGS} #{$OBJS} -o 65`
+task :_65db => [:lib65] do
+	thread_print"CC\t65db"
+	`cc -o 65db #{$CFLAGS} 65db.c lib65.a #{$LDFLAGS}`
 end
 
 task :_65sdl => [:objs] do
 	thread_print"CC\t65sdl"
-	`cc #{$CFLAGS} 65sdl.c #{$SDL2_LDFLAGS} sdl.c #{$SDL2_CFLAGS} #{$LDFLAGS} #{$OBJS} -o 65sdl`
+	`cc -o 65sdl #{$CFLAGS} #{$SDL2_CFLAGS} 65sdl.c sdl.c lib65.a #{$LDFLAGS} #{$SDL2_LDFLAGS}`
 end
 
 task :test do
@@ -44,5 +55,5 @@ task :objs do
 end
 
 task :clean do
-	clean '65 65sdl *.nes *.o test/*.nes'.split
+	clean '65db 65sdl lib65.a *.o test/*.nes'.split
 end

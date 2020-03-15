@@ -18,18 +18,11 @@ A 6502 CPU emulator/simulator with ncurses UI. Includes implementations using vi
 
 Dependencies:
 
-65/65v: ncurses / pdcurses (on Windows)
+ncurses SDL2
 
-65sdl: SDL2
-
-To build using GNUMake:
+To build using GNUMake (Linux/Cygwin):
 
 	make
-
-To build SDL2 version on Windows with Cygwin:
-
-	cd src
-	make -f Makefile.cyg 65sdl
 
 To build using Ruby rake
 
@@ -39,10 +32,9 @@ To build using Ruby rake
 To build and run simple included tests:
 
 	make
-	make test
 	./bin/65 test/<TEST ROM FILENAME>
 
-#### Key bindings:
+#### Debugger key bindings:
 
 ```
 s.........Step into instruction
