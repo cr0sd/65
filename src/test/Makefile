@@ -4,9 +4,9 @@ RM			= rm -f # for BSD
 
 all: $(OBJS)
 %.nes: %.a65
-	@echo "AS65	$*.nes"
+	@echo "  AS65	$*.nes"
 	@$(AS65) -C $*.a65 -o $*.nes
 clean:
-	@echo "RM	$(OBJS)"
+	@echo "  RM	$(OBJS)"
 	@$(RM) $(OBJS)
 	@$(RM) *.s *.o6

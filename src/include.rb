@@ -33,7 +33,7 @@ def a65_nes(x)
 	if !FileUtils.uptodate?('#{y}.nes',['#{y}.a65'])
 		#`set -x; #{$AS65} #{y}.a65 -o #{y}.nes`
 
-		thread_print"AS65\t#{y}.nes"
+		thread_print"  AS65\t#{y}.nes"
 		`#{$AS65} #{y}.a65 -o #{y}.nes`
 	else
 		thread_print"nothing to be done for #{x}"
@@ -50,7 +50,7 @@ def c_o(x)
 	if !FileUtils.uptodate?('#{y}.o',['#{y}.c'])
 		#`set -x; #{$CC} #{$CFLAGS} #{$LDFLAGS} -c #{y}.c`
 
-		thread_print"CC\t#{y}.o"
+		thread_print"  CC\t#{y}.o"
 		`#{$CC} #{$CFLAGS} #{$LDFLAGS} -c #{y}.c`
 	else
 		thread_print"nothing to be done for #{x}"
@@ -65,7 +65,7 @@ def c65_nes(x)
 
 	# Run command if needed
 	if !FileUtils.uptodate?('#{y}.o',['#{y}.c65'])
-		thread_print"CC65\t#{y}.o"
+		thread_print"  CC65\t#{y}.o"
 		`#{$CC65} #{y}.c65`
 		`#{$CCAS65} -b 0-10000 -o #{y}.o65 #{y}.s`
 		`#{$CAT} ines_header #{y}.o65 > #{y}.nes`
@@ -127,7 +127,7 @@ def clean(x)
 	x.each do |y|
 		#threads.push(Thread.new{`set -x; rm -f #{y}`})
 
-		thread_print"RM\t#{y}"
+		thread_print"  RM\t#{y}"
 		threads.push(Thread.new{`rm -f #{y}`})
 	end
 	threads.each do |z| z.join end

@@ -30,17 +30,17 @@ task :default => [:_65db, :_65sdl, :test] do
 end
 
 task :lib65 => [:objs] do
-	thread_print"AR\tlib65.a"
+	thread_print"  AR\tlib65.a"
 	`ar mc lib65.a #{$OBJS}`
 end
 
 task :_65db => [:lib65] do
-	thread_print"CC\t65db"
+	thread_print"  CC\t65db"
 	`cc -o 65db #{$CFLAGS} 65db.c lib65.a #{$LDFLAGS}`
 end
 
 task :_65sdl => [:objs] do
-	thread_print"CC\t65sdl"
+	thread_print"  CC\t65sdl"
 	`cc -o 65sdl #{$CFLAGS} #{$SDL2_CFLAGS} 65sdl.c sdl.c lib65.a #{$LDFLAGS} #{$SDL2_LDFLAGS}`
 end
 
