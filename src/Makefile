@@ -3,21 +3,21 @@
 
 include include.mk
 
-CFLAGS			= -Wfatal-errors
-LDFLAGS			= -pthread
+CFLAGS			+= -Wfatal-errors
+LDFLAGS			+= -pthread -lpthread -lncurses
 LIB				= lib65.a
 OBJS			= cpu.o ram.o rom.o joy.o
 RM				= rm -f # for BSDmake
 
 all: 65db 65sdl test
 help:
-	@echo "usage: make [65db|65sdl|lib|test]"
+	@echo "usage: make [65db|65sdl|lib|test|clean]"
 65db: 65db.o 65db_disasm.o $(LIB)
 	@echo "CC	$@"
-	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS) -lncurses
-65sdl: 65sdl.o sdl.o $(OBJS_SDL2) $(LIB)
+	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS)
+65sdl: 65sdl.o sdl.o $(LIB)
 	@echo "CC	$@"
-	@$(CC) $^ -o $@ $(CFLAGS) $(SDL2_CFLAGS) $(LDFLAGS) $(SDL2_LDFLAGS)
+	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS)
 lib: $(LIB)
 $(LIB): $(OBJS)
 	@echo "AR	$(LIB)"
@@ -26,7 +26,7 @@ test:
 	@make -C test
 %.o: %.c
 	@echo "CC	$*.o"
-	@$(CC) -c $^ $(CFLAGS) $(SDL2_CFLAGS) $(LDFLAGS) $(SDL2_LDFLAGS)
+	@$(CC) -c $^ $(CFLAGS) $(LDFLAGS)
 clean:
 	@echo "RM	65db *.o *.nes $(LIB)"
 	@$(RM) *.o 65db 65sdl *.nes $(LIB)

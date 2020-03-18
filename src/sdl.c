@@ -44,14 +44,14 @@ void*sdl_thread(void*d)
 			uint8_t*kb;
 			kb=(int8_t*)SDL_GetKeyboardState(NULL);
 
-			if(kb[SDL_SCANCODE_Z])
-				printf("A\tjoy:%02X\n",sdl->ram->ram[JOY1]);
+			//if(kb[SDL_SCANCODE_Z])
+				//printf("A\tjoy:%02X\n",sdl->ram->ram[JOY1]);
 
-			if(kb[SDL_SCANCODE_X])
-				printf("B\tjoy:%02X\n",sdl->ram->ram[JOY1]);
+			//if(kb[SDL_SCANCODE_X])
+				//printf("B\tjoy:%02X\n",sdl->ram->ram[JOY1]);
 
-			if(kb[SDL_SCANCODE_A])
-				printf("Start\tjoy:%02X\n",sdl->ram->ram[JOY1]);
+			//if(kb[SDL_SCANCODE_A])
+				//printf("Start\tjoy:%02X\n",sdl->ram->ram[JOY1]);
 
 			sdl->joy->buttons.bits.left=(kb[SDL_SCANCODE_LEFT]!=0);
 			sdl->joy->buttons.bits.right=(kb[SDL_SCANCODE_RIGHT]!=0);
@@ -62,8 +62,8 @@ void*sdl_thread(void*d)
 			sdl->joy->buttons.bits.b=(kb[SDL_SCANCODE_X]!=0);
 			sdl->joy->buttons.bits.start=(kb[SDL_SCANCODE_A]!=0);
 			sdl->joy->buttons.bits.select=(kb[SDL_SCANCODE_S]!=0);
-			if(kb[SDL_SCANCODE_S])
-				printf("Select\tjoy:%02X\n",sdl->ram->ram[JOY1]);
+			//if(kb[SDL_SCANCODE_S])
+				//printf("Select\tjoy:%02X\n",sdl->ram->ram[JOY1]);
 		}
 
 		// EVENT LOOP -----
@@ -84,12 +84,9 @@ void*sdl_thread(void*d)
 							//k.keysym.sym,k.keysym.sym);
 
 					if(k.keysym.sym==SDLK_ESCAPE)
-					{
-						puts("KEY_ESCAPE");
 						goto quit;
-					}
-					break;
 				}
+				break;
 
 			// Quit event
 			case SDL_QUIT:

@@ -12,21 +12,13 @@ main:
 	ldx #$ff
 	txs
 
-	lda #01
-	sta $07
+	lda #2
+	sbc #1
+	bpl here
 
-	lda #$01
-
-	bit $07
-	bit $0101
-
-ldx #0
-ldy #0
-lda #$ff
-l:
-	sta VRAM+$820,x
-	inx
-	jmp l
-
+	lda #$80
+	jmp *
+here:
+	lda #$ff
 	jmp *
 .)

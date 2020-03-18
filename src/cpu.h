@@ -99,13 +99,13 @@ typedef struct cpu_t
 #define bit(x)		()
 
 // Status register micro-insns
-#define sr_n(x)		(__cpu->sr.bits.n=(x<0)) 		// Negative
-#define sr_v(x)		(__cpu->sr.bits.v=?)			// Overflow
-#define sr_b(x)		(__cpu->sr.bits.b=?)			// Break
-#define sr_d(x)		(__cpu->sr.bits.d=?)			// Decimal (BCD)
-#define sr_i(x)		(__cpu->sr.bits.i=x)			// Interrupt (enable/disable)
-#define sr_z(x)		(__cpu->sr.bits.z=(x==0))		// Zero
-#define sr_c(x)		(__cpu->sr.bits.c=?)			// Carry
+#define sr_n(x)		(__cpu->sr.bits.n=((int8_t)(x)<0)) 		// Negative
+#define sr_v(x)		(__cpu->sr.bits.v=?)					// Overflow
+#define sr_b(x)		(__cpu->sr.bits.b=?)					// Break
+#define sr_d(x)		(__cpu->sr.bits.d=?)					// Decimal (BCD)
+#define sr_i(x)		(__cpu->sr.bits.i=(x))					// Interrupt (enable/disable)
+#define sr_z(x)		(__cpu->sr.bits.z=((x)==0))				// Zero
+#define sr_c(x)		(__cpu->sr.bits.c=?)					// Carry
 #define sr_nz(x)	do{ uint16_t m=(x); sr_n(m); sr_z(m); }while(0)
 // ----------------------------------------------
 

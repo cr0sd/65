@@ -40,7 +40,9 @@ int main(int argc,char**argv)
 	else
 		puts("Failed to load ROM");
 
-	if(!ram || !rom || !joy)puts("error"),exit(1);
+	if(!ram || !rom || !joy)puterr("Failed to allocate ram, rom, or joy"),exit(1);
+
+	//printf("rom length: '$%04X'\n",rom->data_len);
 
 	pthread_create(&sdl_th,NULL,sdl_thread,sdl);
 

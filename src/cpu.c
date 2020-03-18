@@ -246,6 +246,7 @@ void cpu_exec(cpu_t*cpu,ram_t*ram)
 		case 0xD0: ( !cpu->sr.bits.z ) ? ( ldpc( cpu->pc + (int8_t)fetch() ) ) : ( 0 ); incpc(); incpc(); break;
 		case 0xB0: ( cpu->sr.bits.c ) ? ( ldpc( cpu->pc + (int8_t)fetch() ) ) : ( 0 ); incpc(); incpc(); break;
 		case 0x90: ( !cpu->sr.bits.c ) ? ( ldpc( cpu->pc + (int8_t)fetch() ) ) : ( 0 ); incpc(); incpc(); break;
+		case 0x10: ( !cpu->sr.bits.n ) ? ( ldpc( cpu->pc + (int8_t)fetch() ) ) : ( 0 ); incpc(); incpc(); break;
 
 		// Comparison ---
 		case 0xC9: cmp( cpu->a, fetch() );						incpc(); break;
