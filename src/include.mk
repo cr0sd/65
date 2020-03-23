@@ -1,8 +1,13 @@
 # Include for Makefile to define build flags based on OS
 
 # Use either 'xa' or 'xa65', whichever system provides
-AS65		= $(shell `which xa > /dev/null` && echo "xa" || `which xa65 > /dev/null` && echo "xa65")
+AS65		= $(shell `which xa > /dev/null` && echo "xa")
+ifeq ($(AS65),)
+AS65		= $(shell `which xa65 > /dev/null` && echo "xa65")
+endif
 
+
+# OS Specific
 ifeq ($(OS),Windows_NT)
 # Cygwin
 CFLAGS		= -DSDL_MAIN_HANDLED -I/mingw64/include
