@@ -22,6 +22,10 @@ To build using GNUMake (Linux/Cygwin):
 
 	make
 
+To build using GNUMake (FreeBSD):
+
+	gmake
+
 To build using Ruby rake
 
 	rake
