@@ -1,4 +1,5 @@
 all:
+	@echo "$(OS)"
 	@$(MAKE) -C src
 	@mkdir -p bin test
 	@echo "  CP	bin/65db bin/65sdl"

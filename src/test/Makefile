@@ -1,4 +1,5 @@
-AS65		= xa
+include ../include.mk
+#AS65		= xa
 OBJS		= nes.nes asciitest.nes vram.nes pi.nes div.nes
 RM			= rm -f # for BSD
 

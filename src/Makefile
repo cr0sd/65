@@ -21,9 +21,9 @@ help:
 lib: $(LIB)
 $(LIB): $(OBJS)
 	@echo "  AR	$(LIB)"
-	@$(AR) mc $(LIB) $(OBJS) 
+	@$(AR) $(ARFLAGS) $(LIB) $(OBJS) 
 test:
-	@make -C test
+	@$(MAKE) -C test
 %.o: %.c
 	@echo "  CC	$*.o"
 	@$(CC) -c $^ $(CFLAGS) $(LDFLAGS)
