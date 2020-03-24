@@ -22,6 +22,8 @@ start:
 
 	jmp *
 
+; a <-- ( divisee / divisor )
+; y <-- ( R )
 divide:
 	lda divisee
 	ldx #0

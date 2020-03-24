@@ -1,0 +1,85 @@
+.byt "NES",$1a
+.byt 1
+.byt 0
+.word 0,0,0,0,0
+
+* = $8000
+
+divisor	=$20
+divisee	=$21
+num		=$30
+numoff	=$31
+
+; Print value passed to int2ascii into ZP ($00 - $07)
+; (We print it in big-endian so it can be read from
+; ASCII hex-dump)
+start:
+.(
+	lda #123
+	sta num
+	jsr int2ascii
+	jmp *
+.)
+
+; int2ascii(num)
+; $00 <-- ASCII string
+int2ascii:
+.(
+	lda #7
+	sta numoff
+l:
+
+	lda num
+	sta divisee
+	lda #10
+	sta divisor
+	jsr divide
+
+	sta num
+	lda numoff
+	tax
+	tya
+	clc
+	adc #48
+	sta $00,x
+
+	lda numoff
+	clc
+	sbc #1
+	sta numoff
+
+	lda num
+	cmp #0
+	bne l
+
+	rts
+.)
+;do
+	;num			<-- a / 10
+	;$00 + numoff	<-- (a % 10) + 48
+	;x				<-- x + 1
+;while a>0
+
+
+; divide(divisee, divisor)
+; a <-- ( divisee / divisor )
+; y <-- ( R )
+divide:
+.(
+	lda divisee
+	ldx #0
+	clc
+l:
+	cmp divisor
+	bcs e
+	clc
+	sbc divisor
+	inx
+	jmp l
+
+e:
+	tay
+	txa
+
+	rts
+.)
