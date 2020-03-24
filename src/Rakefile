@@ -5,8 +5,8 @@ require'./include.rb'
 # -----------------------------
 $AS65			=	'xa'
 $CC				=	'cc'
-$CFLAGS			=	'-Wfatal-errors'
-$LDFLAGS		=	'-lncurses -pthread -lpthread'
+$CFLAGS			=	'-Wfatal-errors `pkg-config --cflags portaudio-2.0`'
+$LDFLAGS		=	'-lncurses -pthread -lpthread `pkg-config --libs portaudio-2.0`'
 $OBJS			=	'cpu.o ram.o rom.o joy.o 65db_disasm.o'
 $LIB			=	'lib65.a'
 
@@ -41,7 +41,7 @@ end
 
 task :_65sdl => [:objs] do
 	thread_print"  CC\t65sdl"
-	`cc -o 65sdl #{$CFLAGS} #{$SDL2_CFLAGS} 65sdl.c sdl.c lib65.a #{$LDFLAGS} #{$SDL2_LDFLAGS}`
+	`cc -o 65sdl #{$CFLAGS} #{$SDL2_CFLAGS} 65sdl.c sdl.c pa.c lib65.a #{$LDFLAGS} #{$SDL2_LDFLAGS}`
 end
 
 task :test do

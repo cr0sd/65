@@ -5,7 +5,7 @@ require'../include.rb'
 # -----------------------------
 $AS65	=	'xa'
 $CC		=	'cc'
-$OBJS	=	'nes.nes asciitest.nes vram.nes'
+$OBJS	=	'int2ascii.nes asciitest.nes vram.nes div.nes'
 
 $stdout_mutex=Mutex.new
 
