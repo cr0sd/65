@@ -1,21 +1,41 @@
-.byt "NES",0
-.word 0,0,0,0,0,0
-*=$8000
-main:
+.byt "NES",$1a
+.byt 1
+.byt 0
+.word 0,0,0,0,0
+
+* = $8000
+
+divisor=$07
+divisee=$08
+
+start:
+	sei
 	ldx #$ff
 	txs
 
-	lda #22
-	ldx #7
-
-	jsr div
+	; divide 201 by 64, store in a
+	lda #201
+	sta divisee
+	lda #64
+	sta divisor
+	jsr divide
 
 	jmp *
 
-div:
-.(
-	ldy #0
-l1:
-	sbc #7
+divide:
+	lda divisee
+	ldx #0
+	clc
+l:
+	cmp divisor
+	bcs e
+	clc
+	sbc divisor
+	inx
+	jmp l
+
+e:
+	tay
+	txa
+
 	rts
-.)
