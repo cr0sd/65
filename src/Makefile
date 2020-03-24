@@ -4,10 +4,9 @@
 include include.mk
 
 CFLAGS			+= -Wfatal-errors
-LDFLAGS			+= -pthread -lpthread
+LDFLAGS			+= -pthread -lpthread -lportaudio
 LIB				= lib65.a
 OBJS			= cpu.o ram.o rom.o joy.o
-RM				= rm -f # for BSDmake
 
 all: 65db 65sdl test
 help:
@@ -15,7 +14,7 @@ help:
 65db: 65db.o 65db_disasm.o $(LIB)
 	@echo "  CC	$@"
 	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS)
-65sdl: 65sdl.o sdl.o $(LIB)
+65sdl: 65sdl.o sdl.o pa.o $(LIB)
 	@echo "  CC	$@"
 	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS)
 lib: $(LIB)

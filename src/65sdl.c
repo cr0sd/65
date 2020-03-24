@@ -4,7 +4,9 @@
 #include"rom.h"
 #include"joy.h"
 #include"sdl.h"
+#include"pa.h"
 #include<SDL2/SDL.h>
+#include<portaudio.h>
 #include<unistd.h>
 #include<pthread.h>
 #include<stdlib.h>
@@ -20,6 +22,7 @@ int main(int argc,char**argv)
 	ram_t*ram=ram_init();
 	joy_t*joy=joy_init(JOY1,2);
 	sdl_t*sdl=new(sdl_t);
+	pa_t* pa=pa_init();
 
 	sdl->ram=ram;
 	sdl->joy=joy;
@@ -71,6 +74,7 @@ quit:
 	free(joy);
 	sdl_del(sdl);
 	free(sdl);
+	free(pa);
 }
 
 // Print formatted error message
