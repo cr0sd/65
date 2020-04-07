@@ -10,7 +10,7 @@ A 6502 CPU emulator/simulator with ncurses UI. Includes implementations using vi
 
 `./65 FILE.NES`
 
-`./65sdl FILE.NES`
+`./fes FILE.NES`
 
 #### Building
 

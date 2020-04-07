@@ -11,7 +11,7 @@ EXTRN	__imp_CreateProcessA:PROC
 EXTRN	__imp_GetStartupInfoA:PROC
 
 _DATA	SEGMENT
-cmd DB	'bin/65sdl.exe test/vram.nes',0
+cmd DB	'bin/fes.exe test/vram.nes',0
 _DATA	ENDS
 
 _TEXT	SEGMENT
