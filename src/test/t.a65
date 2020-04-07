@@ -1,0 +1,45 @@
+.byt "NES",$1A,0,0,0
+.byt 0,0,0,"pvtros"
+
+VRAM	= $2000
+PPAL	= $3F00
+JOYP	= $4016
+me		= $0009
+DELAY	= $000F
+
+* = $8000
+main:
+.(
+	ldx #0
+l:
+	lda #1
+	sta VRAM,x
+	inx
+	beq e
+
+	lda #2
+	sta VRAM,x
+	inx
+	bne l
+
+e:
+	ldx #0
+l2:
+	lda img,x
+	sta VRAM+16,x
+	inx
+	cpx #64
+	bne l2
+
+	jmp *
+.)
+
+img:
+.byt 0,0,2,2,2,2,0,0
+.byt 3,3,3,3,3,3,3,3
+.byt 3,3,3,3,3,3,3,3
+.byt 3,3,3,3,3,3,3,3
+.byt 2,2,2,2,2,2,2,2
+.byt 2,2,2,2,2,2,2,2
+.byt 2,2,2,2,2,2,2,2
+.byt 0,0,2,2,2,2,0,0

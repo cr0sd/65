@@ -6,15 +6,15 @@ include include.mk
 CFLAGS			+= -Wfatal-errors
 LDFLAGS			+= -pthread -lpthread -lportaudio
 LIB				= lib65.a
-OBJS			= cpu.o ram.o rom.o joy.o
+OBJS			= cpu.o ram.o rom.o joy.o ppu.o
 
-all: 65db 65sdl test
+all: 65db fes test
 help:
-	@echo "usage: make [65db|65sdl|lib|test|clean]"
+	@echo "usage: make [65db|fes|lib|test|clean]"
 65db: 65db.o 65db_disasm.o $(LIB)
 	@echo "  CC	$@"
 	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS)
-65sdl: 65sdl.o sdl.o pa.o $(LIB)
+fes: fes.o ppu.o sdl.o $(LIB)
 	@echo "  CC	$@"
 	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS)
 lib: $(LIB)
@@ -28,7 +28,7 @@ test:
 	@$(CC) -c $^ $(CFLAGS) $(LDFLAGS)
 clean:
 	@echo "  RM	65db *.o *.nes $(LIB)"
-	@$(RM) *.o 65db 65sdl *.nes $(LIB)
+	@$(RM) *.o 65db fes *.nes $(LIB)
 	@echo "  RM	test/*.nes"
 	@$(RM) test/*.nes
 .PHONY: all clean test
