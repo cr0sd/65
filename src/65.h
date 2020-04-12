@@ -9,7 +9,8 @@
 
 // Memory
 #define VRAM	0x2000
-#define PPUPAT	0x0200
+#define PPUTMAP	0x0200	// Tile map (256 bytes)
+#define PPUTILE	0x0300	// Tile page (240 bytes)
 #define PRGROM	0x8000
 
 // Peripheral Hardware RAM registers

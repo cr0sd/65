@@ -18,7 +18,7 @@ int main(int argc,char**argv)
 	rom_t*rom=malloc(sizeof(rom_t));
 	ram_t*ram=ram_init();
 	cpu_t*cpu=cpu_init();
-	ppu_t*ppu=ppu_init(320,240);
+	ppu_t*ppu=ppu_init(256,240);
 	joy_t*joy=joy_init(JOY1,2);
 
 	signal(SIGINT,sighandler);
@@ -30,11 +30,12 @@ int main(int argc,char**argv)
 	cpu->pc=PRGROM;
 
 	// Create picture palette
-	uint32_t*pal=(uint32_t*)(ram->ram+0x3f00);
-	pal[0]=0xff000000;
-	pal[1]=0xff8080ff;
-	pal[2]=0xff80ff80;
-	pal[3]=0xffff8080;
+
+	ppu->pal=(uint32_t*)(ram->ram+0x3f00);
+	ppu->pal[0]=0xff000000;
+	ppu->pal[1]=0xff8080ff;
+	ppu->pal[2]=0xff80ff80;
+	ppu->pal[3]=0xffff8080;
 
 	// Verify state is loaded
 	if(!rom)quit=1,puts("error: failed to allocate ROM");
@@ -53,8 +54,6 @@ int main(int argc,char**argv)
 		if(((sdl_t*)(ppu->vid))->quit)break;
 		usleep(5000);
 	}
-
-	printf("\ncpu->a: %d (%02X)\n",cpu->a,cpu->a);
 
 	// Release resources
 	rom_del(rom);

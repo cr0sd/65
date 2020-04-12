@@ -1,7 +1,7 @@
 include ../include.mk
 
 #AS65		= xa
-OBJS		= t.nes asciitest.nes vram.nes div.nes int2ascii.nes
+OBJS		= t.nes u.nes asciitest.nes vram.nes div.nes int2ascii.nes
 
 all: $(OBJS)
 %.nes: %.a65

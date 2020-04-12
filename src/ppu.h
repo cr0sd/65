@@ -8,6 +8,7 @@ typedef struct ppu_t
 	uint32_t w;
 	uint32_t h;
 	uint32_t*pixels;
+	uint32_t*pal;
 	void*vid;		// Video display implementation
 }ppu_t;
 
