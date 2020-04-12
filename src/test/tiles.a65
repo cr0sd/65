@@ -1,0 +1,48 @@
+.byt "NES",$1A,0,0,0
+.byt 0,0,0,"pvtros"
+
+VRAM	= $2000
+PPUTILEM= $0200
+PPUTILE = $0300
+PPAL	= $3F00
+JOYP	= $4016
+me		= $0009
+DELAY	= $000F
+
+* = $8000
+main:
+.(
+	ldx #0
+l:
+	lda #1
+	sta PPUTILE,x
+	inx
+	beq e
+
+	lda #2
+	sta PPUTILE,x
+	inx
+	bne l
+
+e:
+	ldx #0
+l2:
+	lda img,x
+	sta PPUTILE,x
+	inx
+	cpx #128
+	bne l2
+
+	jmp *
+.)
+
+img:
+.byt $3e, $3e, $47, $47, $bb, $bb, $83, $83, $bf, $bf, $c3, $c3, $7f, $7f, $3f, $3f
+.byt $38, $38, $58, $58, $58, $58, $8c, $8c, $dc, $dc, $6c, $6c, $7c, $7c, $3c, $3c
+.byt $18, $18, $2c, $2c, $2c, $2c, $5c, $5c, $78, $78, $30, $30, $00, $00, $00, $00
+.byt $38, $38, $58, $58, $58, $58, $8c, $8c, $dc, $dc, $6c, $6c, $7c, $7c, $3c, $3c
+.byt $7e, $7e, $83, $83, $ef, $ef, $6f, $6f, $2c, $2c, $2c, $2c, $3c, $3c, $1c, $1c
+.byt $38, $38, $4c, $4c, $bc, $bc, $b0, $b0, $b0, $b0, $b0, $b0, $f0, $f0, $70, $70
+.byt $60, $60, $b0, $b0, $f0, $f0, $b0, $b0, $b0, $b0, $b0, $b0, $f0, $f0, $70, $70
+.byt $3e, $3e, $43, $43, $bf, $bf, $86, $86, $7b, $7b, $87, $87, $fe, $fe, $7c, $7c
+.byt $7c, $7c, $86, $86, $bb, $bb, $bb, $bb, $bb, $bb, $bb, $bb, $ff, $ff, $67, $67
