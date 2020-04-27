@@ -1,0 +1,283 @@
+#include"65.h"
+#include"65db.h"
+#include"65db_disasm.h"
+#include"stdlib.h"
+#include"stdarg.h"
+
+static int oper[8];
+
+// Print instruction helper function
+static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
+{
+
+	#undef __cpu
+	#define __cpu cpu
+
+	//printf("\t(pc:$%04X)\t",cpu->pc);
+
+	// pre calculate operands (because ABI is
+	// reversing the evaluation of stack-sensitive
+	// values:
+	int oper[3];
+
+	oper[0] = ram->ram[ cpu->pc ];
+
+	// Print binary representation
+	if(n==1)
+	{
+		printf( "\t%02X\t\t", oper[0] );
+	}
+	else if(n==2)
+	{
+		oper[1]=fetch();
+		printf( "\t%02X %02X\t\t", oper[0], oper[1] );
+	}
+	else if(n==3)
+	{
+		oper[1]=fetch();
+		oper[2]=fetch();
+		printf( "\t%02X %02X %02X\t", oper[0], oper[1], oper[2] );
+	}
+	else if(n==0)
+		;
+
+	// Print rest of vararg stuff (insn name, operands)
+	va_list list;
+	va_start(list,fmt);
+	vprintf(fmt,list);
+	va_end(list);
+	
+	//printf(" (pc:$%04X)\t",cpu->pc);
+}
+
+#define p0(...) pi(cpuc,ram,0,__VA_ARGS__)
+#define p1(...) pi(cpuc,ram,1,__VA_ARGS__)
+#define p2(...) pi(cpuc,ram,2,__VA_ARGS__)
+#define p3(...) pi(cpuc,ram,3,__VA_ARGS__)
+#define end() goto switch_end
+
+// Print disassembly
+void da_print_disassembly(cpu_t*cpu,ram_t*ram)
+{
+	// Set 'mode' to this copy of cpu
+	#undef __cpu
+	#define __cpu cpuc
+
+	int y=TOPROWHEIGHT+3;	// Which line to draw on
+	cpu_t*cpuc=alloca(sizeof(cpu_t));
+
+	// Create copy of cpu
+	if(!cpuc)
+	{
+		puterr("%s: Failed to allocate copy of CPU\n",__func__);
+		return;
+	}
+	memcpy(cpuc,cpu,sizeof(cpu_t));
+
+	// Disassemble 12 lines
+	while((uint32_t)(cpuc->pc)+1<=0xffff)
+	{
+
+		// Print offset
+		printf("%04X:",cpuc->pc);
+
+		// Opcodes
+		switch(ram->ram[cpuc->pc])
+		{
+
+		// Move/transfer
+		// Load a
+		case 0xA1: p2( "lda ($%02X,x)", imm_pk(1) ); end();
+		case 0xB1: p2( "lda ($%02X),y", imm_pk(1) ); end();
+		case 0xA5: p2( "lda zp $%02X", imm_pk(1) ); end();
+		case 0xA9: p2( "lda #$%02X", imm_pk(1) ); end();
+		case 0xAD: p3( "lda abs $%04X", imm16_pk(1) );  end();
+		case 0xB5: p2( "lda zp $%02X,x", imm_pk(1) ); end();
+		case 0xB9: p3( "lda abs $%04X,y", imm16_pk(1) ); end();
+		case 0xBD: p3( "lda abs $%04X,x", imm16_pk(1) ); end();
+		case 0xAA: p1( "tax" ); end();
+
+		// Store a
+		case 0x85: p2( "sta zp $%02X", imm_pk(1) ); end();
+		case 0x95: p2( "sta zp $%02X,x", imm_pk(1) ); end();
+		case 0x8D: p3( "sta abs $%04X", imm16_pk(1) ); end();
+		case 0x9D: p3( "sta abs $%04X,x", imm16_pk(1) ); end();
+		case 0x99: p3( "sta abs $%04X,y", imm16_pk(1) ); end();
+		case 0x81: p2( "sta ind ($%02X,x)", imm_pk(1) ); end();
+		case 0x91: p2( "sta ind ($%02X),y", imm_pk(1) ); end();
+
+		// Store x
+		case 0x86: p2( "stx zp $%02X", imm_pk(1) ); end();
+		case 0x96: p2( "stx zp $%02X,y", imm_pk(1) ); end();
+		case 0x8E: p3( "stx abs $%04X", imm16_pk(1) ); end();
+		// Load x
+		case 0xA2: p2( "ldx #$%02X", imm_pk(1) ); end();
+		case 0xA6: p2( "ldx zp $%02X", imm_pk(1) ); end();
+		case 0xB6: p2( "ldx zp $%02X,y", imm_pk(1) ); end();
+		case 0xAE: p3( "ldx abs $%04X", imm16_pk(1) ); end();
+		case 0xBE: p3( "ldx abs $%04X,y", imm16_pk(1) ); end();
+
+		// Store y
+		case 0x84: p2( "sty zp $%02X", imm_pk(1) ); end();
+		case 0x94: p2( "sty zp $%02X,x", imm_pk(1) ); end();
+		case 0x8C: p3( "sty abs $%04X", imm16_pk(1) ); end();
+		// Load y
+		case 0xA0: p2( "ldy #$%02X", imm_pk(1) ); end();
+		case 0xA4: p2( "ldy zp $%02X", imm_pk(1) ); end();
+		case 0xB4: p2( "ldy zp $%02X,x", imm_pk(1) ); end();
+		case 0xAC: p3( "ldy abs $%04X", imm16_pk(1) ); end();
+		case 0xBC: p3( "ldy abs $%04X,x", imm16_pk(1) ); end();
+
+		// Transfer
+		case 0xA8: p1( "tay" ); end();
+		case 0xBA: p1( "tsx" ); end();
+		case 0x8A: p1( "txa" ); end();
+		case 0x9A: p1( "txs" ); end();
+		case 0x98: p1( "tya" ); end();
+
+		case 0x48: p1( "pha" ); end();
+		case 0x68: p1( "pla" ); end();
+
+		// Arithmetic
+		// ADC
+		case 0x65: p2( "adc zp $%02X", imm_pk(1) ); end();
+		case 0x69: p2( "adc #$%02X", imm_pk(1) ); end();
+		case 0x75: p2( "adc zp $%02X,x", imm_pk(1) ); end();
+		case 0x6D: p3( "adc abs $%04X", imm16_pk(1) ); end();
+		case 0x7D: p3( "adc abs $%04X,x", imm16_pk(1) ); end();
+		case 0x79: p3( "adc abs $%04X,y", imm16_pk(1) ); end();
+		// TODO fix these two:
+		case 0x61: p2( "adc ind ($%02X,x)", imm_pk(1) ); end();
+		case 0x71: p2( "adc ind ($%02X),y", imm_pk(1) ); end();
+
+		// SBC
+		case 0xE5: p2( "sbc zp $%02X", imm_pk(1) ); end();
+		case 0xE9: p2( "sbc #$%02X", imm_pk(1) ); end();
+		case 0xF5: p2( "sbc zp $%02X,x", imm_pk(1) ); end();
+		case 0xED: p3( "sbc abs $%04X", imm16_pk(1) ); end();
+		case 0xFD: p3( "sbc abs $%04X,x", imm16_pk(1) ); end();
+		case 0xF9: p3( "sbc abs $%04X,y", imm16_pk(1) ); end();
+		case 0xE1: p2( "sbc ind ($%02X,x)", imm_pk(1) ); end();
+		case 0xF1: p2( "sbc ind ($%02X),y", imm_pk(1) ); end();
+
+		// INC/DEC
+		case 0xE6: p2( "inc zp $%02X", imm_pk(1) ); end();
+		case 0xF6: p2( "inc zp $%02X,x", imm_pk(1) ); end();
+		case 0xEE: p3( "inc abs $%04X", imm16_pk(1) ); end();
+		case 0xFE: p3( "inc abs $%04X,x", imm16_pk(1) ); end();
+
+		case 0xC8: p1( "iny" ); end();
+		case 0xE8: p1( "inx" ); end();
+
+		// Bitwise
+		// AND
+		case 0x29: p2( "and #$%02X", imm_pk(1) ); end();
+		case 0x25: p2( "and zp $%02X", imm_pk(1) ); end();
+		case 0x35: p2( "and zp $%02X,x", imm_pk(1) ); end();
+		case 0x2D: p3( "and abs $%04X", imm16_pk(1) ); end();
+		case 0x3D: p3( "and abs $%04X,x", imm16_pk(1) ); end();
+		case 0x39: p3( "and abs $%04X,y", imm16_pk(1) ); end();
+		// TODO Verify these work ($LL,x) & ($LL),y
+		case 0x21: p2( "and zp ($%02X,x)", imm_pk(1) ); end();
+		case 0x31: p2( "and zp ($%02X),y", imm_pk(1) ); end();
+
+		// EOR
+		case 0x49: p2( "eor #$%02X", imm_pk(1) ); end();
+		case 0x45: p2( "eor zp $%02X", imm_pk(1) ); end();
+		case 0x55: p2( "eor zp $%02X,x", imm_pk(1) ); end();
+		case 0x4D: p3( "eor abs $%04X", imm16_pk(1) ); end();
+		case 0x5D: p3( "eor abs $%04X,x", imm16_pk(1) ); end();
+		case 0x59: p3( "eor abs $%04X,y", imm16_pk(1) ); end();
+		// TODO Verify these work ($LL,x) & ($LL),y
+		case 0x41: p2( "eor zp ($%02X,x)", imm_pk(1) ); end();
+		case 0x51: p2( "eor zp ($%02X),y", imm_pk(1) ); end();
+
+		// ORA
+		case 0x09: p2( "ora #$%02X", imm_pk(1) ); end();
+		case 0x05: p2( "ora zp $%02X", imm_pk(1) ); end();
+		case 0x15: p2( "ora zp $%02X,x", imm_pk(1) ); end();
+		case 0x0D: p3( "ora abs $%04X", imm16_pk(1) ); end();
+		case 0x1D: p3( "ora abs $%04X,x", imm16_pk(1) ); end();
+		case 0x19: p3( "ora abs $%04X,y", imm16_pk(1) ); end();
+		// TODO Verify these work ($LL,x) & ($LL),y
+		case 0x01: p2( "ora zp ($%02X,x)", imm_pk(1) ); end();
+		case 0x11: p2( "ora zp ($%02X),y", imm_pk(1) ); end();
+
+		// BIT
+		case 0x24: p2( "bit zp $%02X", imm_pk(1) ); end();
+		case 0x2C: p3( "bit abs $%04X", imm16_pk(1) ); end();
+
+		// ASL
+		case 0x0A: p1( "asl a" ); end();
+		case 0x06: p2( "asl zp $%02X", imm_pk(1) ); end();
+		case 0x16: p2( "asl zp $%02X,x", imm_pk(1) ); end();
+		case 0x0E: p3( "asl abs $%04X", imm16_pk(1) ); end();
+		case 0x1E: p3( "asl abs $%04X,x", imm16_pk(1) ); end();
+
+		// LSR
+		case 0x4A: p1( "lsr a" ); end();
+		case 0x46: p2( "lsr zp $%02X", imm_pk(1) ); end();
+		case 0x56: p2( "lsr zp $%02X,x", imm_pk(1) ); end();
+		case 0x4E: p3( "lsr abs $%04X", imm16_pk(1) ); end();
+		case 0x5E: p3( "lsr abs $%04X,x", imm16_pk(1) ); end();
+
+		case 0x18: p1( "clc" ); end();
+		case 0xD8: p1( "cld" ); end();
+		case 0x58: p1( "cli" ); end();
+		case 0xB8: p1( "clv" ); end();
+
+		case 0x38: p1( "sec" ); end();
+		case 0xF8: p1( "sed" ); end();
+		case 0x78: p1( "sei" ); end();
+
+		case 0x08: p1( "php" ); end();
+		case 0x28: p1( "plp" ); end();
+
+		// Jump/branch
+		case 0x4C: p3( "jmp abs $%04X", imm16_pk(1) ); end();
+		case 0x6C: p3( "jmp ind ($%04X) <%04X>", imm16_pk(1), *(uint16_t*)(ram->ram+imm16_pk(1)) ); end();
+		case 0x20: p3( "jsr abs $%04X", imm16_pk(1) ); end();
+		case 0xF0: p2( "beq rel $%02X", imm_pk(1) ); end();
+		case 0xD0: p2( "bne rel $%02X", imm_pk(1) ); end();
+		case 0xB0: p2( "bcs rel $%02X", imm_pk(1) ); end();
+		case 0x90: p2( "bcc rel $%02X", imm_pk(1) ); end();
+		case 0x10: p2( "bpl rel $%02X", imm_pk(1) ); end();
+
+		// Comparison
+		case 0xC9: p2( "cmp #$%02X", imm_pk(1) ); end();
+		case 0xC5: p2( "cmp zp $%02X", imm_pk(1) ); end();
+		case 0xD5: p2( "cmp zp $%02X,x", imm_pk(1) ); end();
+		case 0xCD: p3( "cmp abs $%04X", imm16_pk(1) ); end();
+		case 0xDD: p3( "cmp abs $%04X,x", imm16_pk(1) ); end();
+		case 0xD9: p3( "cmp abs $%04X,y", imm16_pk(1) ); end();
+		case 0xC1: p3( "cmp ind ($%04X,x)", imm16_pk(1) ); end();
+		case 0xD1: p3( "cmp ind ($%04X),y", imm16_pk(1) ); end();
+
+		case 0xE0: p2( "cpx #$%02X", imm_pk(1) ); end();
+		case 0xE4: p2( "cpx zp $%02X", imm_pk(1) ); end();
+		case 0xEC: p3( "cpx abs $%04X", imm16_pk(1) ); end();
+
+		case 0xC0: p2( "cpy #$%02X", imm_pk(1) ); end();
+		case 0xC4: p2( "cpy zp $%02X", imm_pk(1) ); end();
+		case 0xCC: p3( "cpy abs $%04X", imm16_pk(1) ); end();
+
+		// Return
+		case 0x60: p1( "rts" ); end();
+
+		// Misc ---
+		case 0xEA: p1( "nop" ); end();
+		case 0x00: p1( "brk" ); end();
+
+		switch_end:
+			puts("");
+			break;
+		default:
+			puts("");
+			incpc();
+		}
+
+		// Next line of disassembly
+		incpc();
+		++y;
+	}
+}

@@ -8,10 +8,13 @@ LDFLAGS			+= -pthread -lpthread -lportaudio
 LIB				= lib65.a
 OBJS			= cpu.o ram.o rom.o joy.o ppu.o
 
-all: 65db fes test
+all: 65db 65da fes test
 help:
-	@echo "usage: make [65db|fes|lib|test|clean]"
+	@echo "usage: make [65db|65da|fes|lib|test|clean]"
 65db: 65db.o 65db_disasm.o $(LIB)
+	@echo "  CC	$@"
+	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS)
+65da: 65da.o 65da_disasm.o $(LIB)
 	@echo "  CC	$@"
 	@$(CC) $^ -o $@ $(CFLAGS) $(LDFLAGS)
 fes: fes.o ppu.o sdl.o $(LIB)
@@ -27,8 +30,8 @@ test:
 	@echo "  CC	$*.o"
 	@$(CC) -c $^ $(CFLAGS) $(LDFLAGS)
 clean:
-	@echo "  RM	65db *.o *.nes $(LIB)"
-	@$(RM) *.o 65db fes *.nes $(LIB)
+	@echo "  RM	65db 65da fes *.o *.nes $(LIB)"
+	@$(RM) *.o 65db 65da fes *.nes $(LIB)
 	@echo "  RM	test/*.nes"
 	@$(RM) test/*.nes
 .PHONY: all clean test

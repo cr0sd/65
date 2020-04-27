@@ -7,7 +7,7 @@ $AS65			=	'xa'
 $CC				=	'cc'
 $CFLAGS			=	'-Wfatal-errors `pkg-config --cflags portaudio-2.0`'
 $LDFLAGS		=	'-lncurses -pthread -lpthread `pkg-config --libs portaudio-2.0`'
-$OBJS			=	'cpu.o ram.o rom.o joy.o 65db_disasm.o'
+$OBJS			=	'cpu.o ram.o rom.o joy.o'
 $LIB			=	'lib65.a'
 
 if Gem.win_platform?
@@ -25,7 +25,7 @@ $stdout_mutex=Mutex.new
 # Rules
 # -----------------------------
 
-task :default => [:_65db, :_fes, :test] do
+task :default => [:_65db, :_65da, :_fes, :test] do
 	
 end
 
@@ -36,7 +36,12 @@ end
 
 task :_65db => [:lib65] do
 	thread_print"  CC\t65db"
-	`cc -o 65db #{$CFLAGS} 65db.c lib65.a #{$LDFLAGS}`
+	`cc -o 65db #{$CFLAGS} 65db.c 65db_disasm.c lib65.a #{$LDFLAGS}`
+end
+
+task :_65da => [:lib65] do
+	thread_print"  CC\t65da"
+	`cc -o 65da #{$CFLAGS} 65da.c 65da_disasm.c lib65.a #{$LDFLAGS}`
 end
 
 task :_fes => [:objs] do
@@ -55,5 +60,5 @@ task :objs do
 end
 
 task :clean do
-	clean '65db fes lib65.a *.o test/*.nes'.split
+	clean '65db 65da fes lib65.a *.o test/*.nes'.split
 end
