@@ -102,38 +102,12 @@ void rom_map(rom_t*rom,ram_t*ram,size_t offset)
 		return;
 	}
 
-	// ! TODO: The memmove below needs to copy all of the data in
-	// ! ROM into RAM. It should stop when it reaches $FFFF or
-	// ! all the ROM has been copied.
-	// ! NOTE: Apparently we are loading from the $8000 offset of the
-	// ! FILE ITSELF. That's not what we want.
-
-	uint32_t len;//=(0xffff>rom->data_len)?(0xffff-0x8000):(rom->data_len);
-	if(0xffff-0x8000>rom->data_len)len=0x7fff;
-	else if(rom->data_len>0xffff)len=0xffff;
-	else len=rom->data_len;
-
-	//printf("copying %d (%04X) bytes from ROM into RAM\n",
-		//len,len);
-	//printf("data_len: %d (%04X)\n",rom->data_len,rom->data_len);
-	//printf("$7fff>data_len?: %s\n",(0xffff>rom->data_len)?"yes":"no");
-	//memmove(ram->ram,rom->rom,len);
-
 	// Copy rom data into ram memory
 	// Put NES file header parsing here <---
-	//printw("copying %u bytes into RAM from ROM\n",rom->data_len);
 
-	// NOTE: Substitution of copying entire data_len with copying
-	// a smaller 'chunk' at a time was necessary on ArchLinux to prevent
-	// SIGSEGV crashing the program
-
-	const size_t DATA_CHUNK=2048;
-	// mov RAM, ROM * 2048
-	//printf("%s: rom length: '%d'\n",__func__,rom->data_len);
-	for(size_t len=rom->data_len;len>0;len-=(len>DATA_CHUNK)?DATA_CHUNK:len)
-		//printf("memmove ram, rom ($%04X/$%04X)\n",rom->data_len-len,rom->data_len),
-		memmove(ram->ram+offset,rom->rom,(len>DATA_CHUNK)?DATA_CHUNK:len);
-	//memmove(ram->ram,rom->rom,rom->data_len);
+	#define min(x,y) ((x<y)?(x):(y))
+	memmove( ram->ram+offset, rom->rom, min(0x8000,rom->data_len));
+	#undef min
 }
 
 // Free memory allocated to ROM object

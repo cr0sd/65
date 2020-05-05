@@ -25,6 +25,9 @@ $stdout_mutex=Mutex.new
 # Rules
 # -----------------------------
 
+task :all => [:default] do
+end
+
 task :default => [:_65db, :_65da, :_fes, :test] do
 	
 end

@@ -10,6 +10,9 @@ $stdout_mutex=Mutex.new
 
 # Rules
 # -----------------------------
+task :all =>[:default] do
+end
+
 task :default do
 	thread_print'Entering directory src'
 	thread_print`cd src; rake`

@@ -53,11 +53,13 @@ int main(int argc,char**argv)
 		refresh();
 	}
 
+	puts("verifying ROM");
 	// Verify ROM is loaded
 	if(rom->rom)
 		cpu->pc=PRGROM;
 	else
 		puterr("%s: No ROM loaded\n",__func__);
+	puts("ROM verified");
 
 	// Render -----
 	while(true)
