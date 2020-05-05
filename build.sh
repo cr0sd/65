@@ -28,8 +28,15 @@ MAKECMD=$(cat $TMPFILE)
 dialog --title "Target" --radiolist "Choose target" $NV $NH 10 \
 	all "Build normal target" on \
 	clean "Remove binary files" off \
+	Other "Specify other target(s)..." off \
 	2>$TMPFILE
 TARGET=$(cat $TMPFILE)
+
+# Specify custom target
+if [ $TARGET = "Other" ]; then
+	dialog --title "Custom target name(s)" --inputbox "Specify custom target name:\n" $NV $NH "" 2> $TMPFILE
+	TARGET=$(cat $TMPFILE)
+fi
 
 # Make utility specific
 if [ $MAKECMD = "make" ]; then

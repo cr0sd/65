@@ -6,6 +6,8 @@ all:
 	@-cp -p src/65db src/65da src/fes bin
 	@echo "  CP	test/*.nes"
 	@-cp -p src/test/*.nes test
+65da 65db lib:
+	@$(MAKE) -C src $@
 clean:
 	@$(MAKE) -C src clean
 	@echo "  RM	bin/65db bin/65da bin/fes test/*.nes"
