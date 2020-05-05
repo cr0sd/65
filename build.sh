@@ -25,8 +25,8 @@ MAKECMD=$(cat $TMPFILE)
 
 # Choose TARGET
 dialog --title "Target" --radiolist "Choose target" $NV $NH 10 \
-	all "all" on \
-	clean "clean" off \
+	all "Build normal target" on \
+	clean "Remove binary files" off \
 	2>$TMPFILE
 TARGET=$(cat $TMPFILE)
 
@@ -81,12 +81,19 @@ else
 fi
 
 # Confirm build options
-dialog --title "Confirm" --yesno "You chose to build $TARGET with $NJOBS jobs. Is this okay?\n\nPress No to cancel build." $NV $NH
+if [ $MAKECMD = "make" ]; then
+	dialog --title "Confirm" --yesno "You chose to build $TARGET with $NJOBS jobs with $MAKECMD. Is this okay?\n\nPress No to cancel build." $NV $NH
+else
+	# Don't mention NJOBS
+	dialog --title "Confirm" --yesno "You chose to build $TARGET with $MAKECMD. Is this okay?\n\nPress No to cancel build." $NV $NH
+fi
+
+# Build project
 YESNO=$?
 if [ $YESNO -eq 0 ]; then
 
 	dialog --title "Building target" \
-		--prgbox "$MAKECMD $TARGET $JOBSOPT $NJOBS $CPULIMOPT $CPULIM $OTHEROPTS" $NV $NH
+		--prgbox "$MAKECMD $TARGET $JOBSOPT $NJOBS $CPULIMOPT $CPULIM $OTHEROPTS; echo 'Done.'" $NV $NH
 fi
 
 # Remove temporary file
