@@ -29,5 +29,5 @@ task :clean do
 	thread_print`cd src; rake clean`
 	thread_print'Leaving directory src'
 	thread_print"  RM	bin/65db bin/65da bin/fes test/*.nes"
-	`rm bin/65db bin/65da bin/fes test/*.nes`
+	`rm -f bin/65db bin/65da bin/fes test/*.nes`
 end

@@ -9,6 +9,7 @@ TARGET="all"
 JOBSOPT="-j"
 CPULIMOPT=""
 CPULIM=""
+OTHEROPTS=""
 
 # Check if dialog is found on system
 if [ $(which dialog > /dev/null) -ne 0 ]; then
@@ -47,12 +48,11 @@ if [ $MAKECMD = "make" ]; then
 	# Specify CPU load option if chosen
 	if [ $NJOBS = "CPU" ]; then
 
-		# Don't use '-j' options
+		# Do infinite jobs (limit only by CPU load)
 		NJOBS=""
-		JOBSOPT=""
+		#JOBSOPT="-j"
 
 		# Get CPU load limit, validate input
-		CPULIM="invalid"
 		while true; do
 			# Choose CPU load limit
 			dialog --title "CPU Load Limit" --inputbox "Choose CPU load limit for make$WARN" $NV $NH "1.0" 2> $TMPFILE
@@ -62,6 +62,13 @@ if [ $MAKECMD = "make" ]; then
 		done
 
 		CPULIMOPT="-l"
+	fi
+
+	# Force build?
+	dialog --title "Build only modified files" --yesno "Build only modified source files? This will not rebuild if project is already built." $NV $NH
+	YESNO=$?
+	if [ $YESNO -eq 1 ]; then
+		OTHEROPTS="$OTHEROPTS -B"
 	fi
 
 else
@@ -79,7 +86,7 @@ YESNO=$?
 if [ $YESNO -eq 0 ]; then
 
 	dialog --title "Building target" \
-		--prgbox "$MAKECMD $TARGET $JOBSOPT $NJOBS $CPULIMOPT $CPULIM" $NV $NH
+		--prgbox "$MAKECMD $TARGET $JOBSOPT $NJOBS $CPULIMOPT $CPULIM $OTHEROPTS" $NV $NH
 fi
 
 # Remove temporary file
