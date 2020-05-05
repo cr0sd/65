@@ -11,10 +11,11 @@ CPULIMOPT=""
 CPULIM=""
 OTHEROPTS=""
 
+# Die command
+die() { echo $1; exit; }
+
 # Check if dialog is found on system
-if [ $(which dialog > /dev/null) -ne 0 ]; then
-	echo "$0: error: could not find dialog."
-fi
+which dialog 2> /dev/null || die "error: could not find dialog"
 
 # Choose make vs. rake
 dialog --title "Make utility" --radiolist "Choose make utility" $NV $NH 10 \
