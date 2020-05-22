@@ -16,6 +16,7 @@ void print_disassembly(cpu_t*cpu,ram_t*ram);
 uint16_t prompt_address(char*prompt,cpu_t*cpu);
 uint16_t linear_search(uint16_t from,ram_t*ram);
 uint8_t prompt_byte(char*prompt,uint16_t from,ram_t*ram,char*prev,char*b);
+extern WINDOW*win;
 
 // Entry point
 int main(int argc,char**argv)

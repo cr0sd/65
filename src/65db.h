@@ -7,4 +7,4 @@
 
 #include<ncurses.h>
 #define mvclr(y,x) do{move(y,x);clrtoeol();}while(0)
-WINDOW*win;
+//WINDOW*win;
