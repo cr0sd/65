@@ -5,6 +5,7 @@
 #include"stdarg.h"
 
 static int oper[8];
+extern WINDOW*win;
 
 // Print instruction helper function
 static void pi(cpu_t*cpu,ram_t*ram,int n,const char*fmt,...)
